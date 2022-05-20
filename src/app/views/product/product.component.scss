@@ -1,0 +1,24 @@
+.fs-12
+{
+    font-size: 13px;
+}
+
+.zoom-icon {
+    position: absolute;
+      bottom: 0;
+      color: #fff;
+      width: 100%;
+      z-index: 1;
+      padding: 0 12px;   
+      right: 0;
+      height: 100%;
+      left: 0;
+      top: 0;
+  }
+  body{
+      overflow-x: hidden!important;
+  }
+  .menu-tab li a
+  {
+      text-transform: none;
+  }

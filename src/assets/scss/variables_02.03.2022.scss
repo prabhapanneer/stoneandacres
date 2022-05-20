@@ -1,0 +1,188 @@
+
+// @font-face
+// {
+// font-family: "DIN Neuzeit Grotesk";
+// font-weight: 400;
+// font-style: normal;
+// src:url('./assets/font/DIN 30640 Neuzeit Grotesk LT Light.ttf') format("truetype");
+
+// }
+
+@font-face {
+  font-family: "DIN Neuzeit Grotesk";
+  font-weight: 300;
+  font-style: normal;
+  font-display: fallback;
+  src: url("https://fonts.shopifycdn.com/din_neuzeit_grotesk/dinneuzeitgrotesk_n3.a0f3c74e63f622e59b916bd3ad28c501f51e0350.woff2?&hmac=64b95d2d58f002b800dba77ed444cd69d18f64d78e1078b847a58fab445eed54") format("woff2"),
+       url("https://fonts.shopifycdn.com/din_neuzeit_grotesk/dinneuzeitgrotesk_n3.7652704516cc290a4e9a5e4108824e968ea40fa9.woff?&hmac=080313723a8efc712b906fce879ad614bb2a7d7c085b5584f8474b68d08f814f") format("woff");
+}
+
+  @font-face {
+  font-family: "Futura";
+  font-weight: 400;
+  font-style: normal;
+  font-display: fallback;
+  src: url("https://fonts.shopifycdn.com/futura/futura_n4.df36ce3d9db534a4d7947f4aa825495ed740e410.woff2?&hmac=6a56d51fc32d698d069bcec7f4cb537efbe7b6e5940d1e9fc4d0a71d2b552fc4") format("woff2"),
+       url("https://fonts.shopifycdn.com/futura/futura_n4.6bce24beb4ba1ff4ddeb20f7cd6e2fa513a3d6ec.woff?&hmac=0103d4b4c242038a4673909d15ddc0fe2f54962088997a60bd7f07bfc9266a4f") format("woff");
+}
+
+
+  @font-face {
+  font-family: "Futura";
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
+  src: url("https://fonts.shopifycdn.com/futura/futura_n7.153f8fffad8e901382179997bbb87aa7a5ff33b3.woff2?&hmac=373710c79938e701f46de6a94e937f473b7c7af77c10942bd77bf01af2eb31f6") format("woff2"),
+       url("https://fonts.shopifycdn.com/futura/futura_n7.711e9243b3eccc2745ecf4731eba61651a122376.woff?&hmac=ad46e23d814517f1f97c7f23bfeba4784dec72d2cb35f62a82201f6678b00671") format("woff");
+}
+
+  @font-face {
+  font-family: "Futura";
+  font-weight: 400;
+  font-style: oblique;
+  font-display: fallback;
+  src: url("https://fonts.shopifycdn.com/futura/futura_o4.9747e2e6ed2f11b894984527c927b42234e48815.woff2?&hmac=7883c7200d5cdb4ddc96dfdfa72ea97ab8f958dc32bc62d893a674b5e7a2b75f") format("woff2"),
+       url("https://fonts.shopifycdn.com/futura/futura_o4.d5edc6b1d9a050bbe0beb9093d73b883bf18c6c1.woff?&hmac=8e71b9286bcb11520636d77bc9bd5bd5ac3b8d9d38f026533fb3b5c3fda98373") format("woff");
+}
+
+  @font-face {
+  font-family: "Futura";
+  font-weight: 700;
+  font-style: oblique;
+  font-display: fallback;
+  src: url("https://fonts.shopifycdn.com/futura/futura_o7.ece1472e1fefbb598873ba72dc2bfa2e050347c1.woff2?&hmac=23ae72c491cc3fc7acf1e1446b4cecf063b10fe03736d1fe74a5caeb90dafb74") format("woff2"),
+       url("https://fonts.shopifycdn.com/futura/futura_o7.7028291332320745f0217c346c800da7522a22b2.woff?&hmac=9ed4c84acedd86d75f86bfc88a6bcb335766efd90f3ac37f835a8ab20f304b74") format("woff");
+}
+
+
+$heading-font-family : "DIN Neuzeit Grotesk", sans-serif;
+$heading-font-weight : 300;
+$heading-font-style  : normal;
+
+$text-font-family : "Futura", sans-serif;
+$text-font-weight : 400;
+$text-font-style  : normal;
+
+$primary-theme-color: #303030;
+$announcement-bar: true;
+
+// accent colors for tesimonials on hover, tab borders, announcement bar and txt, item-badge for shopping and wishlist
+$accent:#303030;
+$accent-txt:#ffffff;
+
+// font
+$primary-font: "Futura", sans-serif;
+$secondary-font: "DIN Neuzeit Grotesk", sans-serif;
+
+// site wide gray card background color no need to change please dont change this color (eg: my account page cards after login)
+$card-bg:rgba(0, 0, 0, 0.02);
+
+// site wide border & text color
+$primary-border:#e0e0e0;
+$primary-text:#303030;
+
+// input borders & placeholder color
+$input-border:rgba(0,0,0,0.1);
+$input-focus-border:#000000;
+$input-placeholder:rgba(0,0,0,0.3);
+
+// error message
+$error-bg:#f3d7d7;
+$error-txt:red;
+
+// success message
+$sucess-bg:#afe2af;
+$sucess-txt:#0cad0c;
+
+// Announcement bar
+$announce-bg:#f1e4d8;
+$announce-text:#343434;
+$primary-link:#0f7aa1;
+
+$highlighted-bg:#f4f1eb; // multi-highlighted section bg
+
+// header 
+$header:#fff;
+$header-txt:#fff;
+$header-fix-txt:#303030;
+$header-icons:#fff;
+$header-border:#eee;
+$header-highlighted-text:#303030;
+
+$header-gradient:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgb(0, 0, 0) 100%); // only for type-7 header
+
+// mega menu dropdown list background and colors
+$mega-menu-bg:#fff;
+$mega-menu-text:#303030;
+
+// cart badge
+$item-badge-bg:#303030;
+$item-badge-txt:#fff;
+
+// footer
+$footer-bg:#fff;
+$footer-txt:#303030;
+
+// footer band
+$footer-band:#f6f6f6;
+$footer-band-inner:#efefef;
+$footer-band-txt:#303030;
+$footer-border:#e0e0e0;
+$footer-icon: invert(0%) sepia(0%) saturate(7492%) hue-rotate(289deg) brightness(96%) contrast(99%);
+
+// btn
+$btn-border: none;
+$btn-radius: 0px;
+
+// primary btn
+$primary-btn-bg:#303030;
+$primary-btn-hvr-bg:#ffffff;
+$primary-btn-txt:#ffffff;
+$primary-btn-hvr-txt:#303030;
+$primary-btn-border:#303030;
+
+// secondary btn
+$secondary-btn-bg:#e2e2e2;
+$secondary-btn-hvr-bg:#d4d4d4;
+$secondary-btn-txt:#303030;
+$secondary-btn-hvr-txt:#303030;
+
+//Product button
+$product-btn-bg:#ffffff;
+$product-btn-hvr-bg:#303030;
+$product-btn-txt:#303030;
+$product-btn-hvr-txt:#ffffff;
+$product-btn-border:#ffffff;
+
+// radio and check box
+$check_radio_bdr_color:#ccc;
+$check_radio_color:#303030;
+
+// primary-shadow
+@mixin primary-shadow {
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.05);
+}
+// secondary-shadow
+@mixin secondary-shadow {
+  box-shadow: 0 5px 16px 1px rgba(0, 0, 0, 0.13), 0 1px 4px 0 rgba(0, 0, 0, 0.09);
+}
+
+// announcebar
+@function set-announcement-bar-mh($class) {
+  @if ($class == true) { @return 30px; }
+  @else { @return 0px; }
+}
+@function set-mobile-announcement-bar-mh($class) {
+  @if ($class == true) { @return 40px; }
+  @else { @return 0px; }
+}
+$announcement-bar-mh: set-announcement-bar-mh($announcement-bar);
+$mobile-announcement-bar-mh: set-mobile-announcement-bar-mh($announcement-bar);
+
+@mixin dinheading {
+  font-family: $heading-font-family!important;
+  font-weight: $heading-font-weight!important;
+  font-style: $heading-font-style!important;
+  letter-spacing: 0.2em!important;
+  text-transform: uppercase!important;
+}

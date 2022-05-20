@@ -1,0 +1,14 @@
+#faq .fcard{border-bottom:1px solid #eee}
+#faq .fcard .card-body{font-size:16px}
+#faq .fcard .fcard-header{border:0;padding:0}
+#faq .fcard .fcard-header .btn-header-link{
+text-align:left;color:#3d3d3d;padding:20px;font-size:16px;font-weight:600;text-transform:none!important;
+width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;
+-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}
+#faq .fcard .fcard-header .btn-header-link:after{
+content:"expand_less";
+font-family:material icons;font-weight:500;float:right;font-size:24px}
+#faq .fcard .fcard-header .btn-header-link.collapsed{background:#fff;color:#3d3d3d}
+#faq .fcard .fcard-header .btn-header-link.collapsed:after{content:"expand_more";font-family:material icons}
+#faq .fcard .collapsing{background:#fff;line-height:30px}#faq .fcard .collapse{border:0}
+#faq .fcard .collapse.show{background:#fff;line-height:30px;color:#3d3d3d}

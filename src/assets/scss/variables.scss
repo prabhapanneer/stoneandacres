@@ -1,0 +1,131 @@
+$heading-font-family : 'Mukta', sans-serif;
+$heading-font-weight : 400;
+$heading-font-style  : normal;
+
+$text-font-family : 'Mukta', sans-serif;
+$text-font-weight : 400;
+$text-font-style  : normal;
+
+$primary-theme-color: #222b29;
+$announcement-bar: true;
+
+// accent colors for tesimonials on hover, tab borders, announcement bar and txt, item-badge for shopping and wishlist
+$accent:#222b29;
+$accent-txt:#ffffff;
+
+// font
+$primary-font: 'Mukta', sans-serif;
+$secondary-font: 'Mukta', sans-serif;
+
+// site wide gray card background color no need to change please dont change this color (eg: my account page cards after login)
+$card-bg:rgba(0, 0, 0, 0.02);
+
+// site wide border & text color
+$primary-border:#e0e0e0;
+$primary-text:#222b29;
+
+// input borders & placeholder color
+$input-border:rgba(0,0,0,0.1);
+$input-focus-border:#000000;
+$input-placeholder:rgba(0,0,0,0.3);
+
+// error message
+$error-bg:#f3d7d7;
+$error-txt:red;
+
+// success message
+$sucess-bg:#afe2af;
+$sucess-txt:#0cad0c;
+
+// Announcement bar
+$announce-bg:/*#f1e4d8*/#212121;
+$announce-text:#ffffff;
+$primary-link:#0f7aa1;
+
+$highlighted-bg:#f4f1eb; // multi-highlighted section bg
+
+// header 
+$header:#fff;
+$header-txt:#fff;
+$header-fix-txt:#222b29;
+$header-icons:#fff;
+$header-border:#eee;
+$header-highlighted-text:/*#994653*/#e04a76;
+
+$header-gradient:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgb(0, 0, 0) 100%); // only for type-7 header
+
+// mega menu dropdown list background and colors
+$mega-menu-bg:#fff;
+$mega-menu-text:#222b29;
+
+// cart badge
+$item-badge-bg:#222b29;
+$item-badge-txt:#fff;
+
+// footer
+$footer-bg:#efefef;
+$footer-txt:#222b29;
+
+// footer band
+$footer-band:rgba(239, 239, 239, 0.8);
+$footer-band-inner:#efefef;
+$footer-band-txt:#222b29;
+$footer-border:/*#f7efe8*/#faeade;
+$footer-icon: invert(0%) sepia(0%) saturate(7492%) hue-rotate(289deg) brightness(96%) contrast(99%);
+
+// btn
+$btn-border: none;
+$btn-radius: 0px;
+
+// primary btn
+$primary-btn-bg:#222b29;
+$primary-btn-hvr-bg:#ffffff;
+$primary-btn-txt:#ffffff;
+$primary-btn-hvr-txt:#222b29;
+$primary-btn-border:#222b29;
+
+// secondary btn
+$secondary-btn-bg:#e2e2e2;
+$secondary-btn-hvr-bg:#d4d4d4;
+$secondary-btn-txt:#222b29;
+$secondary-btn-hvr-txt:#222b29;
+
+//Product button
+$product-btn-bg:#ffffff;
+$product-btn-hvr-bg:#222b29;
+$product-btn-txt:#222b29;
+$product-btn-hvr-txt:#ffffff;
+$product-btn-border:#ffffff;
+
+// radio and check box
+$check_radio_bdr_color:#ccc;
+$check_radio_color:#222b29;
+
+// primary-shadow
+@mixin primary-shadow {
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.05);
+}
+// secondary-shadow
+@mixin secondary-shadow {
+  box-shadow: 0 5px 16px 1px rgba(0, 0, 0, 0.13), 0 1px 4px 0 rgba(0, 0, 0, 0.09);
+}
+
+// announcebar
+@function set-announcement-bar-mh($class) {
+  @if ($class == true) { @return 30px; }
+  @else { @return 0px; }
+}
+@function set-mobile-announcement-bar-mh($class) {
+  @if ($class == true) { @return 40px; }
+  @else { @return 0px; }
+}
+$announcement-bar-mh: set-announcement-bar-mh($announcement-bar);
+$mobile-announcement-bar-mh: set-mobile-announcement-bar-mh($announcement-bar);
+
+@mixin dinheading {
+  font-family: $heading-font-family!important;
+  font-weight: $heading-font-weight;
+  font-style: $heading-font-style!important;
+  letter-spacing: 0.2em;
+  text-transform: uppercase!important;
+}

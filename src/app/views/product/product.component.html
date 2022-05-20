@@ -1,0 +1,981 @@
+<div *ngIf="psCssLoaded" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+      <div class="pswp-custom-btn">
+        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+      </div>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section *ngIf="pageLoader">
+  <app-loading-spinner></app-loading-spinner>
+</section>
+
+
+
+<div id="wrapper" *ngIf="!pageLoader">
+  <main id="main" class="site-main single single-02">
+    <!-- SEO h1 tag -->
+  <h1 *ngIf="productDetails?.seo_status" [hidden]="true">{{productDetails?.seo_details?.h1_tag}}</h1>
+  <!-- #SEO h1 tag -->
+    <div class="place">
+
+  <!-- product image -->
+   <div *ngIf="productDetails?.image_list?.length" class="row product_image" style="visibility: hidden;">
+   
+    <div class="col-md-12">
+      <div class="related-products">
+        <div class="swiper-container product_image">
+          <div class="swiper-wrapper">
+            <div *ngFor="let x of productDetails?.image_list; let i=index;" class="swiper-slide">
+              <div class="big-img-container w-100"  id="photogallery" itemscope itemtype="http://schema.org/ImageGallery">
+                <div class="w-100" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                  <a class="w-100 d-flex flex-column" itemprop="contentUrl" data-id={{x}}>
+                    <img title="Click to view image" style="cursor: pointer; height: 400px; object-fit: cover;" [src]="imgBaseUrl+x.image" itemprop="thumbnail" alt="Image description">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="product_image_next" class="swiper-button swiper-button-next"></div>
+          <div id="product_image_prev" class="swiper-button swiper-button-prev"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- #product image -->
+      
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="place__left">
+
+<!-- breadcrumb -->
+<div *ngIf="template_setting?.breadcrumb" class="head-breadcrumb" style="padding: 0 !important;">
+  <div class="{{template_setting?.body_type}}">
+    <div class="row px-0">
+      <div class="col-md-12 px-0">
+        <div class="breadcrumb-navigation mt-3">
+          <ul class="collapsed">
+            <li><a routerLink="/">Home</a></li>
+            <li *ngIf="category_details?.name">
+              <a *ngIf="!category_details.route" [routerLink]="category_details.seo_status? '/category/'+category_details.seo_details.page_url: '/category/'+category_details._id">
+                {{category_details.name}}
+              </a>
+              <a *ngIf="category_details.route" [routerLink]="category_details.route">{{category_details.name}}</a>
+            </li>
+            <li><span class="active-page">{{productDetails?.name}}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--# breadcrumb #-->
+
+              <div class="place__box place__box--npd">
+                <h1>{{productDetails.name}}</h1>
+                <div class="place__meta mb-0">
+                  <div class="place__reviews reviews">
+                   
+                    <span class="place__places-item__count reviews_count">{{(productDetails?.brand)}}</span>
+                  </div>
+                  <!-- <div class="place__currency">$$</div> -->
+                  <div class="place__category">
+                    <a>Stone and Acres</a>
+                   
+                  </div>
+                </div><!-- .place__meta -->
+              </div><!-- .place__box -->
+
+
+              <div class="place__box place__box-hightlight">
+                <div class="row hightlight-grid">
+                  <div *ngIf="productDetails.bhk_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
+                    <img src="assets/images/overview_icons/type.png" alt="type" style="height:32px; width:auto;">
+                    <span class="fs-12 mt-1"><b>Type</b></span>
+                    <span *ngIf="productDetails.product_type != 'plot'">{{ productDetails.bhk_list.join(', ') }}</span>    
+                    <span *ngIf="productDetails.product_type == 'plot'">Plots</span>                    
+                  </div>
+                  <div *ngIf="productDetails.sqft_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
+                    <img src="assets/images/overview_icons/area.png" alt="area" style="height:32px; width:auto;">
+                    <span class="fs-12 mt-1"><b>Area</b></span>
+                    <span>{{ productDetails.sqft_list[0] }} - {{ productDetails.sqft_list[productDetails.sqft_list.length-1] }} sq. ft.</span>                    
+                  </div>
+                  <div *ngIf="productDetails.sqft_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
+                    <img src="assets/images/overview_icons/availability.png" alt="availability" style="height:32px; width:auto;">
+                    <span class="fs-12 mt-1"><b>Availability</b></span>
+                    <span>{{ productDetails.stock }} Units</span>                    
+                  </div>
+                  <div *ngIf="productDetails.price_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
+                    <img src="assets/images/overview_icons/budget.png" alt="budget" style="height:32px; width:auto;">
+                    <span class="fs-12 mt-1"><b>Budget</b></span>
+                    <span>{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>                    
+                  </div>
+                  <div class="col-md-4 col-4 place__amenities mb-5">									
+                    <img src="assets/images/overview_icons/handover.png" alt="handover" style="height:32px; width:auto;">
+                    <span class="fs-12 mt-1"><b>Handover</b></span>
+                    <span>{{productDetails.handover_on | date: "MMMM yyyy"}}</span>                    
+                  </div>
+                  <div class="col-md-4 col-4 place__amenities mb-5" *ngIf="productDetails.rera_id">									
+                    <img src="assets/images/overview_icons/rera_id.png" alt="rera" style="height:32px; width:auto;">
+                    <span class="fs-12 mt-1"><b>RERA ID</b></span>
+                    <span>{{productDetails.rera_id}}</span>                    
+                  </div>
+                  
+
+                </div>
+              </div><!-- .place__box -->
+             
+
+              <div class="place__box place__box-map" *ngIf="productDetails?.variant_unit_info">
+                <h3 class="place__title--additional">
+                  Units
+                </h3>
+                <div class="menu-tab">
+                  <ul>
+                    <ng-container *ngFor="let x of productDetails?.variant_unit_info.options; let i=index;">
+                      <li [ngClass]="(productDetails.selected_variant_unit==x.value)? 'active': ''" (click)="viewMode ='tab{{i}}'">
+                        <a (click)="productDetails.selected_variant_unit=x.value; getTabList();">{{x.value}}</a>
+                      </li>
+                    </ng-container>
+                  </ul>
+                
+             
+              <!-- <ng-container *ngFor="let x of productDetails.unit_list[0].options; let i=index;"> -->
+              <!-- <div  class="menu-wrap" id="tab{{i}}" [ngClass]="(productDetails.selected_variant_unit==x.value)? 'active': ''"> -->
+                <div *ngFor="let y of productDetails.tablist; let j=index;">
+                  <div  class="menu-item row" style="width:100%">
+                    <div class="col-md-3 p-2 col-4 mb-40 plan-img" *ngIf="y.image_list?.length"> 
+                      <div class="big-img-container w-100" id="photogallery1" itemscope itemtype="http://schema.org/ImageGallery">
+                        <div class="w-100" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                          <a class="w-100 d-flex flex-column" itemprop="contentUrl" data-id={{y}}>
+                            <img title="Click to view image"  [src]="imgBaseUrl+y.image_list[0].image" itemprop="thumbnail" alt="Image description">
+                          </a>
+                        </div>
+                      </div>
+                      <!-- <img [src]="imgBaseUrl+y.image_list[0].image"> -->
+                      <!-- <span class="material-icons zoom-icon">zoom_in</span> -->
+                    </div>
+                    <div class="col-md-3 p-2 col-4 mb-40 plan-img" *ngIf="!y.image_list?.length"> 
+                      <img src="assets/images/no-image.png">
+                      <!-- <div class="zoom-icon d-flex justify-content-center align-items-center"> <span class="material-icons">zoom_in</span></div> -->
+                    </div>
+                    <div class="col-md-3 col-4 mb-40"><h4>{{y.sqft}} sq. ft.</h4><p>Size</p></div>
+                    <div class="col-md-3 col-4 mb-40"><h4>{{commonService.thausandFormatConverter(y.selling_price) }} onwards</h4><p>Price</p></div>
+                 
+                    <div class="col-md-3 col-6 mb-40">
+                      <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">CONTACT</button>
+                    </div>  
+
+                  </div>                    
+                    
+
+                </div>
+              
+              <!-- </div> -->
+            <!-- </ng-container> -->
+                  
+
+                </div>
+              </div>
+
+              <div class="place__box place__box-hightlight" *ngIf="productDetails?.amenity_list?.length">
+                <h3 class="place__title--additional">Amenities</h3>
+                <div class="hightlight-grid row">
+                  <ng-container *ngFor="let x of productDetails.updated_amenities_list; let i=index;">
+                  <div class="col-3 mb-4">		
+                    <div class="place__amenities">
+                      <img [src]="imgBaseUrl+x.image" alt="{{x.name}}">
+                    <span>{{x.name}}</span>
+                    </div>	                    
+                  </div>
+                  </ng-container>
+                </div>
+              </div><!-- .place__box -->
+
+              <div class="place__box place__box-overview" *ngIf="productDetails.description">
+                <h3>Overview</h3>
+                <div class="place__desc" [innerHtml]="productDetails.description"></div><!-- .place__desc -->
+                <!-- <a href="#" class="show-more" title="Show More">Show more</a> -->
+              </div>
+              
+              <div class="place__box place__box-map" *ngIf="productDetails?.location_url">
+                <h3 class="place__title--additional">
+                  Location & Maps
+                </h3>
+                <div class="maps">
+                <iframe [src]="productDetails.location_url_new" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.7781428704857!2d80.17187021482077!3d12.857601190930756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5259b108b02915%3A0xb54afa6ce1269383!2sPonmar%20Enclave%20Park!5e0!3m2!1sen!2sin!4v1650013286887!5m2!1sen!2sin" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe> -->
+                </div>
+                                
+              </div><!-- .place__box -->
+
+
+
+            </div><!-- .place__left -->
+          </div>
+          <div class="col-lg-4" style="margin-bottom: 200px;">
+            <div class="sidebar sidebar--shop sidebar--border" style="position: sticky;top:200px; margin-bottom: 100px;">
+              <div class="widget-reservation-mini">
+                                <h2 >GET IN TOUCH</h2>
+                                <a href="#" class="open-wg btn">Request</a>
+                            </div>
+              <aside class="widget widget-shadow widget-reservation">
+                <h2 class="mb-3">GET IN TOUCH</h2>
+                <form class="form-underline" autocomplete="off"  ngNativeValidate>
+                  <div class="field-select has-sub field-guest">
+                    <span class="sl-icon"><i class="la la-user-friends"></i></span>
+                    <input type="text" name="name" placeholder="Name" >
+                  </div>
+                  <div class="field-select field-date">
+                    <span class="sl-icon"><i class="las la-at"></i></span>
+                    <input type="email" name="email" placeholder="Email" 
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" />
+                  </div>
+                  <div class="field-select has-sub field-time">
+                    <span class="sl-icon"><i class="las la-phone"></i></span>
+                    <input type="tel" name="mobile" placeholder="Phone Number" maxlength="10" appNumberOnly>
+                  </div>
+                  <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">SUBMIT</button>
+                  <!-- <input type="submit" name="submit" value="Contact"> -->
+                </form>
+              </aside><!-- .widget-reservation -->
+            </div><!-- .sidebar -->
+          </div>
+        </div>
+      </div>
+    </div><!-- .place -->
+
+  </main><!-- .site-main -->
+</div>
+
+
+
+<section class="over-all smooth-fadein" *ngIf="!pageLoader">
+
+  <!-- SEO h1 tag -->
+  <h1 *ngIf="productDetails?.seo_status" [hidden]="true">{{productDetails?.seo_details?.h1_tag}}</h1>
+  <!-- #SEO h1 tag -->
+
+  <section class="common-site-section product-detail">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+
+  
+
+
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
+
+        
+
+          <!-- FAQ -->
+          <div class="prod-faq mt-3">
+            <accordion *ngIf="productDetails?.faq_status && productDetails?.faq_list?.length" [isAnimated]="true">
+              <ng-container *ngFor="let x of productDetails.faq_list;">
+                <accordion-group heading="{{x.ques}}">
+                  <p>{{x.ans}}</p>
+                </accordion-group>
+              </ng-container>
+            </accordion>
+          </div>
+          <!-- #FAQ -->
+        </div>
+      </div>
+
+   <!-- related products -->
+   <div *ngIf="related_products?.length > swiperService.related_products?.card_count" class="row related-products" style="visibility: hidden; background-color: #fff;">
+    <div class="col-md-12">
+      <h4>Related Products</h4>
+    </div>
+    <div class="col-md-12">
+      <div class="related-products">
+        <div class="swiper-container multi-slider product-slider" [ngClass]="commonService.desktop_device? 'desktop_related_prod_slider': 'related_prod_slider'">
+          <div class="swiper-wrapper">
+            <div *ngFor="let x of related_products; let i=index;" class="swiper-slide">
+              <div appMouseHover class="product-box primary-card p-3 cursor">
+                <a class="prod-div" (click)="commonService.selected_product=x;" routerLink="{{ x.seo_status ? '/product/'+x.seo_details.page_url : '/product/'+x._id }}">
+                  <figure class="product-image">
+                    <img width="100%" height="100%" appLqimgLoad appDeferLoad [ImagelazyLoad]="imgBaseUrl+x.image_list[0].image" alt="{{(x.image_list[0].img_alt)? x.image_list[0].img_alt: 'product-img'}}">
+                    <img width="100%" height="100%" appLqimgLoad appDeferLoad *ngIf="commonService?.desktop_device && x.image_list.length > 1" [ImagelazyLoad]="imgBaseUrl+x.image_list[1]?.image"
+                    alt="{{(x.image_list[1].img_alt)? x.image_list[1].img_alt: 'product-img'}}" class="image-hover">
+                  </figure>
+                  <div class="product-content">
+                    <h3 *ngIf="x.brand">{{x.brand}}</h3>
+                    <h4>{{x.name}}</h4>
+                    <div>
+                      <span *ngIf="x.disc_status" class="strike">{{ x.temp_selling_price | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
+                      <span>{{ x.temp_discounted_price | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
+                      <div class="purchase-div">
+                        <a>PURCHASE</a>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div id="related_prod_next" class="swiper-button swiper-button-next"></div>
+          <div id="related_prod_prev" class="swiper-button swiper-button-prev"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- #related products -->
+
+      <!-- product reviews -->
+      <div *ngIf="reviews.length" class="product-reviews-wrapper mt-3">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="product-reviews-inner-wrapper">
+              <h5 class="review-head">Ratings & Reviews</h5>
+              <div class="row">
+                <div class="col-6">
+                  <div class="avg-rating">
+                    <div class="avg-rating-inner">
+                      {{avg_review}}<i class="material-icons">star</i>
+                    </div>
+                    <div *ngIf="reviews.length>1" class="total-reviews">
+                      <span>Based on {{reviews.length}} Reviews</span>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="reviews.length>1" class="col-6 d-flex align-items-center justify-content-end">
+                  <select class="filter-select" name="review_sort" [(ngModel)]="review_sort" (change)="sorting(review_sort);">
+                    <option value="created_on">Most Recent</option>
+                    <option value="rating">Positive First</option>
+                    <option value="negative">Negative First</option>
+                  </select>
+                </div>
+              </div>
+            
+              <div class="primary-card review-card pr-3 pl-3">
+                <div class="row m-0">
+                  <div class="col-md-12 p-0">
+                    <div *ngFor="let x of reviews | paginate: { itemsPerPage: pageSize, currentPage: page };" class="customer-review-card">
+                      <div class="review-title">
+                        <div class="customer-star" [ngClass]="{ 'rating-good': x.rating>2, 'rating-avg': x.rating===2, 'rating-bad': x.rating===1 }">
+                          {{x.rating}}<i class="material-icons">star</i>
+                        </div>
+                        {{x.title}}
+                      </div>
+                      <div class="review-description">
+                        <p [innerHtml]="x.description"></p>
+                      </div>
+                      <div class="reviewed-by">
+                        <span>Reviewed by {{x.customer_name}} on {{x.created_on | date : "dd MMM y"}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="reviews.length>pageSize" class="col-md-12 navigation-ngx" style="border-top: 1px solid #eee;">
+                    <div class="mt-3">
+                      <pagination-controls (pageChange)="page=$event;" autoHide="true" responsive="true" maxSize="5" previousLabel="" nextLabel=""></pagination-controls>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- #product reviews -->
+
+    </div>
+  </section>
+
+</section>
+
+<!-- Addon Types Modal -->
+<div bsModal #addonTypesModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-addon">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex align-items-center">
+        <div>
+          <h5 class="modal-title">Choose your option</h5>
+          <p class="m-0">Let's begin</p>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="addonTypesModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body slim-scroll">
+        <div class="row">
+          <div class="col-12 d-flex mb-3" [ngClass]="productDetails?.disp_sizing_card? 'col-lg-4': 'col-lg-6'">
+            <div (click)="addonTypesModal.hide(); selectAddonType(productDetails.filteredCustomList, addonListModal, existingListModal, createNewModal);" class="primary-card cursor customize-model p-3">
+              <img width="100%" height="100%" imgBroken class="addon-icon" src="assets/images/readymade-size.svg" alt="addon">
+              <p class="text-center m-0">Use Readymade Sizing</p>
+              <p>Choose a standard size</p>
+            </div>
+          </div>
+          <div class="col-12 d-flex mb-3" [ngClass]="productDetails?.disp_sizing_card? 'col-lg-4': 'col-lg-6'">
+            <div (click)="addonTypesModal.hide(); selectAddonType(productDetails.filteredMmList, addonListModal, existingListModal, createNewModal);" class="primary-card cursor customize-model p-3">
+              <img width="100%" height="100%" imgBroken class="addon-icon" src="assets/images/give-measurement.svg" alt="addon">
+              <p class="text-center m-0">Give Measurements</p>
+              <p>Input your measurements and get the best fit</p>
+            </div>
+          </div>
+          <div *ngIf="productDetails?.disp_sizing_card" class="col-lg-4 col-12 d-flex mb-3">
+            <div (click)="addonTypesModal.hide(); redirectSizingAssistPage(productDetails.filteredMmList[0]);" class="primary-card cursor customize-model p-3">
+              <img width="100%" height="100%" imgBroken class="addon-icon" src="assets/images/sizing-assistant.svg" alt="addon">
+              <p class="text-center m-0">Use Sizing Assistant</p>
+              <p>Input your measurements and get the best fit</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="primary-btn" (click)="addonTypesModal.hide();">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Addon List Modal -->
+<div bsModal #addonListModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-addon">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex align-items-center">
+        <div>
+          <h5 class="modal-title">Choose your addon</h5>
+          <p class="m-0">Let's begin</p>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="addonListModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body slim-scroll">
+        <div class="row">
+          <div *ngFor="let x of productDetails.temp_addon_list | orderAsc: 'rank'; let i=index;" class="col-lg-4 col-md-4 col-6 d-flex mb-3">
+            <div (click)="addonListModal.hide(); onSelectAddon(x, existingListModal, createNewModal, mmOptionsModal, 500);" class="primary-card cursor customize-model p-3">
+              <img width="100%" height="100%" imgBroken *ngIf="x.image" [src]="imgBaseUrl+x.image" alt="addon" class="img-fluid">
+              <img width="100%" height="100%" imgBroken *ngIf="!x.image" class="addon-icon opacity6" src="assets/images/addon.svg" alt="addon">
+              <p class="text-center m-0">{{x.name}}</p>
+              <p *ngIf="x.price>0" class="text-center m-0">+ {{ cc.CALC(x.price) | currency:cc.currency?.country_code:'symbol':cc.format }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="primary-btn" (click)="addonListModal.hide();">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Measurement Option Modal -->
+<div bsModal #mmOptionsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-addon">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex align-items-center">
+        <div>
+          <h5 class="modal-title">Choose your measurements option</h5>
+          <p class="m-0">Let's begin</p>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="mmOptionsModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body slim-scroll">
+        <div class="row">
+          <div class="col-lg-6 col-6 d-flex mb-3">
+            <div (click)="mmOptionsModal.hide(); productDetails.selected_addon=productDetails.temp_selected_addon; onChangeAddon(); onCreateCustomization(existingListModal, createNewModal);" class="primary-card cursor customize-model p-3">
+              <img width="100%" height="100%" imgBroken class="addon-icon" src="assets/images/give-measurement.svg" alt="addon">
+              <p class="text-center m-0">Give Measurements</p>
+            </div>
+          </div>
+          <div class="col-lg-6 col-6 d-flex mb-3">
+            <div (click)="mmOptionsModal.hide(); redirectSizingAssistPage(productDetails.temp_selected_addon);" class="primary-card cursor customize-model p-3">
+              <img width="100%" height="100%" imgBroken class="addon-icon" src="assets/images/sizing-assistant.svg" alt="addon">
+              <p class="text-center m-0">Use Sizing Assistant</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="primary-btn" (click)="mmOptionsModal.hide();">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create New Modal -->
+<div bsModal #createNewModal="bs-modal" class="modal fade" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="dialog-addr">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title">
+            {{ (commonService.store_details?.additional_features?.custom_model)? 'Add New Model': 'Customization' }}
+          </h5>
+          <p class="m-0">
+            {{ (commonService.store_details?.additional_features?.custom_model)? 'Name and design your model': 'Create your own customization' }}
+          </p>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="createNewModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body slim-scroll">
+        <form id="addon-form" name="addon-form" autocomplete="off">
+          <div class="gray-card primary-card p-3 mb-4">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="model_name">Model Name<span class="req-star">*</span></label>
+                <input class="w-100" type="text" name="name" placeholder="Enter a name for your model" id="model_name" (input)="addonForm.alert_msg=null;"
+                [(ngModel)]="addonForm.name" #name="ngModel" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <!-- custom section -->
+              <ng-container *ngIf="customSection">
+                <h6>{{custom_list[customIndex]?.name}}</h6>
+                <div class="row">
+                  <div *ngFor="let x of custom_list[customIndex]?.filtered_option_list; let i=index;" class="col-lg-3 col-md-4 col-6 d-flex mb-3">
+                    <div class="primary-card customize-model p-3">
+                      <label class="store-label cursor m-0">
+                        <!-- Radio -->
+                        <input *ngIf="custom_list[customIndex]?.type=='either_or'" type="radio" class="option-input radio" name="option"
+                        [checked]="custom_list[customIndex].selected_option==x.name" (change)="addonForm.alert_msg=null; custom_list[customIndex].selected_option=x.name; getRadioNextList(x.name);" />
+                        <!-- Checkbox -->
+                        <input *ngIf="custom_list[customIndex]?.type!='either_or'" type="checkbox" class="option-input checkbox" name="option{{i}}"
+                        [(ngModel)]="x.custom_option_checked" (change)="addonForm.alert_msg=null; getCheckboxNextList(); disableOption();" [disabled]="x.disabled" />
+                        <!-- Content -->
+                        <img width="100%" height="100%" imgBroken *ngIf="x.image" [src]="imgBaseUrl+x.image" alt="addon" class="img-fluid">
+                        <img width="100%" height="100%" imgBroken *ngIf="!x.image" class="addon-icon opacity6" src="assets/images/addon.svg" alt="addon">
+                        <p class="text-center m-0">{{x.name}}</p>
+                        <p *ngIf="x.price>0" class="text-center m-0">+ {{ cc.CALC(x.price) | currency:cc.currency?.country_code:'symbol':cc.format }}</p>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- measurement section -->
+              <ng-container *ngIf="mmSection">
+                <h6>Measurements</h6>
+                <div class="row">
+                  <div *ngIf="measurement_sets[mmIndex].image" class="col-lg-4">
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                      <img width="100%" height="100%" imgBroken [src]="imgBaseUrl+measurement_sets[mmIndex].image" alt="model">
+                    </div>
+                  </div>
+                  <div [ngClass]="(measurement_sets[mmIndex].image)? 'col-lg-8': 'col-lg-12'">
+                    <!-- mm units -->
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div *ngIf="mmIndex==0" class="gray-card primary-card p-3 m-0">
+                          <div class="d-flex align-items-center  justify-content-center">
+                            <ng-container *ngFor="let unit of measurement_sets[mmIndex].units;">
+                              <label class="store-label d-flex align-items-center m-2">
+                                <input type="radio" class="option-input radio" [value]="unit.name" name="unit" (change)="addonForm.alert_msg=null; onChangeUnit();" [(ngModel)]="addonForm.mm_unit" />in {{unit.name}}
+                              </label>
+                            </ng-container>
+                          </div>
+                        </div>
+                        <div *ngIf="mmIndex>0" class="gray-card primary-card p-3">
+                          <div class="d-flex align-items-center  justify-content-center">
+                            <label class="store-label d-flex align-items-center m-2">
+                              <input type="radio" class="option-input radio" checked />in {{addonForm.mm_unit}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- #mm units -->
+
+                    <div class="row mt-4">
+                      <div class="col-md-12">
+                        <h6>{{measurement_sets[mmIndex].name}}</h6>
+                      </div>
+                      <ng-container *ngFor="let x of measurement_sets[mmIndex].list; let i=index;">
+                        <div class="col-12">
+                          <div class="gray-card primary-card p-3">
+                            <div class="row">
+                              <div class="col-8">
+                                <label for="value{{mmIndex}}{{i}}">{{x.name}}<span class="req-star">*</span></label>
+                                <input class="w-100" type="tel" name="value{{mmIndex}}{{i}}" id="value{{mmIndex}}{{i}}" (input)="addonForm.alert_msg=null; x.alert_msg='';"
+                                [(ngModel)]="x.value" #value="ngModel" (focusout)="mmFocusOut(x);" appNumberOnly required />
+                                <p *ngIf="x.alert_msg" style="font-size: 12px; color: red !important;">{{x.alert_msg}}</p>
+                              </div>
+                              <div class="col-4 d-flex align-items-center">
+                                <div class="d-flex justify-content-end align-items-center w-100">
+                                  <span class="mm_unit">{{addonForm.mm_unit}}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- notes section -->
+              <ng-container *ngIf="noteSection">
+                <h6 class="ml-3">{{productDetails.selected_addon?.notes_title}}</h6>
+                <div *ngFor="let x of notes_list; let i=index;" class="col-lg-12 mb-3">
+                  <div class="gray-card primary-card p-3">
+                    <p>{{x.name}}<span *ngIf="x.required" class="req-star">*</span></p>
+                    <input class="w-100" type="text" id="notes_name{{i}}" name="notes_name{{i}}" [(ngModel)]="x.value" [required]="x.required">
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer flex-column">
+        <!-- alert -->
+        <div class="danger-alert" *ngIf="addonForm?.alert_msg">
+          <div class="alert-msg d-flex align-items-center justify-content-center p-2">
+            <span class="material-icons"></span>
+            <p class="m-0">{{addonForm?.alert_msg}}</p>
+          </div>
+        </div>
+        <!-- alert end -->
+
+        <section class="proceed-sec d-flex justify-content-between w-100 m-0">
+          <!-- left side -->
+          <!-- custom section -->
+          <ng-container *ngIf="customSection">
+            <button *ngIf="customIndex==0" (click)="createNewModal.hide();" class="primary-btn">CLOSE</button>
+            <button *ngIf="customIndex>0" (click)="customPrev();" class="primary-btn">PREVIOUS</button>
+          </ng-container>
+          <!-- measurement section -->
+          <ng-container *ngIf="mmSection">
+            <button *ngIf="mmIndex==0 && !custom_list?.length" (click)="createNewModal.hide();" class="primary-btn">CLOSE</button>
+            <button *ngIf="custom_list?.length || mmIndex>0" (click)="customPrev();" class="primary-btn">PREVIOUS</button>
+          </ng-container>
+          <!-- note section -->
+          <ng-container *ngIf="noteSection">
+            <button *ngIf="!custom_list?.length && !measurement_sets?.length" (click)="createNewModal.hide();" class="primary-btn">CLOSE</button>
+            <button *ngIf="custom_list?.length || measurement_sets?.length" (click)="customPrev();" class="primary-btn">PREVIOUS</button>
+          </ng-container>
+          <!-- #left side -->
+
+          <!-- right side -->
+          <!-- custom section -->
+          <ng-container *ngIf="customSection">
+            <button *ngIf="custom_list[customIndex+1]?.filtered_option_list?.length || measurement_sets.length || notes_list.length" (click)="(custom_list[customIndex+1]?.filtered_option_list?.length)? onCustomNext(false): onCustomNext(true);" class="primary-btn">NEXT</button>
+            <button *ngIf="!custom_list[customIndex+1]?.filtered_option_list?.length && !measurement_sets.length&& !notes_list.length" (click)="onSaveNewModal(createNewModal, selectedCustomizationDetailsModal);" [disabled]="addonForm.submit"
+              class="primary-btn d-flex justify-content-center align-items-center">
+              SUBMIT
+              <div class="box" *ngIf="addonForm.submit">
+                <div class="spinner"></div>
+              </div>
+            </button>
+          </ng-container>
+          <!-- measurement section -->
+          <ng-container *ngIf="mmSection">
+            <button *ngIf="(measurement_sets?.length-1)>mmIndex || notes_list.length" (click)="onMmNext();" class="primary-btn">NEXT</button>
+            <button *ngIf="(measurement_sets?.length-1)==mmIndex && !notes_list.length" (click)="onSaveNewModal(createNewModal, selectedCustomizationDetailsModal);" [disabled]="addonForm.submit"
+              class="primary-btn d-flex justify-content-center align-items-center">
+              SUBMIT
+              <div class="box" *ngIf="addonForm.submit">
+                <div class="spinner"></div>
+              </div>
+            </button>
+          </ng-container>
+          <!-- note section -->
+          <button *ngIf="noteSection" (click)="onSaveNewModal(createNewModal, selectedCustomizationDetailsModal);" [disabled]="addonForm.submit"
+            class="primary-btn d-flex justify-content-center align-items-center">
+            SUBMIT
+            <div class="box" *ngIf="addonForm.submit">
+              <div class="spinner"></div>
+            </div>
+          </button>
+          <!-- #right side -->
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Existing List Modal -->
+<div bsModal #existingListModal="bs-modal" class="modal fade" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="dialog-addr">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title">Model Details</h5>
+          <p class="m-0">Select an existing model or create a new one</p>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="existingListModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body slim-scroll">
+        <div *ngFor="let x of existing_model_list; let i=index;" class="mb-4">
+          <div>
+            <h5>Model {{i+1}}</h5>
+          </div>
+          <div class="gray-card primary-card p-3">
+            <div class="row">
+              <div class="col-lg-2 col-md-6">
+                <div class="profile_address">
+                  <h6>Name</h6>
+                  <p>{{x.name}}<p>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-6">
+                <div class="profile_address">
+                  <h6>Created On</h6>
+                  <p>{{x.created_on | date : "dd MMM y"}}<p>
+                </div>
+              </div>
+              <ng-container *ngIf="x?.custom_list?.length">
+                <div *ngFor="let y of x.custom_list | slice:0:2; let j=index;" class="col-md-6" [ngClass]="x.custom_list.length==1? 'col-lg-4': 'col-lg-2'">
+                  <div class="profile_address">
+                    <h6>{{y.name}}</h6>
+                    <p>{{y.value[0]?.name}}<p>
+                  </div>
+                </div>
+              </ng-container>
+              <div *ngIf="!x?.custom_list?.length" class="col-lg-4 col-md-6"></div>
+              <div class="col-lg-4 col-md-12">
+                <button type="button" (click)="existingListModal.hide(); onSelectModal(x, selectedCustomizationDetailsModal);" class="primary-btn w-100 mb-2">SELECT</button>
+                <button type="button" (click)="existingListModal.hide(); onViewModel(x);" class="secondary-btn w-100">VIEW</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <button class="primary-btn" (click)="closeExistingAndOpenNewModal(existingListModal, createNewModal);" type="button">ADD NEW MODEL</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="secondary-btn" (click)="existingListModal.hide();">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Selected Customization Details Modal -->
+<div bsModal #selectedCustomizationDetailsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-waiter">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex align-items-center">
+        <div>
+          <h5 class="modal-title">
+            <strong>{{customized_model?.name}}</strong>
+          </h5>
+          <p class="m-0">These are the details of the customization</p>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="selectedCustomizationDetailsModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body slim-scroll">
+        <!-- custom list -->
+        <div *ngIf="commonService.customView" class="row">
+          <ng-container *ngFor="let x of customized_model?.custom_list; let i=index;">
+            <div class="col-md-6 d-flex" *ngFor="let y of x.value; let j=index;">
+              <div class="gray-card primary-card d-flex align-items-center w-100 p-3">
+                <div class="d-flex flex-row">
+                  <div class="modal-img">
+                    <img width="100%" height="100%" imgBroken *ngIf="y.image" [src]="imgBaseUrl+y.image" alt="model">
+                    <img width="100%" height="100%" imgBroken class="addon-icon opacity6" *ngIf="!y.image" src="assets/images/addon.svg" alt="addon">
+                  </div>
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6>{{x.name}}</h6>
+                    <p class="m-0">{{y.name}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <!-- measurement list -->
+        <div *ngIf="commonService.measurementView" class="row">
+          <ng-container *ngFor="let x of customized_model?.mm_sets; let i=index;">
+            <div class="d-flex" [ngClass]="(customized_model?.mm_sets?.length===1)? 'col-md-12': 'col-md-6'">
+              <div class="gray-card primary-card w-100 p-3 mb-3">
+                <div align="center">
+                  <h5>{{x.name}}</h5>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center justify-content-center mb-3">
+                    <img width="100%" height="100%" imgBroken *ngIf="x.image" [src]="imgBaseUrl+x.image" alt="measurement_img">
+                  </div>
+                  <ng-container *ngFor="let y of x.list; let j=index;">
+                    <div class="pr-1 pl-1">
+                      <div class="row measurement-table">
+                        <div class="col-6 d-flex juustify-content-start align-items-center border">
+                          <p class="m-0">{{y.name}}:</p>
+                        </div>
+                        <div class="col-6 d-flex juustify-content-start align-items-center border">
+                          <p class="m-0">{{y.value}} {{ customized_model?.mm_unit }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <!-- notes list -->
+        <div *ngIf="commonService.notesView;" class="row">
+          <ng-container *ngFor="let x of customized_model?.notes_list; let i=index;">
+            <div *ngIf="x.value" class="col-md-12 d-flex">
+              <div class="gray-card primary-card d-flex align-items-center w-100 p-3">
+                <div class="d-flex flex-row">
+                  <div class="d-flex flex-column justify-content-center">
+                    <h6>{{x.name}}</h6>
+                    <p class="m-0">{{x.value}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="modal-footer custom-view-mdl-ftr-btn">
+        <div class="row w-100 justify-content-end m-0">
+          <!-- custom view -->
+          <ng-container *ngIf="commonService.customView">
+            <ng-container *ngIf="customized_model?.mm_sets?.length || customized_model?.notes_list?.length">
+              <div *ngIf="customized_model?.mm_sets?.length" class="col-6 pr-1 pl-1" [ngClass]="(customized_model?.notes_list?.length)? 'col-md-4': 'col-md-6'">
+                <button class="primary-btn w-100" type="button" [ngClass]="(customized_model?.notes_list?.length)? '': 'mb-0'" (click)="commonService.customView=false; commonService.measurementView=true; commonService.notesView=false; commonService?.scrollModalTop(0);">
+                  VIEW MEASUREMENTS
+                </button>
+              </div>
+              <div *ngIf="customized_model?.notes_list?.length" class="col-6 pr-1 pl-1" [ngClass]="(customized_model?.mm_sets?.length)? 'col-md-4': 'col-md-6'">
+                <button class="primary-btn w-100" type="button" [ngClass]="(customized_model?.mm_sets?.length)? '': 'mb-0'" (click)="commonService.customView=false; commonService.measurementView=false; commonService.notesView=true; commonService?.scrollModalTop(0);">
+                  VIEW NOTES
+                </button>
+              </div>
+            </ng-container>
+          </ng-container>
+          <!-- measurement view -->
+          <ng-container *ngIf="commonService.measurementView">
+            <ng-container *ngIf="customized_model?.custom_list?.length || customized_model?.notes_list?.length">
+              <div *ngIf="customized_model?.custom_list?.length" class="col-6 pr-1 pl-1" [ngClass]="(customized_model?.notes_list?.length)? 'col-md-4': 'col-md-6'">
+                <button class="primary-btn w-100" type="button" [ngClass]="(customized_model?.notes_list?.length)? '': 'mb-0'" (click)="commonService.customView=true; commonService.measurementView=false; commonService.notesView=false; commonService?.scrollModalTop(0);">
+                  VIEW CUSTOMIZATION
+                </button>
+              </div>
+              <div *ngIf="customized_model?.notes_list?.length" class="col-6 pr-1 pl-1" [ngClass]="(customized_model?.custom_list?.length)? 'col-md-4': 'col-md-6'">
+                <button class="primary-btn w-100" type="button" [ngClass]="(customized_model?.custom_list?.length)? '': 'mb-0'" (click)="commonService.customView=false; commonService.measurementView=false; commonService.notesView=true; commonService?.scrollModalTop(0);">
+                  VIEW NOTES
+                </button>
+              </div>
+            </ng-container>
+          </ng-container>
+          <!-- notes view -->
+          <ng-container *ngIf="commonService.notesView">
+            <ng-container *ngIf="customized_model?.custom_list?.length || customized_model?.mm_sets?.length">
+              <div *ngIf="customized_model?.custom_list?.length" class="col-6 pr-1 pl-1" [ngClass]="(customized_model?.mm_sets?.length)? 'col-md-4': 'col-md-6'">
+                <button class="primary-btn w-100" type="button" [ngClass]="(customized_model?.mm_sets?.length)? '': 'mb-0'" (click)="commonService.customView=true; commonService.measurementView=false; commonService.notesView=false; commonService?.scrollModalTop(0);">
+                  VIEW CUSTOMIZATION
+                </button>
+              </div>
+              <div *ngIf="customized_model?.mm_sets?.length" class="col-6 pr-1 pl-1" [ngClass]="(customized_model?.custom_list?.length)? 'col-md-4': 'col-md-6'">
+                <button class="primary-btn w-100" type="button" [ngClass]="(customized_model?.custom_list?.length)? '': 'mb-0'" (click)="commonService.customView=false; commonService.measurementView=true; commonService.notesView=false; commonService?.scrollModalTop(0);">
+                  VIEW MEASUREMENTS
+                </button>
+              </div>
+            </ng-container>
+          </ng-container>
+          <div class="pr-1 pl-1" [ngClass]="(customized_model?.custom_list?.length && customized_model?.mm_sets?.length && customized_model?.notes_list?.length)? 'col-md-4 col-12': 'col-md-6 col-6'">
+            <button class="primary-btn w-100 mb-0" type="button" *ngIf="!productDetails?.added_to_cart && productDetails.stock>=(productDetails.quantity+productDetails.additional_qty)" (click)="addtoCart(false); selectedCustomizationDetailsModal.hide();">
+              ADD TO CART
+            </button>
+            <button class="primary-btn w-100 mb-0" type="button" *ngIf="productDetails?.added_to_cart || productDetails.stock<(productDetails.quantity+productDetails.additional_qty)" (click)="selectedCustomizationDetailsModal.hide();">
+              CLOSE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Size chart modal -->
+<div bsModal #sizechartModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-chart">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex align-items-center">
+        <div>
+          <h6 class="modal-title">{{productDetails.name}}</h6>
+        </div>
+        <div class="d-flex">
+          <i class="material-icons" (click)="sizechartModal.hide();">close</i>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="sizechart-body">
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <p class="m-0 text-right">{{productDetails?.chart_details?.unit}}</p>
+            </div>
+            <div class="col-md-12">
+              <div class="sizechart">
+                <table *ngIf="productDetails?.chart_details?.chart_list?.length" class="table">
+                  <tr>
+                    <th *ngFor="let key of productDetails.chart_keys;">{{key}}</th>
+                  </tr>
+                  <tr *ngFor="let item of productDetails.chart_details.chart_list;">
+                    <td *ngFor="let key of productDetails.chart_keys;">{{item[key]}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <p class="sizenote">{{productDetails?.chart_details?.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
