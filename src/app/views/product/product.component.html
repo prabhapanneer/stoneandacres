@@ -111,11 +111,20 @@
                   </div>
                   <!-- <div class="place__currency">$$</div> -->
                   <div class="place__category">
-                    <a>Stone and Acres</a>
-                   
+                    <a>Stone and Acres</a>                   
                   </div>
+                 
                 </div><!-- .place__meta -->
               </div><!-- .place__box -->
+
+              <!-- <div class="col-md-3 col-6 mb-40">
+                <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">CONTACT</button>
+              </div>   -->
+
+              <div class="tooltip">
+                <div class="px-3 py-2 primary-btn">Download Brochure</div>
+                <span class="tooltiptext">Please fill the get in touch form for download brochure</span>
+              </div>
 
 
               <div class="place__box place__box-hightlight">
@@ -245,7 +254,7 @@
             </div><!-- .place__left -->
           </div>
           <div class="col-lg-4" style="margin-bottom: 200px;">
-            <div class="sidebar sidebar--shop sidebar--border" style="position: sticky;top:200px; margin-bottom: 100px;">
+            <div class="sidebar sidebar--shop sidebar--border" style="position: sticky;top:200px; margin-bottom: 200px;">
               <div class="widget-reservation-mini">
                                 <h2 >GET IN TOUCH</h2>
                                 <a href="#" class="open-wg btn">Request</a>
@@ -269,6 +278,9 @@
                   <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">SUBMIT</button>
                   <!-- <input type="submit" name="submit" value="Contact"> -->
                 </form>
+                <div class="mt-3">
+                  <button type="button" (click)="commonService.openEmi()" class="primary-btn w-100">EMI CALCULATOR</button>
+                </div>
               </aside><!-- .widget-reservation -->
             </div><!-- .sidebar -->
           </div>

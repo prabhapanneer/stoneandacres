@@ -26,6 +26,7 @@ export class HomeComponent {
   template_setting = environment.template_setting;
   blog_list: any = [];
   subscription: Subscription;
+  
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public swiperService: SwiperService, private assetLoader: DynamicAssetLoaderService,
@@ -39,6 +40,8 @@ export class HomeComponent {
   ngOnInit() {
     // this.setSliderHeight();
   }
+
+  
 
   ngAfterContentInit() {
     // this.setSliderHeight();

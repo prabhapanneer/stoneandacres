@@ -95,6 +95,7 @@
                     Wishlist
                   </a>
                 </li>
+                
                 <li *ngIf="commonService.ys_features.indexOf('product_search')!=-1">
                   <a routerLink="/search">Search</a>
                 </li>
@@ -169,6 +170,9 @@
               </a>
             </div> -->
             <!-- search -->
+            <div class="header-icon-container">
+              <a (click)="commonService.openEmi()">EMI Calculator</a>
+            </div>
             <div *ngIf="commonService.ys_features.indexOf('product_search')!=-1" routerLink="/search" class="btn-search header-icon-container">
               <i [hidden]="!commonService?.window_loaded" class="material-icons-outlined transform-90">search</i>
             </div>

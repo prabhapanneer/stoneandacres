@@ -18,9 +18,23 @@ export class FooterComponent {
   imgBaseUrl: string = environment.img_baseurl;
   bandLogo: string = environment.band_logo;
   currentYear: any = (new Date()).getFullYear();
+  emiForm: any = {};
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, public router: Router) { }
+  openemi(modalName) {
+    modalName.show();
+  }
+  onCalc()
+  {
+    console.log(this.emiForm)
+    let princ = this.emiForm.loan_amount;
+  let term  = this.emiForm.duration;
+  let intr   = (this.emiForm.interest_rate/100)/12;
 
+  this.emiForm.calc = princ * intr / (1 - (Math.pow(1/(1 + intr), term*12)));
+  this.emiForm.result = this.emiForm.calc.toFixed(0);
+  console.log("EMI",this.emiForm.calc.toFixed(0));
+  }
   onSubscribe(modalName) {
     this.subscribeForm.submit = true;
     this.subscribeForm.store_id = environment.store_id;

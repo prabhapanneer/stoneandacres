@@ -341,6 +341,10 @@ export class CommonService {
     }
   }
 
+  openEmi() {
+    this.document.getElementById('open_emi').click();
+  }
+
   getIpInfo(ipIndex) {
     return new Promise((resolve, reject) => {
       this.storeApi.IP_INFO(this.ip_urls[Number(ipIndex)]).subscribe(result => {
