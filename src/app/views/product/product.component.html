@@ -123,7 +123,7 @@
 
               <div class="tooltip">
                 <div class="px-3 py-2 primary-btn">Download Brochure</div>
-                <span class="tooltiptext">Please fill the get in touch form for download brochure</span>
+                <span class="tooltiptext">Please fill the get in touch form to download brochure</span>
               </div>
 
 
@@ -150,11 +150,11 @@
                     <span class="fs-12 mt-1"><b>Budget</b></span>
                     <span>{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>                    
                   </div>
-                  <div class="col-md-4 col-4 place__amenities mb-5">									
+                  <!-- <div class="col-md-4 col-4 place__amenities mb-5">									
                     <img src="assets/images/overview_icons/handover.png" alt="handover" style="height:32px; width:auto;">
                     <span class="fs-12 mt-1"><b>Handover</b></span>
                     <span>{{productDetails.handover_on | date: "MMMM yyyy"}}</span>                    
-                  </div>
+                  </div> -->
                   <div class="col-md-4 col-4 place__amenities mb-5" *ngIf="productDetails.rera_id">									
                     <img src="assets/images/overview_icons/rera_id.png" alt="rera" style="height:32px; width:auto;">
                     <span class="fs-12 mt-1"><b>RERA ID</b></span>
@@ -165,6 +165,39 @@
                 </div>
               </div><!-- .place__box -->
              
+
+
+
+              <div class="place__box place__box-hightlight" *ngIf="productDetails?.amenity_list?.length">
+                <h3 class="place__title--additional">Amenities</h3>
+                <div class="hightlight-grid row">
+                  <ng-container *ngFor="let x of productDetails.updated_amenities_list; let i=index;">
+                  <div class="col-3 mb-4">		
+                    <div class="place__amenities">
+                      <img [src]="imgBaseUrl+x.image" alt="{{x.name}}">
+                    <span>{{x.name}}</span>
+                    </div>	                    
+                  </div>
+                  </ng-container>
+                </div>
+              </div><!-- .place__box -->
+
+              <div class="place__box place__box-overview" *ngIf="productDetails.description">
+                <h3>Overview</h3>
+                <div class="place__desc" [innerHtml]="productDetails.description"></div><!-- .place__desc -->
+                <!-- <a href="#" class="show-more" title="Show More">Show more</a> -->
+              </div>
+              
+              <div class="place__box place__box-map" *ngIf="productDetails?.location_url">
+                <h3 class="place__title--additional">
+                  Location & Maps
+                </h3>
+                <div class="maps">
+                <iframe [src]="productDetails.location_url_new" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.7781428704857!2d80.17187021482077!3d12.857601190930756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5259b108b02915%3A0xb54afa6ce1269383!2sPonmar%20Enclave%20Park!5e0!3m2!1sen!2sin!4v1650013286887!5m2!1sen!2sin" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe> -->
+                </div>
+                                
+              </div><!-- .place__box -->
 
               <div class="place__box place__box-map" *ngIf="productDetails?.variant_unit_info">
                 <h3 class="place__title--additional">
@@ -217,37 +250,6 @@
 
                 </div>
               </div>
-
-              <div class="place__box place__box-hightlight" *ngIf="productDetails?.amenity_list?.length">
-                <h3 class="place__title--additional">Amenities</h3>
-                <div class="hightlight-grid row">
-                  <ng-container *ngFor="let x of productDetails.updated_amenities_list; let i=index;">
-                  <div class="col-3 mb-4">		
-                    <div class="place__amenities">
-                      <img [src]="imgBaseUrl+x.image" alt="{{x.name}}">
-                    <span>{{x.name}}</span>
-                    </div>	                    
-                  </div>
-                  </ng-container>
-                </div>
-              </div><!-- .place__box -->
-
-              <div class="place__box place__box-overview" *ngIf="productDetails.description">
-                <h3>Overview</h3>
-                <div class="place__desc" [innerHtml]="productDetails.description"></div><!-- .place__desc -->
-                <!-- <a href="#" class="show-more" title="Show More">Show more</a> -->
-              </div>
-              
-              <div class="place__box place__box-map" *ngIf="productDetails?.location_url">
-                <h3 class="place__title--additional">
-                  Location & Maps
-                </h3>
-                <div class="maps">
-                <iframe [src]="productDetails.location_url_new" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
-                <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.7781428704857!2d80.17187021482077!3d12.857601190930756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5259b108b02915%3A0xb54afa6ce1269383!2sPonmar%20Enclave%20Park!5e0!3m2!1sen!2sin!4v1650013286887!5m2!1sen!2sin" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe> -->
-                </div>
-                                
-              </div><!-- .place__box -->
 
 
 

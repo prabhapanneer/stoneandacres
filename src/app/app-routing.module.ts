@@ -48,6 +48,8 @@ const routes: Routes = [
   { path: 'pages/:type', loadChildren: () => import('./views/properties/extra-page/extra-page.module').then(m => m.ExtraPageModule) },
   { path: 'sell', loadChildren: () => import('./views/properties/sell/sell.module').then(m => m.SellModule) },
   { path: 'aboutus', loadChildren: () => import('./views/properties/about-us/about-us.module').then(m => m.AboutUsModule) },
+  { path: 'our-services', loadChildren: () => import('./views/properties/our-services/our-services.module').then(m => m.OurServicesModule) },
+
   
   { path: '**', redirectTo: '/others/404' }
 ];
