@@ -1,0 +1,96 @@
+<section *ngIf="pageLoader">
+    <app-loading-spinner></app-loading-spinner>
+  </section>
+  
+  <section *ngIf="!pageLoader" class="over-all smooth-fadein">
+    <section class="common-site-section contact">
+      <div class="{{template_setting?.body_type}}">
+        <div class="row align-items-center justify-content-center mb-4">
+            <h1 class="">Referral Program</h1>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <!-- referral form -->
+          <div class="col-md-8">
+            <div class="contact-us-form mb-3">
+              <form autocomplete="off" (ngSubmit)="onSubmit();" ngNativeValidate>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="text-center p-3 mb-2 col-md-12">
+                            <h1>Your Details</h1>
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Name</p>
+                            <input type="text" name="name" class="form-control w-100" [(ngModel)]="referralForm.name" required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                          <p>Mobile</p>
+                          <input type="tel" name="mobile" class="form-control w-100" maxlength="10" minlength="10" [(ngModel)]="referralForm.mobile" appNumberOnly required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                          <p>Email id</p>
+                          <input type="email" name="email" class="form-control w-100" [(ngModel)]="referralForm.email"
+                          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Projects</p>
+                            <select name="project" [(ngModel)]="referralForm.project" style="height:48px !important;font-style: italic;">
+                              <option [ngValue]="undefined" disabled >Select Project</option>
+                              <option *ngFor="let x of projectList.list" [ngValue]="x.name">{{x.name}}</option>                                
+                            </select>
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Flat / Plot Number</p>
+                            <input type="text" name="flat_number" class="form-control w-100" [(ngModel)]="referralForm.flat_number" required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Other Project</p>
+                            <input type="text" name="other_project" class="form-control w-100" [(ngModel)]="referralForm.other_project" required />
+                        </div>
+                        
+                        <div class="text-center p-3  mb-2 col-md-12">
+                            <h1>Referee Details</h1>
+                        </div>
+
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Friend Name</p>
+                            <input type="text" name="friend_name" class="form-control w-100" [(ngModel)]="referralForm.friend_name" required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                          <p>Friend Mobile</p>
+                          <input type="tel" name="friend_mobile" class="form-control w-100" maxlength="10" minlength="10" [(ngModel)]="referralForm.friend_mobile" appNumberOnly required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Location</p>
+                            <input type="text" name="friend_location" class="form-control w-100" [(ngModel)]="referralForm.friend_location" required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Projects</p>
+                            <select name="friend_project" [(ngModel)]="referralForm.friend_project" style="height:48px !important;font-style: italic;">
+                              <option [ngValue]="undefined" disabled>Select Project</option>
+                              <option *ngFor="let y of projectList.list" [ngValue]="y.name">{{y.name}}</option>
+                            </select>
+                        </div>
+                    
+                        <div *ngIf="alert_msg" [ngClass]="success_alert? 'success-alert': 'danger-alert'">
+                          <div class="alert-msg d-flex align-items-center justify-content-center p-2">
+                            <span class="material-icons"></span>
+                            <p class="m-0">{{ alert_msg }}</p>
+                          </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row justify-content-center align-items-center">
+                    <button type="submit" [disabled]="referralForm.submit" class="primary-btn d-flex justify-content-center align-items-center w-md-40">
+                        Submit
+                        <div *ngIf="referralForm.submit" class="box">
+                          <div class="spinner"></div>
+                        </div>
+                    </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>

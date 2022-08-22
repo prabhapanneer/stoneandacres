@@ -1,0 +1,76 @@
+<section *ngIf="pageLoader">
+    <app-loading-spinner></app-loading-spinner>
+  </section>
+  
+  <section *ngIf="!pageLoader" class="over-all smooth-fadein">
+    <section class="common-site-section contact">
+      <div class="{{template_setting?.body_type}}">
+        <div class="row align-items-center justify-content-center mb-4">
+            <h1 class="">For Land Owners</h1>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <!-- landWonerForm form -->
+          <div class="col-md-8">
+            <div class="contact-us-form mb-3">
+              <form autocomplete="off" (ngSubmit)="onSubmit();" ngNativeValidate>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                            <p>Name of the land owner</p>
+                            <input type="text" name="name" class="form-control w-100" [(ngModel)]="landWonerForm.name" required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-6">
+                          <p>Mobile Number</p>
+                          <input type="tel" name="mobile" class="form-control w-100" maxlength="10" minlength="10" [(ngModel)]="landWonerForm.mobile" appNumberOnly required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-12">
+                          <p>Email Adderss</p>
+                          <input type="email" name="email" class="form-control w-100" [(ngModel)]="landWonerForm.email"
+                          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
+                        </div>
+                        <div class="primary-card form-group p-3 mb-3 col-md-12">
+                          <p>Land Location</p>
+                          <textarea name="location" class="form-control w-100" style="height: 100% !important;" rows="2" cols="50" [(ngModel)]="landWonerForm.location"></textarea>
+                        </div>
+
+                        <div class="mt-4 w-100 col-md-12">
+                          <div class="primary-card form-group px-0 pt-3 mb-0 w-100">
+                            <p class="mb-0">Land Extend in (Acres/Grounds)</p>
+                            </div>
+                            <div class="row">                          
+                              <div class="primary-card form-group p-3 mb-3 col-md-8">                            
+                                <input type="text" name="landextend" class="form-control w-100" [(ngModel)]="landWonerForm.landextend" required />
+                            </div>
+                            <div class="primary-card form-group p-3 mb-3 col-md-4">                         
+                                <select name="landextend_type" [(ngModel)]="landWonerForm.landextend_type" style="height:48px !important;font-style: italic;">
+                                    <option value="undefined" selected disabled>Select type</option>
+                                    <option value="Acers">Acers</option>
+                                    <option value="Ground">Ground</option>
+                                </select>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <div *ngIf="alert_msg" [ngClass]="success_alert? 'success-alert': 'danger-alert'">
+                          <div class="alert-msg d-flex align-items-center justify-content-center p-2">
+                            <span class="material-icons"></span>
+                            <p class="m-0">{{ alert_msg }}</p>
+                          </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row justify-content-center align-items-center">
+                    <button type="submit" [disabled]="landWonerForm.submit" class="primary-btn d-flex justify-content-center align-items-center w-md-40">
+                        Submit
+                        <div *ngIf="landWonerForm.submit" class="box">
+                          <div class="spinner"></div>
+                        </div>
+                    </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>

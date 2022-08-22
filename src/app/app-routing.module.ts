@@ -50,6 +50,10 @@ const routes: Routes = [
   { path: 'aboutus', loadChildren: () => import('./views/properties/about-us/about-us.module').then(m => m.AboutUsModule) },
   { path: 'our-services', loadChildren: () => import('./views/properties/our-services/our-services.module').then(m => m.OurServicesModule) },
 
+  { path: 'customers', loadChildren:() => import('./views/properties/customers/customers.module').then(m => m.CustomersModule) },
+  { path: 'land-owners', loadChildren:() => import('./views/properties/land-owners/land-owners.module').then(m => m.LandOwnersModule) },
+  { path: 'referral', loadChildren:() => import('./views/properties/referral/referral.module').then(m => m.ReferralModule) },
+  { path: 'thankyou-page', loadChildren:()=>import('./views/properties/thankyou-page/thankyou-page.module').then(m=> m.ThankyouPageModule) },
   
   { path: '**', redirectTo: '/others/404' }
 ];

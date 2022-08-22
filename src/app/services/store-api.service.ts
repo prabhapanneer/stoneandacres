@@ -78,4 +78,9 @@ export class StoreApiService {
   // fatoorah payment
   FATOORAH_INITIATE_PAY(x) { return this.http.post<any>(environment.ws_url+'/store_details/fatoorah_initiate_pay/'+environment.store_id, x); }
 
+
+  MAIL(x){
+    return this.http.post<any>('https://yourstore.io/api/others/enquiry_email',x);
+  }
+
 }
