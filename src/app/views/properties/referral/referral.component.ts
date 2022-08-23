@@ -90,11 +90,7 @@ export class ReferralComponent implements OnInit {
                             
         bodyContent +="</td>";
         bodyContent +="</tr>";
-        // bodyContent +="<tr>";
-        // bodyContent +="<td colspan='2' align='center'>";
-        // bodyContent +="<h1 style='font-size:18px;font-weight:600;margin:0;text-align:center;padding-top:30px;padding-bottom: 10px;color: rgba(0, 0, 0, 0.7);letter-spacing: 0.05em;font-family: 'Poppins', sans-serif!important;'>Please get in touch with them at the earliest</h1>";
-        // bodyContent +="</td>";
-        // bodyContent +="</tr>";                   
+                 
         bodyContent +="</tbody>";
         bodyContent +="</table>";
         bodyContent +="<table border='0' cellpadding='0' cellspacing='0' width='500' style='width:100%;min-width:100%;padding:0 30px '>";
@@ -164,18 +160,6 @@ export class ReferralComponent implements OnInit {
         bodyContent +="</td>";
         bodyContent +="<td align='left' valign='top' width='70%'>";
         bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px 10px 10px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'><b> ##flat_number## </b></p>";
-        bodyContent +="</td>";
-        bodyContent +="</tr>";
-
-        bodyContent +="<tr>";
-        bodyContent +="<td align='left' valign='top' width='19%'>"; 
-        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'>Other Project</p>";
-        bodyContent +="</td>";  
-        bodyContent +="<td align='left' valign='top' width='1%'>";
-        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'> : </p>";
-        bodyContent +="</td>";
-        bodyContent +="<td align='left' valign='top' width='70%'>";
-        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px 10px 10px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'><b> ##other_project## </b></p>";
         bodyContent +="</td>";
         bodyContent +="</tr>";
 
@@ -278,7 +262,6 @@ export class ReferralComponent implements OnInit {
         bodyContent = bodyContent.replace("##email##", formData.email);
         bodyContent = bodyContent.replace("##project##", formData.project);
         bodyContent = bodyContent.replace("##flat_number##", formData.flat_number);
-        bodyContent = bodyContent.replace("##other_project##", formData.other_project);
         bodyContent = bodyContent.replace("##friend_name##", formData.friend_name);
         bodyContent = bodyContent.replace("##friend_mobile##", formData.friend_mobile);
         bodyContent = bodyContent.replace("##friend_location##", formData.friend_location);

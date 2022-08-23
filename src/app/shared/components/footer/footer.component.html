@@ -198,25 +198,25 @@
         
         <div class="row">
           <div class="form-group col-6">
-            <label for="name">Loan Amount</label>
+            <label for="name">Loan amount</label>
             <input type="tel" appNumberOnly name="loan_amount" id="loan_amount" [(ngModel)]="emiForm.loan_amount" #loan_amount="ngModel"
               (input)="emiForm.errorMsg=null;" required />
           </div>
 
           <div class="form-group col-6">
-            <label for="name">Interest Rate (%)</label>
+            <label for="name">Interest rate (%)</label>
             <input type="tel" appNumberOnly name="interest_rate" id="interest_rate" [(ngModel)]="emiForm.interest_rate" #interest_rate="ngModel"
               (input)="emiForm.errorMsg=null;" required />
           </div>
 
           <div class="form-group col-6">
-            <label for="name">Loan Duration (Years)</label>
+            <label for="name">Loan duration (in years)</label>
             <input type="tel" appNumberOnly name="duration" id="duration" [(ngModel)]="emiForm.duration" #duration="ngModel"
               (input)="emiForm.errorMsg=null;" required />
           </div>
           </div>
           <div class="row pt-3 pb-2" *ngIf="this.emiForm.result">
-            <div class="col-12"><h2>Loan EMI: {{emiForm.result | currency:'INR':'symbol':'1.0'}}</h2></div>
+            <div class="col-12"><h2>Loan EMI: {{emiForm.result}}</h2></div>
           </div>
       </div>
 

@@ -32,7 +32,8 @@ export class FooterComponent {
   let intr   = (this.emiForm.interest_rate/100)/12;
 
   this.emiForm.calc = princ * intr / (1 - (Math.pow(1/(1 + intr), term*12)));
-  this.emiForm.result = this.emiForm.calc.toFixed(0);
+  let x = this.emiForm.calc.toFixed(0);
+  this.emiForm.result = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(x);
   console.log("EMI",this.emiForm.calc.toFixed(0));
   }
   onSubscribe(modalName) {

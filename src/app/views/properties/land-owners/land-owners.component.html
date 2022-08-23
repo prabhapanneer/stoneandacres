@@ -16,15 +16,15 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="primary-card form-group p-3 mb-3 col-md-6">
-                            <p>Name of the land owner</p>
+                            <p>Name</p>
                             <input type="text" name="name" class="form-control w-100" [(ngModel)]="landWonerForm.name" required />
                         </div>
                         <div class="primary-card form-group p-3 mb-3 col-md-6">
-                          <p>Mobile Number</p>
+                          <p>Mobile</p>
                           <input type="tel" name="mobile" class="form-control w-100" maxlength="10" minlength="10" [(ngModel)]="landWonerForm.mobile" appNumberOnly required />
                         </div>
                         <div class="primary-card form-group p-3 mb-3 col-md-12">
-                          <p>Email Adderss</p>
+                          <p>Email</p>
                           <input type="email" name="email" class="form-control w-100" [(ngModel)]="landWonerForm.email"
                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
                         </div>
@@ -35,16 +35,16 @@
 
                         <div class="mt-4 w-100 col-md-12">
                           <div class="primary-card form-group px-0 pt-3 mb-0 w-100">
-                            <p class="mb-0">Land Extend in (Acres/Grounds)</p>
+                            <p class="mb-0">Land Extent in (Acres/Grounds)</p>
                             </div>
                             <div class="row">                          
                               <div class="primary-card form-group p-3 mb-3 col-md-8">                            
-                                <input type="text" name="landextend" class="form-control w-100" [(ngModel)]="landWonerForm.landextend" required />
+                                <input type="text" name="landextent" class="form-control w-100" [(ngModel)]="landWonerForm.landextent" required />
                             </div>
                             <div class="primary-card form-group p-3 mb-3 col-md-4">                         
-                                <select name="landextend_type" [(ngModel)]="landWonerForm.landextend_type" style="height:48px !important;font-style: italic;">
+                                <select name="landextent_type" [(ngModel)]="landWonerForm.landextent_type" style="height:48px !important;font-style: italic;">
                                     <option value="undefined" selected disabled>Select type</option>
-                                    <option value="Acers">Acers</option>
+                                    <option value="Acres">Acres</option>
                                     <option value="Ground">Ground</option>
                                 </select>
                             </div>

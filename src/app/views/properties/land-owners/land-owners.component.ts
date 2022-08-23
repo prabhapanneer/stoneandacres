@@ -32,7 +32,7 @@ export class LandOwnersComponent implements OnInit {
       this.landWonerForm.to_mail = "prabha1094@gmail.com";
       this.landWonerForm.cc_mail = "nandhakumar26092000@gmail.com";
       this.landWonerForm.type = this.landWonerForm.type;
-      this.landWonerForm.form_data = { name: this.landWonerForm.name, email:this.landWonerForm.email, mobile: this.landWonerForm.mobile, message: this.landWonerForm.message, location: this.landWonerForm.location, land_extend:{Landextend_name: this.landWonerForm.Landextend, Landextend_type: this.landWonerForm.Landextend_type}};
+      this.landWonerForm.form_data = { name: this.landWonerForm.name, email:this.landWonerForm.email, mobile: this.landWonerForm.mobile, message: this.landWonerForm.message, location: this.landWonerForm.location, land_extend:{Landextent_name: this.landWonerForm.Landextent, Landextent_type: this.landWonerForm.Landextent_type}};
       this.storeApi.MAIL(this.landWonerForm).subscribe((result)=>{
         if(result.status) {
           // this.ngOnInit();
@@ -154,7 +154,7 @@ export class LandOwnersComponent implements OnInit {
         bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'> : </p>";
         bodyContent +="</td>";
         bodyContent +="<td align='left' valign='top' width='84%'>";
-        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px 10px 10px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'><b> ##landextend## </b></p>";
+        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:left;padding:10px 0px 10px 10px;color: rgba(0, 0, 0, 0.64);font-family: 'Poppins', sans-serif!important;'><b> ##landextent## </b></p>";
         bodyContent +="</td>";
         bodyContent +="</tr>";
         bodyContent +="</table>";
@@ -207,7 +207,7 @@ export class LandOwnersComponent implements OnInit {
         bodyContent = bodyContent.replace("##mobile##", formData.mobile);
         bodyContent = bodyContent.replace("##email##", formData.email);
         bodyContent = bodyContent.replace("##location##", formData.location);
-        bodyContent = bodyContent.replace("##landextend##", formData.landextend);
+        bodyContent = bodyContent.replace("##landextent##", formData.landextent);
         
         return bodyContent;
         
