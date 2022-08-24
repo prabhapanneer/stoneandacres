@@ -48,27 +48,12 @@ export class HomeComponent {
     /* LAYOUT DETAILS */
     if(!this.commonService.layout_list.length) {
       this.storeApi.LAYOUT_LIST().subscribe(result => {
-        console.log('layouttttttttt',result)
         if(result.status) {
           let layoutList = JSON.parse(result.list).sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1));
-          console.log('layouttttttttt',layoutList)
           // blogs
           if(layoutList.findIndex(obj => obj.type=='blogs')!=-1 && this.commonService.ys_features.indexOf('blogs')!=-1) {
             this.storeApi.HOME_PAGE_BLOG_LIST(environment.template_setting.blog_count).subscribe(result => {
-              if(result.status) {
-                this.blog_list = JSON.parse(result.list);
-                let cardCount = this.swiperService.blogs.card_count;
-                if(this.blog_list.length) {
-                  let pendingBlogCount = cardCount - this.blog_list.length;
-                  for(let i=0; i<pendingBlogCount; i++)
-                  {
-                    this.blog_list = this.blog_list.concat(this.blog_list);
-                    if(this.blog_list.length >= cardCount) {
-                      break;
-                    }
-                  }
-                }
-              }
+              if(result.status) this.blog_list = JSON.parse(result.list);
               this.updateLayoutList(layoutList);
               this.findCurrency();
               setTimeout(() => { this.initializeSwiper(); }, 100);
@@ -114,66 +99,6 @@ export class HomeComponent {
           else if(index===5) segment.image_list.push(imgList[4]);
           else segment.image_list.push(element);
         });
-      }
-      else if(segment.type=="featured_product") {
-        let cardCount = this.swiperService.featured_products.card_count;
-        if(segment.product_list.length && cardCount > segment.product_list.length) {
-          let remaining = cardCount - segment.product_list.length;
-          for(let i=0; i<remaining; i++)
-          {
-
-            segment.product_list = segment.product_list.concat(segment.product_list);
-            console.log('seg',segment.product_list)
-            if(segment.product_list.length >= cardCount) {
-              segment.product_list.length = cardCount;
-              console.log(cardCount)
-              break;
-            }
-          }
-        }
-        console.log('featured product list', segment.product_list);
-      }
-      else if(segment.type=="featured_section") {
-        let cardCount = this.swiperService.featured_section.card_count;
-        if(segment.image_list.length && cardCount > segment.image_list.length) {
-          let remaining = cardCount - segment.image_list.length;
-          for(let i=0; i<remaining; i++)
-          {
-            segment.image_list = segment.image_list.concat(segment.image_list);
-            if(segment.image_list.length >= cardCount) {
-              segment.image_list.length = cardCount;
-              break;
-            }
-          }
-        }
-      }
-      else if(segment.type=="testimonial") {
-        let cardCount = this.swiperService.testimonial.card_count;
-        if(segment.image_list.length && cardCount > segment.image_list.length) {
-          let remaining = cardCount - segment.image_list.length;
-          for(let i=0; i<remaining; i++)
-          {
-            segment.image_list = segment.image_list.concat(segment.image_list);
-            if(segment.image_list.length >= cardCount) {
-              segment.image_list.length = cardCount;
-              break;
-            }
-          }
-        }
-      }
-      else if(segment.type=="multiple_featured_product") {
-        let cardCount = this.swiperService.multi_tab_featured_products.card_count;
-        for(let tab of segment.multitab_list) {
-          let remaining = cardCount - tab.product_list.length;
-          for(let i=0; i<remaining; i++)
-          {
-            tab.product_list = tab.product_list.concat(tab.product_list);
-            if(tab.product_list.length >= cardCount) {
-              tab.product_list.length = cardCount;
-              break;
-            }
-          }
-        }
       }
       else if(segment.type=="blogs" && this.blog_list.length) {
         if(segment.blogs_type=='grid') {

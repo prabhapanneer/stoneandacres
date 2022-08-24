@@ -217,7 +217,7 @@
     <!-- #Section Grid -->
 
     <!-- Featured Sections -->
-    <section *ngIf="segment.type=='featured_section' && segment.image_list?.length>=swiperService.featured_section?.card_count" class="primary-section wow fadeInUp">
+    <section *ngIf="segment.type=='featured_section' && segment.image_list?.length" class="primary-section wow fadeInUp">
       <div class="{{template_setting?.body_type}}">
         <div class="row">
           <div *ngIf="segment.heading" class="col-12">
@@ -261,7 +261,7 @@
     <!-- #Featured Sections -->
 
     <!-- Featured Products -->
-    <section *ngIf="segment.type=='featured_product' && segment.product_list?.length>=swiperService.featured_products?.card_count" class="primary-section wow fadeInUp">
+    <section *ngIf="segment.type=='featured_product' && segment.product_list?.length" class="primary-section wow fadeInUp">
       <div class="{{template_setting?.body_type}}">
         <div class="row">
           <div *ngIf="segment.heading" class="col-12">
@@ -320,8 +320,8 @@
             <div class="tabs">
               <tabset>
                 <ng-container *ngFor="let tab of segment.multitab_list; let j=index;">
-                  <tab *ngIf="tab?.product_list?.length>=swiperService.multi_tab_featured_products?.card_count" heading="{{tab?.name}}">
-                    <div *ngIf="tab?.product_list?.length>=swiperService.multi_tab_featured_products?.card_count" class="swiper-container multi-slider product-slider" [ngClass]="commonService.desktop_device? 'desktoptabslider_'+(i+1)+(j+1): 'tabslider_'+(i+1)+(j+1)" appHomeSwiper>
+                  <tab *ngIf="tab?.product_list?.length" heading="{{tab?.name}}">
+                    <div *ngIf="tab?.product_list?.length" class="swiper-container multi-slider product-slider" [ngClass]="commonService.desktop_device? 'desktoptabslider_'+(i+1)+(j+1): 'tabslider_'+(i+1)+(j+1)" appHomeSwiper>
                       <div class="swiper-wrapper">
                         <div *ngFor="let x of tab.product_list; let k=index;" class="swiper-slide">
                           <div appMouseHover class="product-box primary-card p-3 cursor">
@@ -463,7 +463,7 @@
     <!-- #Secondary Banner -->
 
     <!-- Testimonial -->
-    <section *ngIf="segment.type=='testimonial' && segment.image_list?.length>=swiperService.testimonial?.card_count" class="primary-section testimonial-sec wow fadeInUp">
+    <section *ngIf="segment.type=='testimonial' && segment.image_list?.length" class="primary-section testimonial-sec wow fadeInUp">
       <div class="{{template_setting?.body_type}}">
         <div class="row">
           <div *ngIf="segment.heading" class="col-12">
