@@ -204,7 +204,7 @@
                                 
               </div><!-- .place__box -->
 
-              <div class="place__box place__box-map" *ngIf="productDetails?.variant_unit_info">
+              <!-- <div class="place__box place__box-map" *ngIf="productDetails?.variant_unit_info">
                 <h3 class="place__title--additional">
                   Units
                 </h3>
@@ -217,9 +217,6 @@
                     </ng-container>
                   </ul>
                 
-             
-              <!-- <ng-container *ngFor="let x of productDetails.unit_list[0].options; let i=index;"> -->
-              <!-- <div  class="menu-wrap" id="tab{{i}}" [ngClass]="(productDetails.selected_variant_unit==x.value)? 'active': ''"> -->
                 <div *ngFor="let y of productDetails.tablist; let j=index;">
                   <div  class="menu-item row" style="width:100%">
                     <div class="col-md-3 p-2 col-4 mb-40 plan-img" *ngIf="y.image_list?.length"> 
@@ -230,31 +227,21 @@
                           </a>
                         </div>
                       </div>
-                      <!-- <img [src]="imgBaseUrl+y.image_list[0].image"> -->
-                      <!-- <span class="material-icons zoom-icon">zoom_in</span> -->
                     </div>
                     <div class="col-md-3 p-2 col-4 mb-40 plan-img" *ngIf="!y.image_list?.length"> 
                       <img src="assets/images/no-image.png">
-                      <!-- <div class="zoom-icon d-flex justify-content-center align-items-center"> <span class="material-icons">zoom_in</span></div> -->
                     </div>
                     <div class="col-md-3 col-4 mb-40"><h4>{{y.sqft}} sq. ft.</h4><p>Size</p></div>
                     <div class="col-md-3 col-4 mb-40"><h4>{{commonService.thausandFormatConverter(y.selling_price) }} onwards</h4><p>Price</p></div>
                  
                     <div class="col-md-3 col-6 mb-40">
                       <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">CONTACT</button>
-                    </div>  
-
-                  </div>                    
-                    
+                    </div>
+                  </div> 
+                </div>
 
                 </div>
-              
-              <!-- </div> -->
-            <!-- </ng-container> -->
-                  
-
-                </div>
-              </div>
+              </div> -->
 
 
 
