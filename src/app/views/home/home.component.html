@@ -322,7 +322,7 @@
                 <ng-container *ngFor="let tab of segment.multitab_list; let j=index;">
                   <tab *ngIf="tab?.product_list?.length" heading="{{tab?.name}}">
                     <div *ngIf="tab?.product_list?.length" class="swiper-container multi-slider product-slider" [ngClass]="commonService.desktop_device? 'desktoptabslider_'+(i+1)+(j+1): 'tabslider_'+(i+1)+(j+1)" appHomeSwiper>
-                      <div class="swiper-wrapper">
+                      <div class="swiper-wrapper justify-content-center">
                         <div *ngFor="let x of tab.product_list; let k=index;" class="swiper-slide">
                           <div appMouseHover class="product-box primary-card p-3 cursor">
                             <a class="prod-div" (click)="commonService.selected_product=x;" routerLink="{{ x.seo_status ? '/product/'+x.seo_details.page_url : '/product/'+x._id }}">

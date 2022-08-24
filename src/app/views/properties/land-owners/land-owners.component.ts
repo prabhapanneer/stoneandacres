@@ -14,12 +14,14 @@ export class LandOwnersComponent implements OnInit {
   landWonerForm: any = {}; pageLoader: boolean;
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
+  currentYear:any;
 
   constructor(private storeApi: StoreApiService, public commonService: CommonService, private router: Router) { }
 
   ngOnInit(): void {
     this.alert_msg = null; this.landWonerForm = {};
     this.pageLoader = true;
+    this.currentYear = new Date().getFullYear();
     setTimeout(() => { this.pageLoader = false; }, 500);
   }
 
@@ -35,7 +37,6 @@ export class LandOwnersComponent implements OnInit {
       this.landWonerForm.form_data = { name: this.landWonerForm.name, email:this.landWonerForm.email, mobile: this.landWonerForm.mobile, message: this.landWonerForm.message, location: this.landWonerForm.location, land_extend:{Landextent_name: this.landWonerForm.Landextent, Landextent_type: this.landWonerForm.Landextent_type}};
       this.storeApi.MAIL(this.landWonerForm).subscribe((result)=>{
         if(result.status) {
-          // this.ngOnInit();
           this.router.navigate(["/thankyou-page"]);
         }
         else console.log("response", result)
@@ -81,11 +82,7 @@ export class LandOwnersComponent implements OnInit {
                             
         bodyContent +="</td>";
         bodyContent +="</tr>";
-        // bodyContent +="<tr>";
-        // bodyContent +="<td colspan='2' align='center'>";
-        // bodyContent +="<h1 style='font-size:18px;font-weight:600;margin:0;text-align:center;padding-top:30px;padding-bottom: 10px;color: rgba(0, 0, 0, 0.7);letter-spacing: 0.05em;font-family: 'Poppins', sans-serif!important;'>Please get in touch with them at the earliest</h1>";
-        // bodyContent +="</td>";
-        // bodyContent +="</tr>";                   
+                 
         bodyContent +="</tbody>";
         bodyContent +="</table>";
         bodyContent +="<table border='0' cellpadding='0' cellspacing='0' width='500' style='width:100%;min-width:100%;padding:0 30px '>";
@@ -187,7 +184,7 @@ export class LandOwnersComponent implements OnInit {
         bodyContent +="</td>";
         bodyContent +="<td align='right' style='width:76%;padding-top:20px'>";
         bodyContent +="<p style='font-size:12px;font-weight:500;margin:0;padding-top:10px;text-align:right;padding-bottom: 15px;color: rgba(0, 0, 0, 0.3);letter-spacing: 0.05em;font-family: Poppins, sans-serif!important;'>© ##copy_year## ";
-        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Demo Store.</a> All Rights Reserved. </p>";
+        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Stone & Acres.</a> All Rights Reserved. </p>";
         bodyContent +="</td>";
         bodyContent +="</tr>";
         bodyContent +="</tbody>";
@@ -208,7 +205,8 @@ export class LandOwnersComponent implements OnInit {
         bodyContent = bodyContent.replace("##email##", formData.email);
         bodyContent = bodyContent.replace("##location##", formData.location);
         bodyContent = bodyContent.replace("##landextent##", formData.landextent);
-        
+        bodyContent = bodyContent.replace("##copy_year##", this.currentYear);
+
         return bodyContent;
         
   }

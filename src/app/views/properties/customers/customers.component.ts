@@ -14,13 +14,14 @@ export class CustomersComponent implements OnInit {
   customerForm: any = {}; pageLoader: boolean;
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
-  projectList:any={};
+  projectList:any={}; currentYear:any;
   constructor(private storeApi: StoreApiService, public commonService: CommonService, public router: Router) { }
 
   ngOnInit(): void {
     this.alert_msg = null; this.customerForm = {};
     this.pageLoader = true;
     let filterType = "all";
+    this.currentYear = new Date().getFullYear();
     this.storeApi.FILTERED_PRODUCT_LIST({ type: filterType }).subscribe(result => {
       setTimeout(() => { this.pageLoader = false; }, 500);
       if(result.status) {
@@ -42,7 +43,6 @@ export class CustomersComponent implements OnInit {
       this.customerForm.form_data = { name: this.customerForm.name, email:this.customerForm.email, mobile: this.customerForm.mobile, message: this.customerForm.message };
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
         if(result.status) {
-          // this.ngOnInit();
           this.router.navigate(["/thankyou-page"]);
         }
         else console.log("response", result)
@@ -89,11 +89,7 @@ export class CustomersComponent implements OnInit {
                             
         bodyContent +="</td>";
         bodyContent +="</tr>";
-        // bodyContent +="<tr>";
-        // bodyContent +="<td colspan='2' align='center'>";
-        // bodyContent +="<h1 style='font-size:18px;font-weight:600;margin:0;text-align:center;padding-top:30px;padding-bottom: 10px;color: rgba(0, 0, 0, 0.7);letter-spacing: 0.05em;font-family: 'Poppins', sans-serif!important;'>Please get in touch with them at the earliest</h1>";
-        // bodyContent +="</td>";
-        // bodyContent +="</tr>";                   
+                  
         bodyContent +="</tbody>";
         bodyContent +="</table>";
         bodyContent +="<table border='0' cellpadding='0' cellspacing='0' width='500' style='width:100%;min-width:100%;padding:0 30px '>";
@@ -196,7 +192,7 @@ export class CustomersComponent implements OnInit {
         bodyContent +="</td>";
         bodyContent +="<td align='right' style='width:76%;padding-top:20px'>";
         bodyContent +="<p style='font-size:12px;font-weight:500;margin:0;padding-top:10px;text-align:right;padding-bottom: 15px;color: rgba(0, 0, 0, 0.3);letter-spacing: 0.05em;font-family: Poppins, sans-serif!important;'>© ##copy_year## ";
-        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Demo Store.</a> All Rights Reserved. </p>";
+        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Stone & Acres.</a> All Rights Reserved. </p>";
         bodyContent +="</td>";
         bodyContent +="</tr>";
         bodyContent +="</tbody>";
@@ -217,6 +213,7 @@ export class CustomersComponent implements OnInit {
         bodyContent = bodyContent.replace("##email##", formData.email);
         bodyContent = bodyContent.replace("##project##", formData.project);
         bodyContent = bodyContent.replace("##message##", formData.message);
+        bodyContent = bodyContent.replace("##copy_year##", this.currentYear);
 
         return bodyContent;
         

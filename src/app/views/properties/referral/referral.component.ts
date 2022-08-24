@@ -14,7 +14,7 @@ export class ReferralComponent implements OnInit {
   referralForm: any = {}; pageLoader: boolean;
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
-  projectList:any={};
+  projectList:any={}; currentYear:any;
 
   constructor(private storeApi: StoreApiService, public commonService: CommonService, private router: Router) { }
 
@@ -22,6 +22,7 @@ export class ReferralComponent implements OnInit {
     this.alert_msg = null; this.referralForm = {};
     this.pageLoader = true;
     let filterType = "all";
+    this.currentYear = new Date().getFullYear();
     this.storeApi.FILTERED_PRODUCT_LIST({ type: filterType }).subscribe(result => {
       setTimeout(() => { this.pageLoader = false; }, 500);
       if(result.status) {
@@ -38,13 +39,11 @@ export class ReferralComponent implements OnInit {
       this.referralForm.subject = "Referral Enquiry";
       this.referralForm.mail_content = bodyContent;      
       this.referralForm.to_mail = "prabha1094@gmail.com";
-      // this.referralForm.to_mail = "nandhakumar26092000@gmail.com";
-      this.referralForm.cc_mail = "nandhakumar26092000@gmail.com", "ashok9730@gmail.com";
+      this.referralForm.cc_mail = "nandhakumar26092000@gmail.com";
       this.referralForm.type = this.referralForm.type;
       this.referralForm.form_data = { name: this.referralForm.name, email:this.referralForm.email, mobile: this.referralForm.mobile, message: this.referralForm.message, location: this.referralForm.location, land_extend:{Landextend_name: this.referralForm.Landextend, Landextend_type: this.referralForm.Landextend_type}};
       this.storeApi.MAIL(this.referralForm).subscribe((result)=>{
         if(result.status) {
-          // this.ngOnInit();
           this.router.navigate(["/thankyou-page"]);
         }
         else console.log("response", result)
@@ -241,7 +240,7 @@ export class ReferralComponent implements OnInit {
         bodyContent +="</td>";
         bodyContent +="<td align='right' style='width:76%;padding-top:20px'>";
         bodyContent +="<p style='font-size:12px;font-weight:500;margin:0;padding-top:10px;text-align:right;padding-bottom: 15px;color: rgba(0, 0, 0, 0.3);letter-spacing: 0.05em;font-family: Poppins, sans-serif!important;'>© ##copy_year## ";
-        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Demo Store.</a> All Rights Reserved. </p>";
+        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Stone & Acres.</a> All Rights Reserved. </p>";
         bodyContent +="</td>";
         bodyContent +="</tr>";
         bodyContent +="</tbody>";
@@ -266,6 +265,7 @@ export class ReferralComponent implements OnInit {
         bodyContent = bodyContent.replace("##friend_mobile##", formData.friend_mobile);
         bodyContent = bodyContent.replace("##friend_location##", formData.friend_location);
         bodyContent = bodyContent.replace("##friend_project##", formData.friend_project);
+        bodyContent = bodyContent.replace("##copy_year##", this.currentYear);
         
         return bodyContent;
         
