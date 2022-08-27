@@ -255,19 +255,19 @@
                             </div>
               <aside class="widget widget-shadow widget-reservation">
                 <h2 class="mb-3">GET IN TOUCH</h2>
-                <form class="form-underline" autocomplete="off"  ngNativeValidate>
+                <form class="form-underline" (ngSubmit)="onSubmit();" autocomplete="off"  ngNativeValidate>
                   <div class="field-select has-sub field-guest">
                     <span class="sl-icon"><i class="la la-user-friends"></i></span>
-                    <input type="text" name="name" placeholder="Name" >
+                    <input type="text" name="name"  [(ngModel)]="projectForm.name" placeholder="Name" >
                   </div>
                   <div class="field-select field-date">
                     <span class="sl-icon"><i class="las la-at"></i></span>
-                    <input type="email" name="email" placeholder="Email" 
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" />
+                    <input type="email" name="email" placeholder="Email" [(ngModel)]="projectForm.email"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" />
                   </div>
                   <div class="field-select has-sub field-time">
                     <span class="sl-icon"><i class="las la-phone"></i></span>
-                    <input type="tel" name="mobile" placeholder="Phone Number" maxlength="10" appNumberOnly>
+                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="10" appNumberOnly>
                   </div>
                   <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">SUBMIT</button>
                   <!-- <input type="submit" name="submit" value="Contact"> -->

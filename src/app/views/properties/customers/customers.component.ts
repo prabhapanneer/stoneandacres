@@ -47,9 +47,7 @@ export class CustomersComponent implements OnInit {
         }
         else console.log("response", result)
       })
-    })
-    
-    
+    })   
   }
 
  async emailBody(formData){

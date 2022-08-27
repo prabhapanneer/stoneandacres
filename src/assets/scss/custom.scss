@@ -46,6 +46,10 @@ background:$announce-bg ;
 
 // ------------------COMMON--------------------------
 /* FORM ELEMENTS */
+input, textarea{
+  font-style: normal  !important;
+}
+
 input[type="text"] {
   width: 400px;
   max-width: 100%;

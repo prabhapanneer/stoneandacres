@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { StoreApiService } from '../../../services/store-api.service';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-us',
@@ -16,7 +17,7 @@ export class ContactUsComponent implements OnInit {
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
 
-  constructor(private sanitizer: DomSanitizer, private storeApi: StoreApiService, public commonService: CommonService) { }
+  constructor(private sanitizer: DomSanitizer, private storeApi: StoreApiService, public commonService: CommonService, private router: Router) { }
 
   ngOnInit() {
     this.alert_msg = null; this.contactForm = {};
@@ -47,7 +48,10 @@ export class ContactUsComponent implements OnInit {
       this.contactForm.submit = false;
       this.contactForm = {};
       this.success_alert = result.status;
-      if(result.status) this.alert_msg = "Your enquiry submitted successfully";
+      if(result.status) {
+        this.alert_msg = "Your enquiry submitted successfully";
+        setTimeout(() => { this.router.navigate(["/thankyou-page"]); }, 3000);
+      }
       else {
         this.alert_msg = "Network error, try again later";
         console.log("response", result);
