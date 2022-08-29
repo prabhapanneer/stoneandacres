@@ -33,7 +33,7 @@
                         </div>
                         <div class="primary-card form-group p-3 mb-3 col-md-6">
                             <p>Project</p>
-                            <select name="project" [(ngModel)]="referralForm.project" style="height:48px !important;font-style: italic;">
+                            <select name="project" [(ngModel)]="referralForm.project" style="height:48px !important;">
                               <option [ngValue]="undefined" disabled >Select one</option>
                               <option *ngFor="let x of projectList.list" [ngValue]="x.name">{{x.name}}</option>                                
                             </select>
