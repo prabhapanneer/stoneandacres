@@ -53,12 +53,13 @@ export class ProductComponent implements OnInit {
   subscription: Subscription; wl_subscription: Subscription;
   related_products: any = []; reviews: any = []; avg_review: any;
   page: number; pageSize: number = 10; review_sort: string;
-  projectForm:any={}; currentYear:any;
+  projectForm:any={}; currentYear:any;  styleIndex: number = 0;
+  brochureForm:any={};
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2, @Inject(DOCUMENT) private document, private assetLoader: DynamicAssetLoaderService,
     private router: Router, private activeRoute: ActivatedRoute, public commonService: CommonService, private storeApi: StoreApiService, private meta: Meta, private sanitizer: DomSanitizer,
-    private api: ApiService, public wishService: WishlistService, private cartService: CartlistService, public cc: CurrencyConversionService, public swiperService: SwiperService
+    private api: ApiService, public wishService: WishlistService, private cartService: CartlistService, public cc: CurrencyConversionService, public swiperService: SwiperService,
   ) {
     this.subscription = this.commonService.currency_type.subscribe(currency => {
       this.findCurrency();
@@ -1450,7 +1451,7 @@ export class ProductComponent implements OnInit {
   // Form Submit
 
   onSubmit(){
-    this.projectForm.type = "Project";
+    this.projectForm.form_type = "Project";
     this.projectForm.project = this.productDetails.name;
     this.emailBody(this.projectForm).then((bodyContent)=>{
       this.projectForm.store_id = environment.store_id;
@@ -1502,7 +1503,7 @@ export class ProductComponent implements OnInit {
         bodyContent +="<tr>";
         bodyContent +="<td align='center' valign='middle' style='padding:0'>";
         bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:center;padding-bottom: 10px;color: rgba(0, 0, 0, 0.5);font-family: Poppins, sans-serif!important;'>Hey Team,</p>";
-        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:center;padding-bottom: 10px;color: rgba(0, 0, 0, 0.5);font-family: Poppins, sans-serif!important;'>You have a new project enquiry!</p>";
+        bodyContent +="<p style='font-size:14px;font-weight:500;margin:0;text-align:center;padding-bottom: 10px;color: rgba(0, 0, 0, 0.5);font-family: Poppins, sans-serif!important;'>You have a new ##form_type## enquiry!</p>";
                             
         bodyContent +="</td>";
         bodyContent +="</tr>";
@@ -1613,12 +1614,39 @@ export class ProductComponent implements OnInit {
         bodyContent = bodyContent.replace("##mobile##", formData.mobile);
         bodyContent = bodyContent.replace("##email##", formData.email);
         bodyContent = bodyContent.replace("##project##", formData.project);
-        // bodyContent = bodyContent.replace("##message##", formData.message);
+        bodyContent = bodyContent.replace("##form_type##", formData.form_type);
         bodyContent = bodyContent.replace("##copy_year##", this.currentYear);
 
         return bodyContent;
         
   }
 
+  openBrochureModal(modalName){
+    this.styleIndex = 0;
+    modalName.show(); 
+    this.commonService.scrollModalTop(500);
+    console.log("modal", modalName)
+    
+  }
+
+  onSubmitBrochure(){
+    this.brochureForm.form_type = 'Brochure';
+    this.brochureForm.project = this.productDetails.name;
+    this.emailBody(this.brochureForm).then((bodyContent)=>{
+      this.brochureForm.store_id = environment.store_id;
+      this.brochureForm.subject = "Brochure Enquiry";
+      this.brochureForm.mail_content = bodyContent;      
+      this.brochureForm.to_mail = "prabha1094@gmail.com";
+      this.brochureForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.brochureForm.type = this.brochureForm.type;
+      this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
+      this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
+        if(result.status) {
+          this.router.navigate(["/thankyou-page/"+this.productDetails.product_id]);
+        }
+        else console.log("response", result)
+      })
+    })
+  }
 
 }

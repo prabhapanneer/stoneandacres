@@ -54,6 +54,7 @@ const routes: Routes = [
   { path: 'land-owners', loadChildren:() => import('./views/properties/land-owners/land-owners.module').then(m => m.LandOwnersModule) },
   { path: 'referral', loadChildren:() => import('./views/properties/referral/referral.module').then(m => m.ReferralModule) },
   { path: 'thankyou-page', loadChildren:()=>import('./views/properties/thankyou-page/thankyou-page.module').then(m=> m.ThankyouPageModule) },
+  { path: 'thankyou-page/:id', loadChildren:()=>import('./views/properties/thankyou-page/thankyou-page.module').then(m=> m.ThankyouPageModule) },
   
   { path: '**', redirectTo: '/others/404' }
 ];
