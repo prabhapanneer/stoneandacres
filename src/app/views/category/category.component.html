@@ -202,7 +202,8 @@
                     <h4>{{x.name}}</h4>
                     <div>
                       <span *ngIf="x.disc_status" class="strike">{{ x.temp_selling_price | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
-                      <span style="text-transform: none !important;color: rgba(0, 0, 0, 0.64);letter-spacing: 0.1em;font-size: 0.75rem;">Starts from {{ commonService.thausandFormatConverter(x.temp_discounted_price)  }}</span>
+                      <span *ngIf="(commonService.thausandFormatConverter(x.temp_discounted_price)) != 0" style="text-transform: none !important;color: rgba(0, 0, 0, 0.64);letter-spacing: 0.1em;font-size: 0.75rem;">Starts from {{ commonService.thausandFormatConverter(x.temp_discounted_price)  }}</span>
+                      <span *ngIf="(commonService.thausandFormatConverter(x.temp_discounted_price)) <= 0" style="text-transform: none !important;color: rgba(0, 0, 0, 0.64);letter-spacing: 0.1em;font-size: 0.75rem;">Price on request</span>
                       <!-- <span>{{ x.temp_discounted_price | currency:cc.currency?.country_code:'symbol':cc.format }}</span> -->
                       <div class="purchase-div">
                         <a>PURCHASE</a>
