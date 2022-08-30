@@ -40,7 +40,12 @@
                 <h4 class="mb-2">Don't look any further</h4>
                 <h6>We have a range of solutions focussed on defining and targeting the appropriate audience for each project</h6>
               </div>
-              <button class="primary-btn" routerLink="/land-owners">ENQUIRE NOW</button>
+              <button class="primary-btn d-flex justify-content-center align-items-center" [disabled]="btn_loader" (click)="btnClick();">
+                ENQUIRE NOW
+                <div class="box" *ngIf="btn_loader">
+                  <div class="spinner"></div>
+                </div>
+              </button>
             </div>
           </div>
         </div>

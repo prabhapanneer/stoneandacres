@@ -32,6 +32,7 @@ export class CustomersComponent implements OnInit {
   }
 
   onSubmit(){
+    this.customerForm.submit = true;
     this.customerForm.type = "Customer";
     this.emailBody(this.customerForm).then((bodyContent)=>{
       this.customerForm.store_id = environment.store_id;
@@ -43,7 +44,10 @@ export class CustomersComponent implements OnInit {
       this.customerForm.form_data = { name: this.customerForm.name, email:this.customerForm.email, mobile: this.customerForm.mobile, message: this.customerForm.message };
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
         if(result.status) {
-          this.router.navigate(["/thankyou-page"]);
+          setTimeout(()=>{
+            this.customerForm.submit = false;
+            this.router.navigate(["/thankyou-page"]);
+          },500);          
         }
         else console.log("response", result)
       })

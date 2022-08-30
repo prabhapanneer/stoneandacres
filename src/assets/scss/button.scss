@@ -29,7 +29,7 @@ button {
       width: 20px;
       background: transparent;
       border-radius: 50%;
-      border-top: 2px solid $primary-btn-txt;
+      border-top: 2px solid #FFF;
       border-right: 2px solid transparent;
       animation: spin 700ms linear infinite;
     }
@@ -42,7 +42,7 @@ button {
   &:hover{
     .box {
       .spinner {
-        border-color: $primary-btn-hvr-txt;
+        border-color: #FFF;
       }
     }
   }

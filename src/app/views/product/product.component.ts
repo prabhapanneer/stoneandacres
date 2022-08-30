@@ -54,7 +54,7 @@ export class ProductComponent implements OnInit {
   related_products: any = []; reviews: any = []; avg_review: any;
   page: number; pageSize: number = 10; review_sort: string;
   projectForm:any={}; currentYear:any;  styleIndex: number = 0;
-  brochureForm:any={};
+  brochureForm:any={}; btn_loader1:boolean=false; btn_loader2:boolean=false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2, @Inject(DOCUMENT) private document, private assetLoader: DynamicAssetLoaderService,
@@ -1451,6 +1451,7 @@ export class ProductComponent implements OnInit {
   // Form Submit
 
   onSubmit(){
+    this.projectForm.submit = true;
     this.projectForm.form_type = "Project";
     this.projectForm.project = this.productDetails.name;
     this.emailBody(this.projectForm).then((bodyContent)=>{
@@ -1463,7 +1464,10 @@ export class ProductComponent implements OnInit {
       this.projectForm.form_data = { name: this.projectForm.name, email:this.projectForm.email, mobile: this.projectForm.mobile, message: this.projectForm.message };
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
         if(result.status) {
-          this.router.navigate(["/thankyou-page"]);
+          setTimeout(()=>{
+            this.projectForm.submit = false;
+            this.router.navigate(["/thankyou-page"]);
+          },500);
         }
         else console.log("response", result)
       })
@@ -1622,14 +1626,17 @@ export class ProductComponent implements OnInit {
   }
 
   openBrochureModal(modalName){
-    this.styleIndex = 0;
-    modalName.show(); 
-    this.commonService.scrollModalTop(500);
-    console.log("modal", modalName)
-    
+    this.btn_loader1 = true;
+    setTimeout(()=>{ 
+      this.btn_loader1 = false;
+      this.styleIndex = 0;
+      modalName.show(); 
+      this.commonService.scrollModalTop(500);
+    },500);    
   }
 
   onSubmitBrochure(){
+    this.brochureForm.submit = true;
     this.brochureForm.form_type = 'Brochure';
     this.brochureForm.project = this.productDetails.name;
     this.emailBody(this.brochureForm).then((bodyContent)=>{
@@ -1642,11 +1649,22 @@ export class ProductComponent implements OnInit {
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
         if(result.status) {
-          this.router.navigate(["/thankyou-page/"+this.productDetails.product_id]);
+          setTimeout(()=>{ 
+            this.brochureForm.submit = false;
+            this.router.navigate(["/thankyou-page/"+this.productDetails.product_id]); }, 500)          
         }
         else console.log("response", result)
       })
     })
+  }
+
+  btnLoader2(){
+    this.btn_loader2=true;
+    setTimeout(()=>{ 
+      this.btn_loader2=false;
+      // this.document.getElementById('open_emi').click();
+      this.commonService.openEmi();
+    }, 500);
   }
 
 }

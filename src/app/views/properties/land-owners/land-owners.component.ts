@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LandOwnersComponent implements OnInit {
 
-  landWonerForm: any = {}; pageLoader: boolean;
+  landOwnerForm: any = {}; pageLoader: boolean;
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
   currentYear:any;
@@ -19,25 +19,29 @@ export class LandOwnersComponent implements OnInit {
   constructor(private storeApi: StoreApiService, public commonService: CommonService, private router: Router) { }
 
   ngOnInit(): void {
-    this.alert_msg = null; this.landWonerForm = {};
+    this.alert_msg = null; this.landOwnerForm = {};
     this.pageLoader = true;
     this.currentYear = new Date().getFullYear();
     setTimeout(() => { this.pageLoader = false; }, 500);
   }
 
   onSubmit(){
-    this.landWonerForm.type = "For Land Owners";
-    this.emailBody(this.landWonerForm).then((bodyContent)=>{
-      this.landWonerForm.store_id = environment.store_id; 
-      this.landWonerForm.subject = "Land Owners Enquiry";
-      this.landWonerForm.mail_content = bodyContent;      
-      this.landWonerForm.to_mail = "prabha1094@gmail.com";
-      this.landWonerForm.cc_mail = "nandhakumar26092000@gmail.com";
-      this.landWonerForm.type = this.landWonerForm.type;
-      this.landWonerForm.form_data = { name: this.landWonerForm.name, email:this.landWonerForm.email, mobile: this.landWonerForm.mobile, message: this.landWonerForm.message, location: this.landWonerForm.location, land_extend:{Landextent_name: this.landWonerForm.Landextent, Landextent_type: this.landWonerForm.Landextent_type}};
-      this.storeApi.MAIL(this.landWonerForm).subscribe((result)=>{
+    this.landOwnerForm.submit = true;
+    this.landOwnerForm.type = "For Land Owners";
+    this.emailBody(this.landOwnerForm).then((bodyContent)=>{
+      this.landOwnerForm.store_id = environment.store_id; 
+      this.landOwnerForm.subject = "Land Owners Enquiry";
+      this.landOwnerForm.mail_content = bodyContent;      
+      this.landOwnerForm.to_mail = "prabha1094@gmail.com";
+      this.landOwnerForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.landOwnerForm.type = this.landOwnerForm.type;
+      this.landOwnerForm.form_data = { name: this.landOwnerForm.name, email:this.landOwnerForm.email, mobile: this.landOwnerForm.mobile, message: this.landOwnerForm.message, location: this.landOwnerForm.location, land_extend:{Landextent_name: this.landOwnerForm.Landextent, Landextent_type: this.landOwnerForm.Landextent_type}};
+      this.storeApi.MAIL(this.landOwnerForm).subscribe((result)=>{
         if(result.status) {
-          this.router.navigate(["/thankyou-page"]);
+          setTimeout(()=>{
+            this.landOwnerForm.submit = false;
+            this.router.navigate(["/thankyou-page"]);
+          },500);
         }
         else console.log("response", result)
       })

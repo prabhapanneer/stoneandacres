@@ -122,7 +122,12 @@
               </div>   -->
 
               <div class="tooltip" *ngIf="productDetails?.brochure">
-                <div class="px-3 py-2 primary-btn" (click)="openBrochureModal(brochureModal);" style="cursor: pointer;" >Download Brochure</div>
+                <button class="px-3 py-2 primary-btn" [disabled]="btn_loader1" (click)="openBrochureModal(brochureModal);" style="cursor: pointer;" >
+                  Download Brochure
+                  <div *ngIf="btn_loader1" class="box">
+                    <div class="spinner"></div>
+                  </div>
+                </button>
                 <span class="tooltiptext">Please fill the get in touch form to download brochure</span>
               </div>
 
@@ -148,7 +153,9 @@
                   <div *ngIf="productDetails.price_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
                     <img src="assets/images/overview_icons/budget.png" alt="budget" style="height:32px; width:auto;">
                     <span class="fs-12 mt-1"><b>Budget</b></span>
-                    <span>{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>                    
+                    <!-- <span>{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>  -->
+                    <span *ngIf="(commonService.thausandFormatConverter(productDetails.price_list[0])) != 0 && (commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1])) != 0">{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>
+                    <span *ngIf="(commonService.thausandFormatConverter(productDetails.price_list[0])) <= 0 && (commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1])) <= 0">Price on request</span>                   
                   </div>
                   <!-- <div class="col-md-4 col-4 place__amenities mb-5">									
                     <img src="assets/images/overview_icons/handover.png" alt="handover" style="height:32px; width:auto;">
@@ -258,22 +265,32 @@
                 <form class="form-underline" (ngSubmit)="onSubmit();" autocomplete="off"  ngNativeValidate>
                   <div class="field-select has-sub field-guest">
                     <span class="sl-icon"><i class="la la-user-friends"></i></span>
-                    <input type="text" name="name"  [(ngModel)]="projectForm.name" placeholder="Name" >
+                    <input type="text" name="name"  [(ngModel)]="projectForm.name" placeholder="Name" required>
                   </div>
                   <div class="field-select field-date">
                     <span class="sl-icon"><i class="las la-at"></i></span>
                     <input type="email" name="email" placeholder="Email" [(ngModel)]="projectForm.email"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" />
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" required/>
                   </div>
                   <div class="field-select has-sub field-time">
                     <span class="sl-icon"><i class="las la-phone"></i></span>
-                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="10" appNumberOnly>
+                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="10" appNumberOnly required>
                   </div>
-                  <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">SUBMIT</button>
+                  <button class="primary-btn d-flex justify-content-center align-items-center w-100" [disabled]="projectForm.submit" type="submit">
+                    SUBMIT
+                    <div *ngIf="projectForm.submit" class="box">
+                      <div class="spinner"></div>
+                    </div>
+                  </button>
                   <!-- <input type="submit" name="submit" value="Contact"> -->
                 </form>
                 <div class="mt-3">
-                  <button type="button" (click)="commonService.openEmi()" class="primary-btn w-100">EMI CALCULATOR</button>
+                  <button type="button" [disabled]="btn_loader2" (click)="btnLoader2();" class="primary-btn w-100">
+                    EMI CALCULATOR
+                    <div *ngIf="btn_loader2" class="box">
+                      <div class="spinner"></div>
+                    </div>
+                  </button>
                 </div>
               </aside><!-- .widget-reservation -->
             </div><!-- .sidebar -->
@@ -1016,7 +1033,12 @@
             <span class="sl-icon"><i class="las la-phone"></i></span>
             <input type="tel" name="mobile" placeholder="Phone Number" class="w-100" [(ngModel)]="brochureForm.mobile" maxlength="10" appNumberOnly required>
           </div>
-          <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit">SUBMIT</button>
+          <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit" [disabled]="brochureForm.submit">
+            SUBMIT
+            <div *ngIf="brochureForm.submit" class="box">
+              <div class="spinner"></div>
+            </div>
+          </button>
           <!-- <input type="submit" name="submit" value="Contact"> -->
         </form>
         </div>

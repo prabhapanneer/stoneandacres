@@ -17,7 +17,12 @@
               <form class="mt-2 mb-2" autocomplete="off"  (ngSubmit)="onSubscribe(subscribeModal);" ngNativeValidate>
                 <div class="btn-input signup-form w-100">
                   <input placeholder="Enter Email" type="email" name="email" [(ngModel)]="subscribeForm.email" required />
-                  <button class="btn-icon" type="submit">SUBSCRIBE</button>
+                  <button class="btn-icon" type="submit" [disabled]="subscribeForm.submit">
+                    SUBSCRIBE
+                    <div class="box" *ngIf="subscribeForm.submit">
+                      <div class="spinner"></div>
+                    </div>
+                  </button>
                 </div>
               </form>
               <p *ngIf="subscribeForm.alert_msg">{{subscribeForm.alert_msg}}</p>
@@ -190,7 +195,7 @@
           <!-- <p class="m-0">Tell us about yourself</p> -->
         </div>
         <div class="d-flex">
-          <i [hidden]="!commonService?.window_loaded" class="material-icons" (click)="emiModal.hide();">close</i>
+          <i [hidden]="!commonService?.window_loaded" class="material-icons" (click)="emiModal.hide();emiForm={};">close</i>
         </div>
       </div>
 

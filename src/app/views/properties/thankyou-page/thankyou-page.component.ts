@@ -13,12 +13,14 @@ export class ThankyouPageComponent implements OnInit {
   type:boolean=false; params:any;productDetails:any={};
   imgBaseUrl: string = environment.img_baseurl;
   myFileName:any=String; fileUrl:any=String;
+  btn_loader:boolean=false;
+
   constructor( public router: Router,  private activeRoute: ActivatedRoute, private storeApi: StoreApiService) { }
 
   ngOnInit(): void {
     this.activeRoute.params.subscribe((params: Params) => {
       this.params= params.id;
-      if(params){
+      if(params.id){
         this.storeApi.PRODUCT_DETAILS({ product_id: this.params }).subscribe(result => {
           if(result.status) {
             this.productDetails = result.data;
@@ -27,9 +29,16 @@ export class ThankyouPageComponent implements OnInit {
           }
         });
       }
-      if(!params){ setTimeout(() => { this.router.navigate(['/']) }, 10000); }      
+      else{ setTimeout(() => { this.router.navigate(['/']) }, 10000); }      
     });
     
+  }
+
+  btnClick(){
+    this.btn_loader = true;        
+    setTimeout(()=>{ 
+      document.getElementById('getPdf').click();
+      this.btn_loader = false;}, 500)
   }
 
 }

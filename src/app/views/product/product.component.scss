@@ -58,3 +58,33 @@
   .tooltip:hover .tooltiptext {
     visibility: visible;
   }
+
+  // button spinner
+button {
+    
+  .box {
+    display: inline-block;
+    margin-left: 10px;
+    .spinner {
+      height: 15px !important;
+      width: 15px !important;
+      background: transparent;
+      border-radius: 50%;
+      border-top: 2px solid #FFF;
+      border-right: 2px solid transparent;
+      animation: spin 700ms linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+  &:hover{
+    .box {
+      .spinner {
+        border-color: #FFF;
+      }
+    }
+  }
+}

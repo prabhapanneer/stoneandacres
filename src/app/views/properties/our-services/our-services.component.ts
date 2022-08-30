@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { CommonService } from '../../../services/common.service';
 
@@ -9,11 +10,17 @@ import { CommonService } from '../../../services/common.service';
 })
 export class OurServicesComponent implements OnInit {
 
-  pageLoader: boolean;
+  pageLoader: boolean;btn_loader:boolean=false;
   template_setting: any = environment.template_setting;
 
-  constructor(public commonService: CommonService) { }
+  constructor(public commonService: CommonService, public router: Router) { }
 
   ngOnInit(): void {
+  }
+  btnClick(){
+    this.btn_loader = true;
+    setTimeout(()=>{ 
+      this.btn_loader = false;
+      this.router.navigate(['/land-owners']) }, 500)
   }
 }

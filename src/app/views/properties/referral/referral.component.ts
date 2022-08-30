@@ -33,6 +33,7 @@ export class ReferralComponent implements OnInit {
   }
 
   onSubmit(){
+    this.referralForm.submit = true;
     this.referralForm.type = "Referral Program";
     this.emailBody(this.referralForm).then((bodyContent)=>{
       this.referralForm.store_id = environment.store_id; 
@@ -44,7 +45,10 @@ export class ReferralComponent implements OnInit {
       this.referralForm.form_data = { name: this.referralForm.name, email:this.referralForm.email, mobile: this.referralForm.mobile, message: this.referralForm.message, location: this.referralForm.location, land_extend:{Landextend_name: this.referralForm.Landextend, Landextend_type: this.referralForm.Landextend_type}};
       this.storeApi.MAIL(this.referralForm).subscribe((result)=>{
         if(result.status) {
-          this.router.navigate(["/thankyou-page"]);
+          setTimeout(()=>{
+            this.referralForm.submit = false;
+            this.router.navigate(["/thankyou-page"]);
+          },500);
         }
         else console.log("response", result)
       })
