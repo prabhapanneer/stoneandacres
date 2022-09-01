@@ -1146,7 +1146,7 @@ a.place__comments__reply i { display: inline-block; vertical-align: middle; marg
 .single .place__category a { color: #ffffff; font-size: 15px; }
 .single .hightlight-grid { display: -webkit-box; display: -ms-flexbox; display: flex; }
 .single .hightlight-grid .hightlight-count { margin-right: 70px;  font-size: 16px; color: #23d3d3; white-space: nowrap; }
-.single .hightlight-grid .place__amenities { text-align: center; display: block;  }
+.single .hightlight-grid .place__amenities { text-align: center; display: block; word-break: break-word; }
 .single .hightlight-grid .place__amenities img { width: auto; height: 28px; object-fit: cover; }
 /* .single .hightlight-grid .place__amenities:nth-child(4) { margin-right: 35px; } */
 .single .hightlight-grid .place__amenities span { display: block; margin-left: 0; margin-top: 15px; }
