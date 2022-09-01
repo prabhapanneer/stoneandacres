@@ -1458,8 +1458,8 @@ export class ProductComponent implements OnInit {
       this.projectForm.store_id = environment.store_id;
       this.projectForm.subject = "Project Enquiry";
       this.projectForm.mail_content = bodyContent;      
-      this.projectForm.to_mail = "prabha1094@gmail.com";
-      this.projectForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.projectForm.to_mail = "contact@stoneandacres.com";
+      this.projectForm.cc_mail = "prabha1094@gmail.com";
       this.projectForm.type = this.projectForm.type;
       this.projectForm.form_data = { name: this.projectForm.name, email:this.projectForm.email, mobile: this.projectForm.mobile, message: this.projectForm.message };
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
@@ -1643,8 +1643,8 @@ export class ProductComponent implements OnInit {
       this.brochureForm.store_id = environment.store_id;
       this.brochureForm.subject = "Brochure Enquiry";
       this.brochureForm.mail_content = bodyContent;      
-      this.brochureForm.to_mail = "prabha1094@gmail.com";
-      this.brochureForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.brochureForm.to_mail = "contact@stoneandacres.com";
+      this.brochureForm.cc_mail = "prabha1094@gmail.com";
       this.brochureForm.type = this.brochureForm.type;
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{

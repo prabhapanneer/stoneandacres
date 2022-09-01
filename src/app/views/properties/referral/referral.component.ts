@@ -39,8 +39,8 @@ export class ReferralComponent implements OnInit {
       this.referralForm.store_id = environment.store_id; 
       this.referralForm.subject = "Referral Enquiry";
       this.referralForm.mail_content = bodyContent;      
-      this.referralForm.to_mail = "prabha1094@gmail.com";
-      this.referralForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.referralForm.to_mail = "contact@stoneandacres.com";
+      this.referralForm.cc_mail = "prabha1094@gmail.com";
       this.referralForm.type = this.referralForm.type;
       this.referralForm.form_data = { name: this.referralForm.name, email:this.referralForm.email, mobile: this.referralForm.mobile, message: this.referralForm.message, location: this.referralForm.location, land_extend:{Landextend_name: this.referralForm.Landextend, Landextend_type: this.referralForm.Landextend_type}};
       this.storeApi.MAIL(this.referralForm).subscribe((result)=>{

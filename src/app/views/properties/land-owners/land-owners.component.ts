@@ -32,8 +32,8 @@ export class LandOwnersComponent implements OnInit {
       this.landOwnerForm.store_id = environment.store_id; 
       this.landOwnerForm.subject = "Land Owners Enquiry";
       this.landOwnerForm.mail_content = bodyContent;      
-      this.landOwnerForm.to_mail = "prabha1094@gmail.com";
-      this.landOwnerForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.landOwnerForm.to_mail = "contact@stoneandacres.com";
+      this.landOwnerForm.cc_mail = "prabha1094@gmail.com";
       this.landOwnerForm.type = this.landOwnerForm.type;
       this.landOwnerForm.form_data = { name: this.landOwnerForm.name, email:this.landOwnerForm.email, mobile: this.landOwnerForm.mobile, message: this.landOwnerForm.message, location: this.landOwnerForm.location, land_extend:{Landextent_name: this.landOwnerForm.Landextent, Landextent_type: this.landOwnerForm.Landextent_type}};
       this.storeApi.MAIL(this.landOwnerForm).subscribe((result)=>{

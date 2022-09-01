@@ -38,8 +38,8 @@ export class CustomersComponent implements OnInit {
       this.customerForm.store_id = environment.store_id;
       this.customerForm.subject = "Customer Enquiry";
       this.customerForm.mail_content = bodyContent;      
-      this.customerForm.to_mail = "prabha1094@gmail.com";
-      this.customerForm.cc_mail = "nandhakumar26092000@gmail.com";
+      this.customerForm.to_mail = "contact@stoneandacres.com";
+      this.customerForm.cc_mail = "prabha1094@gmail.com";
       this.customerForm.type = this.customerForm.type;
       this.customerForm.form_data = { name: this.customerForm.name, email:this.customerForm.email, mobile: this.customerForm.mobile, message: this.customerForm.message };
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
