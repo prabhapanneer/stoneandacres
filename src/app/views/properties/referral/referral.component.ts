@@ -243,8 +243,8 @@ export class ReferralComponent implements OnInit {
         bodyContent +="<p style='width:50px'>&nbsp;</p>";
         bodyContent +="</td>";
         bodyContent +="<td align='right' style='width:76%;padding-top:20px'>";
-        bodyContent +="<p style='font-size:12px;font-weight:500;margin:0;padding-top:10px;text-align:right;padding-bottom: 15px;color: rgba(0, 0, 0, 0.3);letter-spacing: 0.05em;font-family: Poppins, sans-serif!important;'>© ##copy_year## ";
-        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;' href='https://www.onetuft.com' target='_blank'>Stone & Acres.</a> All Rights Reserved. </p>";
+        bodyContent +="<p style='font-size:12px;font-weight:500;margin:0;padding-top:10px;text-align:right;padding-bottom: 15px;color: rgba(0, 0, 0, 0.3);letter-spacing: 0.05em;font-family: Poppins, sans-serif!href='https://www.stoneandacres.com/'important;'>© ##copy_year## ";
+        bodyContent +="<a style='text-decoration: underline;color: rgba(0, 0, 0, 0.3)!important;font-weight:bold; text-decoration: none;font-family: Poppins, sans-serif!important;'  target='_blank'>Stone & Acres.</a> All Rights Reserved. </p>";
         bodyContent +="</td>";
         bodyContent +="</tr>";
         bodyContent +="</tbody>";
