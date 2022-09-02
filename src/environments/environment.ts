@@ -1,4 +1,3 @@
-// let storeId = "5d0ca4c89f21de0314f98f24";
 let storeId = "624fd5a8a96c721d4bef5bc5";
 
 export const environment = {
@@ -43,6 +42,6 @@ export const environment = {
     interval_in_mins: 60,
     limit: 3
   },
-  port: 4004,
-  domain: "onetuft.com"
+  port: 4095,
+  domain: "stoneandacres.com"
 };

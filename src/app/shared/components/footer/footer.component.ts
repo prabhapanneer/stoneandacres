@@ -72,7 +72,9 @@ export class FooterComponent {
   // }
 
   ngOnInit() {
-    $(".btn-input").hover(function() { $(this).toggleClass("active"); });
+    if(isPlatformBrowser(this.platformId)) {
+      $(".btn-input").hover(function() { $(this).toggleClass("active"); });
+    }
   }
 
 }
