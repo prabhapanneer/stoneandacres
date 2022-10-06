@@ -33,6 +33,8 @@ export class ReferralComponent implements OnInit {
   }
 
   onSubmit(){
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
     this.referralForm.submit = true;
     this.referralForm.type = "Referral Program";
     this.emailBody(this.referralForm).then((bodyContent)=>{
@@ -47,7 +49,7 @@ export class ReferralComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.referralForm.submit = false;
-            this.router.navigate(["/thankyou-page"]);
+            this.router.navigate(["/enquiry/thankyou-page"]);
           },500);
         }
         else console.log("response", result)

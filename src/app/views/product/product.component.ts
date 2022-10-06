@@ -131,7 +131,6 @@ export class ProductComponent implements OnInit {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
             this.productDetails = result.data;
-            console.log('dataaaaaa',this.productDetails)
             this.productDetails.variant_list = this.productDetails.variant_list.filter(obj => obj.stock >0);
 
             if(this.productDetails.variant_status)
@@ -1290,7 +1289,7 @@ export class ProductComponent implements OnInit {
     {
           this.productDetails.updated_amenities_list = [];
           this.productDetails.amenity_list.forEach(element => {
-          let amenIndex = this.commonService.product_features.amenities_list.findIndex(x => x._id == element)
+          let amenIndex = this.commonService.product_features.amenities_list?.findIndex(x => x._id == element)
           if(amenIndex != -1)
           { 
           this.productDetails.updated_amenities_list.push(this.commonService.product_features.amenities_list[amenIndex]);
@@ -1451,6 +1450,8 @@ export class ProductComponent implements OnInit {
   // Form Submit
 
   onSubmit(){
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
     this.projectForm.form_type = "Project";
     this.projectForm.project = this.productDetails.name;
@@ -1466,7 +1467,9 @@ export class ProductComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.projectForm.submit = false;
-            this.router.navigate(["/thankyou-page"]);
+            localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
+            localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
+            this.router.navigate(["/enquiry/"+this.productDetails.name+"-thankyou-page"]);
           },500);
         }
         else console.log("response", result)
@@ -1636,8 +1639,10 @@ export class ProductComponent implements OnInit {
   }
 
   onSubmitBrochure(){
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
     this.brochureForm.submit = true;
-    this.brochureForm.form_type = 'Brochure';
+    this.brochureForm.form_type = "Brochure";
     this.brochureForm.project = this.productDetails.name;
     this.emailBody(this.brochureForm).then((bodyContent)=>{
       this.brochureForm.store_id = environment.store_id;
@@ -1651,7 +1656,9 @@ export class ProductComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{ 
             this.brochureForm.submit = false;
-            this.router.navigate(["/thankyou-page/"+this.productDetails.product_id]); }, 500)          
+            localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
+            localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
+            this.router.navigate(["/enquiry/"+this.productDetails.name+"-thankyou-page"]); }, 500)          
         }
         else console.log("response", result)
       })

@@ -32,6 +32,8 @@ export class CustomersComponent implements OnInit {
   }
 
   onSubmit(){
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
     this.customerForm.submit = true;
     this.customerForm.type = "Customer";
     this.emailBody(this.customerForm).then((bodyContent)=>{
@@ -46,7 +48,7 @@ export class CustomersComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.customerForm.submit = false;
-            this.router.navigate(["/thankyou-page"]);
+            this.router.navigate(["/enquiry/thankyou-page"]);
           },500);          
         }
         else console.log("response", result)

@@ -40,6 +40,8 @@ export class ContactUsComponent implements OnInit {
   }
 
   onSubmit() {
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
     this.contactForm.submit = true;
     this.contactForm.store_id = environment.store_id;
     this.contactForm.subject = "New Enquiry";
@@ -50,7 +52,7 @@ export class ContactUsComponent implements OnInit {
       this.success_alert = result.status;
       if(result.status) {
         this.alert_msg = "Your enquiry submitted successfully";
-        setTimeout(() => { this.router.navigate(["/thankyou-page"]); }, 3000);
+        setTimeout(() => { this.router.navigate(["/enquiry/thankyou-page"]); }, 3000);
       }
       else {
         this.alert_msg = "Network error, try again later";

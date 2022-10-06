@@ -26,6 +26,8 @@ export class LandOwnersComponent implements OnInit {
   }
 
   onSubmit(){
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
     this.landOwnerForm.submit = true;
     this.landOwnerForm.type = "For Land Owners";
     this.emailBody(this.landOwnerForm).then((bodyContent)=>{
@@ -40,7 +42,7 @@ export class LandOwnersComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.landOwnerForm.submit = false;
-            this.router.navigate(["/thankyou-page"]);
+            this.router.navigate(["/enquiry/thankyou-page"]);
           },500);
         }
         else console.log("response", result)
