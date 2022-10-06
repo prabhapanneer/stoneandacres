@@ -52,7 +52,7 @@ export class ContactUsComponent implements OnInit {
       this.success_alert = result.status;
       if(result.status) {
         this.alert_msg = "Your enquiry submitted successfully";
-        setTimeout(() => { this.router.navigate(["/enquiry/thankyou-page"]); }, 3000);
+        setTimeout(() => { this.router.navigate(["/enquiry/thankyou-page"]); }, 500);
       }
       else {
         this.alert_msg = "Network error, try again later";

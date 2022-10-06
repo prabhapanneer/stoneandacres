@@ -1465,12 +1465,13 @@ export class ProductComponent implements OnInit {
       this.projectForm.form_data = { name: this.projectForm.name, email:this.projectForm.email, mobile: this.projectForm.mobile, message: this.projectForm.message };
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
         if(result.status) {
-          setTimeout(()=>{
-            this.projectForm.submit = false;
-            localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
-            localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
-            this.router.navigate(["/enquiry/"+this.productDetails.name+"-thankyou-page"]);
-          },500);
+          this.projectForm.submit = false;
+          localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
+          localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
+          this.urlFormat(this.productDetails.name).then((router_link)=>{
+            setTimeout(()=>{ 
+              this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
+          }) 
         }
         else console.log("response", result)
       })
@@ -1654,11 +1655,13 @@ export class ProductComponent implements OnInit {
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
         if(result.status) {
-          setTimeout(()=>{ 
-            this.brochureForm.submit = false;
-            localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
-            localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
-            this.router.navigate(["/enquiry/"+this.productDetails.name+"-thankyou-page"]); }, 500)          
+          this.brochureForm.submit = false;
+          localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
+          localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
+          this.urlFormat(this.productDetails.name).then((router_link)=>{
+            setTimeout(()=>{ 
+              this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
+          })          
         }
         else console.log("response", result)
       })
@@ -1674,4 +1677,14 @@ export class ProductComponent implements OnInit {
     }, 500);
   }
 
+  urlFormat(string) {
+    return new Promise((resolve, reject) => {
+    string = string.trim().toLowerCase().replace(/[^a-zA-Z0-9- ]/g, "");
+    string = string.replace(/ +(?= )/g, "");
+    string = string.replace(/[^a-zA-Z0-9]/g, "-");
+    string = string.replace("---", "-");
+    resolve(string)
+  });
+  
+}
 }
