@@ -42,7 +42,7 @@ export class LandOwnersComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.landOwnerForm.submit = false;
-            this.router.navigate(["/enquiry/thankyou-page"]);
+            this.router.navigate(["/enquiry/land-owners-enquiry-thankyou-page"]);
           },500);
         }
         else console.log("response", result)

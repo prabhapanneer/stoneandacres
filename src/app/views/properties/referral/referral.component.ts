@@ -49,7 +49,7 @@ export class ReferralComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.referralForm.submit = false;
-            this.router.navigate(["/enquiry/thankyou-page"]);
+            this.router.navigate(["/enquiry/referral-enquiry-thankyou-page"]);
           },500);
         }
         else console.log("response", result)

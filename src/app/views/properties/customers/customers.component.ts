@@ -48,7 +48,7 @@ export class CustomersComponent implements OnInit {
         if(result.status) {
           setTimeout(()=>{
             this.customerForm.submit = false;
-            this.router.navigate(["/enquiry/thankyou-page"]);
+            this.router.navigate(["/enquiry/customer-enquiry-thankyou-page"]);
           },500);          
         }
         else console.log("response", result)
