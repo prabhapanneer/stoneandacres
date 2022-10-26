@@ -47,8 +47,16 @@ export class CustomersComponent implements OnInit {
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            this.customerForm.submit = false;
-            this.router.navigate(["/enquiry/customer-enquiry-thankyou-page"]);
+            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.customerForm.name+'WM&Mobile='+this.customerForm.mobile+'&Email='+this.customerForm.email+'&LEADCF15='+this.customerForm.project+'&Description='+this.customerForm.message+'&LEADCF11='+this.customerForm.type;
+            try {
+              let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
+              result.then((res)=>{
+                this.customerForm.submit = false;
+                this.router.navigate(["/enquiry/customer-enquiry-thankyou-page"]);
+              })
+              } catch (error) {
+              console.log("err",error);
+            }      
           },500);          
         }
         else console.log("response", result)

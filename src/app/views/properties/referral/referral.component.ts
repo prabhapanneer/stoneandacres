@@ -48,8 +48,17 @@ export class ReferralComponent implements OnInit {
       this.storeApi.MAIL(this.referralForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            this.referralForm.submit = false;
-            this.router.navigate(["/enquiry/referral-enquiry-thankyou-page"]);
+            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.referralForm.name+'WM&Mobile='+this.referralForm.mobile+'&Email='+this.referralForm.email+'&Description='+this.referralForm.message+'&LEADCF15='+this.referralForm.project+'&LEADCF5='+this.referralForm.location+'&LEADCF11='+this.referralForm.type+'&LEADCF4='+this.referralForm.flat_number+'&LEADCF1='+this.referralForm.friend_name+'&LEADCF2='+this.referralForm.friend_mobile+'&LEADCF3='+this.referralForm.friend_location+'&LEADCF8='+this.referralForm.friend_project;
+            try {
+              let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
+              result.then((res)=>{
+                this.referralForm.submit = false;
+                this.router.navigate(["/enquiry/referral-enquiry-thankyou-page"]);
+              })
+              } catch (error) {
+              console.log("err",error);
+            } 
+            
           },500);
         }
         else console.log("response", result)

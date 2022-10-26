@@ -1,7 +1,7 @@
 import { Observable } from "rxjs"
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +69,28 @@ export class StoreApiService {
   CONTACT_PAGE_INFO() { return this.http.get<any>(environment.ws_url+'/store_details/contact_page?store_id='+environment.store_id); }
   LOCATIONS() { return this.http.get<any>(environment.ws_url+'/store_details/locations?store_id='+environment.store_id); }
   EXTRA_PAGE(x) { return this.http.get<any>(environment.ws_url+'/store_details/extra_page?store_id='+environment.store_id+'&type='+x); }
+
+  ZOHO_ENQUIRY(x) {
+    return new Promise((resolve,reject)=>{    
+    try {
+      var response = {};
+      this.http.get<any>(x).toPromise().then(res => {
+        response = {"success":true}
+        resolve(response);
+    },
+    msg => { // Error
+      response = {"success":true}
+      resolve(response);
+      // return response;
+    }); 
+    } catch (error) {
+      console.log('eeeeeeeeee', error)
+      reject(error);
+    }
+  })
+    // let httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    
+  }
 
   DONATION_AMOUNT(x) { return this.http.get<any>(environment.ws_url+'/store_details/donation_amount?store_id='+environment.store_id+'&country_code='+x); }
 

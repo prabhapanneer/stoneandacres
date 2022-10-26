@@ -1465,13 +1465,22 @@ export class ProductComponent implements OnInit {
       this.projectForm.form_data = { name: this.projectForm.name, email:this.projectForm.email, mobile: this.projectForm.mobile, message: this.projectForm.message };
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
         if(result.status) {
-          this.projectForm.submit = false;
+          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.projectForm.name+'WM&Mobile='+this.projectForm.mobile+'&Email='+this.projectForm.email+'&LEADCF15='+this.projectForm.project+'&Description='+this.projectForm.message+'&LEADCF11='+this.projectForm.form_type;
+          try {
+            let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
+            result.then((res)=>{
+              this.projectForm.submit = false;
           localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
           localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
           this.urlFormat(this.productDetails.name).then((router_link)=>{
             setTimeout(()=>{ 
               this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
           }) 
+            })
+            } catch (error) {
+            console.log("err",error);
+          } 
+          
         }
         else console.log("response", result)
       })
@@ -1655,13 +1664,22 @@ export class ProductComponent implements OnInit {
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
         if(result.status) {
-          this.brochureForm.submit = false;
-          localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
-          localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
-          this.urlFormat(this.productDetails.name).then((router_link)=>{
-            setTimeout(()=>{ 
-              this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
-          })          
+          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.brochureForm.name+'WM&Mobile='+this.brochureForm.mobile+'&Email='+this.brochureForm.email+'&LEADCF15='+this.brochureForm.project+'&Description='+this.brochureForm.message+'&LEADCF11='+this.brochureForm.form_type;
+          try {
+            let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
+            result.then((res)=>{
+              this.brochureForm.submit = false;
+              localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
+              localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
+              this.urlFormat(this.productDetails.name).then((router_link)=>{
+                setTimeout(()=>{ 
+                  this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
+              }) 
+            })
+            } catch (error) {
+            console.log("err",error);
+          } 
+                 
         }
         else console.log("response", result)
       })
