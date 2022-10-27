@@ -41,7 +41,7 @@ export class LandOwnersComponent implements OnInit {
       this.storeApi.MAIL(this.landOwnerForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.landOwnerForm.name+'WM&Mobile='+this.landOwnerForm.mobile+'&Email='+this.landOwnerForm.email+'&Description='+this.landOwnerForm.message+'&LEADCF11='+this.landOwnerForm.type+'&LEADCF5='+this.landOwnerForm.location+'&LEADCF6='+this.landOwnerForm.Landextent+'&LEADCF10='+this.landOwnerForm.Landextent_type;
+            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.landOwnerForm.name+'&Mobile='+this.landOwnerForm.mobile+'&Email='+this.landOwnerForm.email+'&Description='+this.landOwnerForm.message+'&LEADCF11='+this.landOwnerForm.type+'&LEADCF5='+this.landOwnerForm.location+'&LEADCF6='+this.landOwnerForm.Landextent+'&LEADCF10='+this.landOwnerForm.Landextent_type;
             try {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
               result.then((res)=>{
