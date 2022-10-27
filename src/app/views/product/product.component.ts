@@ -1453,7 +1453,7 @@ export class ProductComponent implements OnInit {
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
-    this.projectForm.form_type = "Project";
+    this.projectForm.form_type = "Get in Touch";
     this.projectForm.project = this.productDetails.name;
     this.emailBody(this.projectForm).then((bodyContent)=>{
       this.projectForm.store_id = environment.store_id;
@@ -1652,7 +1652,7 @@ export class ProductComponent implements OnInit {
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.brochureForm.submit = true;
-    this.brochureForm.form_type = "Brochure";
+    this.brochureForm.form_type = "Download Brochure";
     this.brochureForm.project = this.productDetails.name;
     this.emailBody(this.brochureForm).then((bodyContent)=>{
       this.brochureForm.store_id = environment.store_id;

@@ -35,7 +35,7 @@ export class CustomersComponent implements OnInit {
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.customerForm.submit = true;
-    this.customerForm.type = "Customer";
+    this.customerForm.type = "Customer Enquiry";
     this.emailBody(this.customerForm).then((bodyContent)=>{
       this.customerForm.store_id = environment.store_id;
       this.customerForm.subject = "Customer Enquiry";
