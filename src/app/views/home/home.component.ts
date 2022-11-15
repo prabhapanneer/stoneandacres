@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
@@ -30,8 +30,9 @@ export class HomeComponent {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public swiperService: SwiperService, private assetLoader: DynamicAssetLoaderService,
-    public commonService: CommonService, private router: Router, public cc: CurrencyConversionService, @Inject(DOCUMENT) private document, private sanitizer: DomSanitizer
-  ) {
+    public commonService: CommonService, private router: Router, public cc: CurrencyConversionService, @Inject(DOCUMENT) private document, private sanitizer: DomSanitizer,
+    private activeRoute: ActivatedRoute,
+    ) {
     this.subscription = this.commonService.currency_type.subscribe(currency => {
       this.findCurrency();
     });
@@ -39,6 +40,18 @@ export class HomeComponent {
 
   ngOnInit() {
     // this.setSliderHeight();
+    this.activeRoute.queryParams.subscribe((params: Params) => {
+      let paramsVal:any = JSON.stringify(params); 
+      if(params.gclid){
+        localStorage.setItem("urltype", paramsVal)
+      }
+      else if(params.utm_source){
+        localStorage.setItem("urltype", paramsVal);
+      }
+      else{
+        localStorage.removeItem("urltype");
+      }
+    })
   }
 
   

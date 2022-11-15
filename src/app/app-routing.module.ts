@@ -7,7 +7,7 @@ import { GuestGuard } from './guards/guest.guard';
 import { AccountGuard } from './guards/account.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/', pathMatch: 'full' },
+  // { path: '', redirectTo: '/', pathMatch: 'full' },
 
   { path: '', loadChildren: () => import('./views/home/home.module').then(m => m.HomeModule) },
 

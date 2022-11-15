@@ -1450,6 +1450,7 @@ export class ProductComponent implements OnInit {
   // Form Submit
 
   onSubmit(){
+    let params = JSON.parse(localStorage.getItem('urltype'));
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
@@ -1465,7 +1466,19 @@ export class ProductComponent implements OnInit {
       this.projectForm.form_data = { name: this.projectForm.name, email:this.projectForm.email, mobile: this.projectForm.mobile, message: this.projectForm.message };
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
         if(result.status) {
-          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.projectForm.name+'&Mobile='+this.projectForm.mobile+'&Email='+this.projectForm.email+'&LEADCF15='+this.projectForm.project+'&Description=&LEADCF11='+this.projectForm.form_type+'&Lead Source=SA Website&Lead Status=Not Contacted';
+          if(params.gclid)
+          {
+            this.projectForm.lead_source = "SA Website Google"
+          }
+          else if(params.utm_source)
+          {
+            this.projectForm.lead_source = "SA Website Facebook"
+          }
+          else
+          {
+            this.projectForm.lead_source = "SA Website"
+          }
+          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.projectForm.name+'&Mobile='+this.projectForm.mobile+'&Email='+this.projectForm.email+'&LEADCF15='+this.projectForm.project+'&Description=&LEADCF11='+this.projectForm.form_type+'&Lead Source='+this.projectForm.lead_source+'&Lead Status=Not Contacted';
           try {
             let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
             result.then((res)=>{
@@ -1649,6 +1662,7 @@ export class ProductComponent implements OnInit {
   }
 
   onSubmitBrochure(){
+    let params = JSON.parse(localStorage.getItem('urltype'));
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.brochureForm.submit = true;
@@ -1664,7 +1678,19 @@ export class ProductComponent implements OnInit {
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
         if(result.status) {
-          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.brochureForm.name+'&Mobile='+this.brochureForm.mobile+'&Email='+this.brochureForm.email+'&LEADCF15='+this.brochureForm.project+'&Description=&LEADCF11='+this.brochureForm.form_type+'&Lead Source=SA Website&Lead Status=Not Contacted';
+          if(params.gclid)
+          {
+            this.brochureForm.lead_source = "SA Website Google"
+          }
+          else if(params.utm_source)
+          {
+            this.brochureForm.lead_source = "SA Website Facebook"
+          }
+          else
+          {
+            this.brochureForm.lead_source = "SA Website"
+          }
+          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.brochureForm.name+'&Mobile='+this.brochureForm.mobile+'&Email='+this.brochureForm.email+'&LEADCF15='+this.brochureForm.project+'&Description=&LEADCF11='+this.brochureForm.form_type+'&Lead Source='+this.brochureForm.lead_source+'&Lead Status=Not Contacted';
           try {
             let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
             result.then((res)=>{
