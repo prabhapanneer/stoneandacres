@@ -58,7 +58,7 @@ export class ContactUsComponent implements OnInit {
     this.contactForm.subject = "New Enquiry";
     this.contactForm.leadtype = "Contact Page";
     if(this.commonService.application_setting.enquiry_email) this.contactForm.to_mail = this.commonService.application_setting.enquiry_email;
-    if(localStorage.getItem('urltype')=== null)
+    if(!localStorage.getItem('urltype'))
     {
       this.contactForm.lead_source = "SA Website";
     }

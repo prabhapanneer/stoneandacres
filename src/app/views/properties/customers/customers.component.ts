@@ -47,7 +47,7 @@ export class CustomersComponent implements OnInit {
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            if(localStorage.getItem('urltype')=== null)
+            if(!localStorage.getItem('urltype'))
                 {
                     this.customerForm.lead_source = "SA Website";
                 }

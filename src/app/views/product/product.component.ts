@@ -1467,7 +1467,7 @@ export class ProductComponent implements OnInit {
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
         if(result.status) {
 
-                if(localStorage.getItem('urltype')=== null)
+                if(!localStorage.getItem('urltype'))
                 {
                     this.projectForm.lead_source = "SA Website";
                 }
@@ -1688,7 +1688,7 @@ export class ProductComponent implements OnInit {
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
         if(result.status) {
-          if(localStorage.getItem('urltype')=== null)
+          if(!localStorage.getItem('urltype'))
                 {
                     this.brochureForm.lead_source = "SA Website";
                 }

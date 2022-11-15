@@ -49,7 +49,7 @@ export class ReferralComponent implements OnInit {
       this.storeApi.MAIL(this.referralForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            if(localStorage.getItem('urltype')=== null)
+            if(!localStorage.getItem('urltype'))
             {
                 this.referralForm.lead_source = "SA Website";
             }
