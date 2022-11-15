@@ -1497,6 +1497,7 @@ export class ProductComponent implements OnInit {
           localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
           this.urlFormat(this.productDetails.name).then((router_link)=>{
             setTimeout(()=>{ 
+              localStorage.removeItem("urltype");
               this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
           }) 
             })
@@ -1716,6 +1717,7 @@ export class ProductComponent implements OnInit {
               localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
               this.urlFormat(this.productDetails.name).then((router_link)=>{
                 setTimeout(()=>{ 
+                  localStorage.removeItem("urltype");
                   this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
               }) 
             })

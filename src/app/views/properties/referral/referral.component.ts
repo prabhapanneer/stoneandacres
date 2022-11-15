@@ -74,6 +74,7 @@ export class ReferralComponent implements OnInit {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
               result.then((res)=>{
                 this.referralForm.submit = false;
+                localStorage.removeItem("urltype");
                 this.router.navigate(["/enquiry/referral-enquiry-thankyou-page"]);
               })
               } catch (error) {

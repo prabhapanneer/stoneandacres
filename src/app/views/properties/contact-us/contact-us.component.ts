@@ -89,6 +89,7 @@ export class ContactUsComponent implements OnInit {
           let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
           result.then((res)=>{
           this.alert_msg = "Your enquiry submitted successfully";
+          localStorage.removeItem("urltype");
           setTimeout(() => { this.router.navigate(["/enquiry/thankyou-page"]); }, 500);
           })
           } catch (error) {

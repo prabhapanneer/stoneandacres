@@ -72,6 +72,7 @@ export class CustomersComponent implements OnInit {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
               result.then((res)=>{
                 this.customerForm.submit = false;
+                localStorage.removeItem("urltype");
                 this.router.navigate(["/enquiry/customer-enquiry-thankyou-page"]);
               })
               } catch (error) {

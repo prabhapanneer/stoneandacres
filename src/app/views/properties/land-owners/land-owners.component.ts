@@ -66,6 +66,7 @@ export class LandOwnersComponent implements OnInit {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
               result.then((res)=>{
                 this.landOwnerForm.submit = false;
+                localStorage.removeItem("urltype");
                 this.router.navigate(["/enquiry/land-owners-enquiry-thankyou-page"]);
               })
               } catch (error) {
