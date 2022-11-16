@@ -41,7 +41,8 @@ export class HomeComponent {
   ngOnInit() {
     // this.setSliderHeight();
     this.activeRoute.queryParams.subscribe((params: Params) => {
-      let paramsVal:any = JSON.stringify(params); 
+      let paramsVal:any = JSON.stringify(params);
+      localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
       if(params.gclid){
         localStorage.setItem("urltype", paramsVal)
       }
