@@ -26,7 +26,7 @@ export class ThankyouPageComponent implements OnInit {
       this.params_type = x[0];
       this.enquiry_type = this.commonService.decryptData(localStorage.getItem("enquiry_type"));
       this.project_id = localStorage.getItem("enquiry_proj_id");
-      if(params.type != 'thankyou-page' && this.enquiry_type == 'Brochure'){
+      if(this.enquiry_type == 'Download Brochure'){
         this.brochure_status = true;
         this.storeApi.PRODUCT_DETAILS({ product_id: this.project_id }).subscribe(result => {
           if(result.status) {
