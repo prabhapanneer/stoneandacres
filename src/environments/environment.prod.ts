@@ -9,7 +9,7 @@ export const environment = {
   store_id: storeId,
   gtag_tracking: false,
   facebook_pixel: false,
-  gtag_conversion_id: "",
+  gtag_conversion_id: "AW-10950323825/ijW_CNK5iIMYEPHcwuUo",
   razorpay_payment_url: "https://api.razorpay.com/v1/checkout/embedded",
   razorpay_redirect_url: "https://yourstore.io/api/store_details/razorpay_payment/"+storeId,
   ccavenue_payment_url: "https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction",

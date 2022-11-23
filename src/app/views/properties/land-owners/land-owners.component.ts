@@ -3,6 +3,7 @@ import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-land-owners',
@@ -26,6 +27,7 @@ export class LandOwnersComponent implements OnInit {
   }
 
   onSubmit(){
+    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.landOwnerForm.submit = true;
@@ -62,7 +64,7 @@ export class LandOwnersComponent implements OnInit {
                     this.landOwnerForm.lead_source = "SA Website";
                     }
                 }
-            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.landOwnerForm.name+'&Mobile='+this.landOwnerForm.mobile+'&Email='+this.landOwnerForm.email+'&Description=&LEADCF11='+this.landOwnerForm.type+'&LEADCF5='+this.landOwnerForm.location+'&LEADCF6='+this.landOwnerForm.Landextent+'&LEADCF10='+this.landOwnerForm.Landextent_type+'&Lead Source='+this.landOwnerForm.lead_source+'&Lead Status=Not Contacted&Website='+this.landOwnerForm.website_url;
+            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.landOwnerForm.name+'&Mobile='+this.landOwnerForm.mobile+'&Email='+this.landOwnerForm.email+'&Description=&LEADCF11='+this.landOwnerForm.type+'&LEADCF5='+this.landOwnerForm.location+'&LEADCF6='+this.landOwnerForm.Landextent+'&LEADCF10='+this.landOwnerForm.Landextent_type+'&Lead Source='+this.landOwnerForm.lead_source+'&Lead Status=Not Contacted&Website='+this.landOwnerForm.website_url+'&LEADCF82='+currentDate;
             try {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
               result.then((res)=>{

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT, formatDate } from '@angular/common';
 import { Meta, DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { AccordionConfig } from 'ngx-bootstrap/accordion';
@@ -1450,7 +1450,7 @@ export class ProductComponent implements OnInit {
   // Form Submit
 
   onSubmit(){
-
+    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
@@ -1488,7 +1488,7 @@ export class ProductComponent implements OnInit {
                     }
                 }
          
-          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.projectForm.name+'&Mobile='+this.projectForm.mobile+'&Email='+this.projectForm.email+'&LEADCF15='+this.projectForm.project+'&Description=&LEADCF11='+this.projectForm.form_type+'&Lead Source='+this.projectForm.lead_source+'&Lead Status=Not Contacted&Website='+this.projectForm.website_url;
+          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.projectForm.name+'&Mobile='+this.projectForm.mobile+'&Email='+this.projectForm.email+'&LEADCF15='+this.projectForm.project+'&Description=&LEADCF11='+this.projectForm.form_type+'&Lead Source='+this.projectForm.lead_source+'&Lead Status=Not Contacted&Website='+this.projectForm.website_url+'&LEADCF82='+currentDate;
           try {
             let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
             result.then((res)=>{
@@ -1673,6 +1673,7 @@ export class ProductComponent implements OnInit {
   }
 
   onSubmitBrochure(){
+    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.brochureForm.submit = true;
@@ -1709,7 +1710,7 @@ export class ProductComponent implements OnInit {
                     this.brochureForm.lead_source = "SA Website";
                     }
                 }
-          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.brochureForm.name+'&Mobile='+this.brochureForm.mobile+'&Email='+this.brochureForm.email+'&LEADCF15='+this.brochureForm.project+'&Description=&LEADCF11='+this.brochureForm.form_type+'&Lead Source='+this.brochureForm.lead_source+'&Lead Status=Not Contacted&Website='+this.brochureForm.website_url;
+          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.brochureForm.name+'&Mobile='+this.brochureForm.mobile+'&Email='+this.brochureForm.email+'&LEADCF15='+this.brochureForm.project+'&Description=&LEADCF11='+this.brochureForm.form_type+'&Lead Source='+this.brochureForm.lead_source+'&Lead Status=Not Contacted&Website='+this.brochureForm.website_url+'&LEADCF82='+currentDate;
           try {
             let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
             result.then((res)=>{

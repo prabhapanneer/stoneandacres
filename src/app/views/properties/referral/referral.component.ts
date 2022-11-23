@@ -3,6 +3,7 @@ import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-referral',
@@ -34,6 +35,7 @@ export class ReferralComponent implements OnInit {
   }
 
   onSubmit(){
+    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.referralForm.submit = true;
@@ -70,7 +72,7 @@ export class ReferralComponent implements OnInit {
                 this.referralForm.lead_source = "SA Website";
                 }
             }
-            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.referralForm.name+'&Mobile='+this.referralForm.mobile+'&Email='+this.referralForm.email+'&Description=&LEADCF15='+this.referralForm.project+'&LEADCF5='+this.referralForm.location+'&LEADCF11='+this.referralForm.type+'&LEADCF4='+this.referralForm.flat_number+'&LEADCF1='+this.referralForm.friend_name+'&LEADCF2='+this.referralForm.friend_mobile+'&LEADCF3='+this.referralForm.friend_location+'&LEADCF8='+this.referralForm.friend_project+'&Lead Source='+this.referralForm.lead_source+'&Lead Status=Not Contacted&Website='+this.referralForm.website_url;
+            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.referralForm.name+'&Mobile='+this.referralForm.mobile+'&Email='+this.referralForm.email+'&Description=&LEADCF15='+this.referralForm.project+'&LEADCF5='+this.referralForm.location+'&LEADCF11='+this.referralForm.type+'&LEADCF4='+this.referralForm.flat_number+'&LEADCF1='+this.referralForm.friend_name+'&LEADCF2='+this.referralForm.friend_mobile+'&LEADCF3='+this.referralForm.friend_location+'&LEADCF8='+this.referralForm.friend_project+'&Lead Source='+this.referralForm.lead_source+'&Lead Status=Not Contacted&Website='+this.referralForm.website_url+'&LEADCF82='+currentDate;
             try {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
               result.then((res)=>{

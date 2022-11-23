@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CommonService } from 'src/app/services/common.service';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { environment } from 'src/environments/environment';
-
+declare var gtag;
 
 @Component({
   selector: 'app-thankyou-page',
@@ -26,6 +26,9 @@ export class ThankyouPageComponent implements OnInit {
       this.params_type = x[0];
       this.enquiry_type = this.commonService.decryptData(localStorage.getItem("enquiry_type"));
       this.project_id = localStorage.getItem("enquiry_proj_id");
+
+      if(environment.gtag_conversion_id) gtag('event', 'conversion', {'send_to': environment.gtag_conversion_id});
+
       if(this.enquiry_type == 'Download Brochure'){
         this.brochure_status = true;
         this.storeApi.PRODUCT_DETAILS({ product_id: this.project_id }).subscribe(result => {
