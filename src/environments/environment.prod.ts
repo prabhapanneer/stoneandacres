@@ -7,7 +7,7 @@ export const environment = {
   img_baseurl: 'https://yourstore.io/api/',
   img_host: "https://yourstore.io", // for _s split
   store_id: storeId,
-  gtag_tracking: false,
+  gtag_tracking: true,
   facebook_pixel: false,
   gtag_conversion_id: "AW-10950323825/ijW_CNK5iIMYEPHcwuUo",
   razorpay_payment_url: "https://api.razorpay.com/v1/checkout/embedded",
