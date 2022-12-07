@@ -38,6 +38,7 @@
               <div class="inner">
                 <div class="{{template_setting?.body_type}}">
                   <form autocomplete="off" (ngSubmit)="onSubmit();" ngNativeValidate>
+                    <input type="hidden" id="zc_gad" name="zc_gad" value=""/>
                     <input (focus)="wcarosel=false;" (focusout)="wcarosel=true;" type="text" placeholder="" (input)="afterSearchEvent=false;" name="name" [(ngModel)]="searchForm.name" id="txt-focus">
                     <!--Swiching text-->
                     <div *ngIf="wcarosel && !searchForm.name" class="text-carousel" (click)="mychange();">

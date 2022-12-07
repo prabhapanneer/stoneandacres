@@ -37,6 +37,7 @@
         <div class="col-md-6">
           <div class="contact-us-form mb-3">
             <form autocomplete="off" (ngSubmit)="onSubmit();" ngNativeValidate>
+              <input type="hidden" id="zc_gad" name="zc_gad" value=""/>
               <div class="primary-card p-3 mb-3">
                 <p>Name</p>
                 <input type="text" name="name" class="w-100" [(ngModel)]="contactForm.name" required />

@@ -263,6 +263,7 @@
               <aside class="widget widget-shadow widget-reservation">
                 <h2 class="mb-3">GET IN TOUCH</h2>
                 <form class="form-underline" (ngSubmit)="onSubmit();" autocomplete="off"  ngNativeValidate>
+                  <input type="hidden" id="zc_gad" name="zc_gad" value=""/>
                   <div class="field-select has-sub field-guest">
                     <span class="sl-icon"><i class="la la-user-friends"></i></span>
                     <input type="text" name="name"  [(ngModel)]="projectForm.name" placeholder="Name" required>
@@ -1020,6 +1021,7 @@
       <div class="row">
         <div class="col-md-12">
         <form class="form-underline" (ngSubmit)="onSubmitBrochure();" autocomplete="off"  ngNativeValidate>
+          <input type="hidden" id="zc_gad" name="zc_gad" value=""/>
           <div class="mb-3 field-select has-sub field-guest">
             <span class="sl-icon"><i class="la la-user-friends"></i></span>
             <input type="text" name="name" class="w-100" [(ngModel)]="brochureForm.name" placeholder="Name" required>
