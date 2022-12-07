@@ -70,13 +70,32 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activeRoute.params.subscribe((params: Params) => {
+    this.activeRoute.params.subscribe((params: Params) => {      
       this.currentYear = new Date().getFullYear();
       this.removeMetaProperties();
       if(isPlatformBrowser(this.platformId)) $(".related-products").css("visibility", "hidden");
       if(isPlatformBrowser(this.platformId)) $(".product_image").css("visibility", "hidden");
       this.params = params; this.swipeProductIndex = 0; this.swipe_product_list = []; this.activeImgIndex = 0;
       this.category_details = {}; this.related_products = []; this.reviews = [];this.page = 1; this.review_sort = 'rating';
+
+      localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
+      
+      let fullUrl = this.router.url.split('?');
+      let splitValue = fullUrl[1].split('=');   
+      // if(splitValue[0] === "gclid"){
+      //   localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}')
+      // }
+      // else 
+      if(splitValue[0] === "utm_source"){
+        localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+      }
+      else if(splitValue[0] === "li_fat_id"){
+        localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+      }
+      else{
+        localStorage.removeItem("urltype");
+      }
+
       if(this.commonService.product_page_attr) 
       {
         // for login redirection
@@ -282,6 +301,7 @@ export class ProductComponent implements OnInit {
           }
         });
       }
+
     });
   }
 
@@ -1474,13 +1494,18 @@ export class ProductComponent implements OnInit {
                 else
                 {
                     let params = JSON.parse(localStorage.getItem('urltype'));
-                    if(params.gclid)
-                    {
-                    this.projectForm.lead_source = "SA Website Google";
-                    }
-                    else if(params.utm_source)
+                    // if(params.gclid)
+                    // {
+                    // this.projectForm.lead_source = "SA Website Google";
+                    // }
+                    // else
+                    if(params.utm_source)
                     {
                     this.projectForm.lead_source = "SA Website Facebook";
+                    }
+                    else if(params.li_fat_id)
+                    {
+                    this.projectForm.lead_source = "SA Website Instagram";
                     }
                     else
                     {
@@ -1497,7 +1522,6 @@ export class ProductComponent implements OnInit {
           localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
           this.urlFormat(this.productDetails.name).then((router_link)=>{
             setTimeout(()=>{ 
-              localStorage.removeItem("urltype");
               this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
           }) 
             })
@@ -1697,13 +1721,18 @@ export class ProductComponent implements OnInit {
                 else
                 {
                     let params = JSON.parse(localStorage.getItem('urltype'));
-                    if(params.gclid)
-                    {
-                    this.brochureForm.lead_source = "SA Website Google";
-                    }
-                    else if(params.utm_source)
+                    // if(params.gclid)
+                    // {
+                    // this.brochureForm.lead_source = "SA Website Google";
+                    // }
+                    // else
+                    if(params.utm_source)
                     {
                     this.brochureForm.lead_source = "SA Website Facebook";
+                    }
+                    else if(params.li_fat_id)
+                    {
+                    this.brochureForm.lead_source = "SA Website Instagram";
                     }
                     else
                     {
@@ -1719,7 +1748,6 @@ export class ProductComponent implements OnInit {
               localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
               this.urlFormat(this.productDetails.name).then((router_link)=>{
                 setTimeout(()=>{ 
-                  localStorage.removeItem("urltype");
                   this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
               }) 
             })

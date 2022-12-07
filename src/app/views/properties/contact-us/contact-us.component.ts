@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { StoreApiService } from '../../../services/store-api.service';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -18,10 +18,31 @@ export class ContactUsComponent implements OnInit {
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
 
-  constructor(private sanitizer: DomSanitizer, private storeApi: StoreApiService, public commonService: CommonService, private router: Router) { }
+  constructor(private sanitizer: DomSanitizer, private storeApi: StoreApiService, public commonService: CommonService, 
+    private router: Router, private activeRoute: ActivatedRoute,) { }
 
   ngOnInit() {
-    this.alert_msg = null; this.contactForm = {};
+
+    this.activeRoute.queryParams.subscribe((params: Params) => {
+      this.alert_msg = null; this.contactForm = {};
+      localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
+      
+      let fullUrl = this.router.url.split('?');
+      let splitValue = fullUrl[1].split('=');   
+      // if(splitValue[0] === "gclid"){
+      //   localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}')
+      // }
+      // else
+      if(splitValue[0] === "utm_source"){
+        localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+      }
+      else if(splitValue[0] === "li_fat_id"){
+        localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+      }
+      else{
+        localStorage.removeItem("urltype");
+      }
+      
     if(!this.commonService.contact_page_info) {
       this.pageLoader = true;
       
@@ -48,6 +69,10 @@ export class ContactUsComponent implements OnInit {
       // console.log("err",error)
       // }
     }
+
+    })
+
+    
   }
 
   onSubmit() {   
@@ -67,13 +92,18 @@ export class ContactUsComponent implements OnInit {
     else
     {
             let params = JSON.parse(localStorage.getItem('urltype'));
-            if(params.gclid)
-            {
-            this.contactForm.lead_source = "SA Website Google";
-            }
-            else if(params.utm_source)
+            // if(params.gclid)
+            // {
+            // this.contactForm.lead_source = "SA Website Google";
+            // }
+            // else 
+            if(params.utm_source)
             {
             this.contactForm.lead_source = "SA Website Facebook";
+            }
+            else if(params.li_fat_id)
+            {
+            this.contactForm.lead_source = "SA Website Instagram";
             }
             else
             {
@@ -91,7 +121,6 @@ export class ContactUsComponent implements OnInit {
           let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
           result.then((res)=>{
           this.alert_msg = "Your enquiry submitted successfully";
-          localStorage.removeItem("urltype");
           setTimeout(() => { this.router.navigate(["/enquiry/thankyou-page"]); }, 500);
           })
           } catch (error) {
