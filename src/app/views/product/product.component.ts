@@ -81,20 +81,23 @@ export class ProductComponent implements OnInit {
       localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
       
       let fullUrl = this.router.url.split('?');
-      let splitValue = fullUrl[1].split('=');   
-      // if(splitValue[0] === "gclid"){
-      //   localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}')
-      // }
-      // else 
-      if(splitValue[0] === "utm_source"){
-        localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+      if(fullUrl.length > 1) {
+        let splitValue = fullUrl[1].split('=');   
+        // if(splitValue[0] === "gclid"){
+        //   localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}')
+        // }
+        // else 
+        if(splitValue[0] === "utm_source"){
+          localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+        }
+        else if(splitValue[0] === "li_fat_id"){
+          localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
+        }
+        else{
+          localStorage.removeItem("urltype");
+        }
       }
-      else if(splitValue[0] === "li_fat_id"){
-        localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
-      }
-      else{
-        localStorage.removeItem("urltype");
-      }
+      else localStorage.removeItem("urltype");
 
       if(this.commonService.product_page_attr) 
       {
