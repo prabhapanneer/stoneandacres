@@ -39,24 +39,22 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    // this.setSliderHeight();
-    this.activeRoute.queryParams.subscribe((params: Params) => {
-      let paramsVal:any = JSON.stringify(params);
-      localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
-      
-      if(params.gclid){
-        localStorage.setItem("urltype", paramsVal)
+    // this.setSliderHeight();  
+    if(isPlatformBrowser(this.platformId)) {
+    sessionStorage.setItem("website_url", this.commonService.origin+this.router.url);
+      if(this.router.url.indexOf("li_fat_id") != -1)
+      {
+        sessionStorage.setItem("lead_source","SA Website LinkedIn")
       }
-      else if(params.utm_source){
-        localStorage.setItem("urltype", paramsVal);
+      else if(this.router.url.indexOf("fbclid") != -1)
+      {
+        sessionStorage.setItem("lead_source","SA Website Facebook")
       }
-      else if(params.li_fat_id){
-        localStorage.setItem("urltype", paramsVal);
-      }
-      else{
-        localStorage.removeItem("urltype");
-      }
-    })
+      else
+      {
+        sessionStorage.setItem("lead_source","SA Website")
+      }    
+    }  
   }
 
   

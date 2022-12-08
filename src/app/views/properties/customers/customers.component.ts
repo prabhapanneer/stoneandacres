@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { formatDate } from '@angular/common';
+import { isPlatformBrowser, formatDate } from '@angular/common';
 
 
 @Component({
@@ -16,11 +16,10 @@ export class CustomersComponent implements OnInit {
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
   projectList:any={}; currentYear:any;
-  constructor(private storeApi: StoreApiService, public commonService: CommonService, public router: Router, private activeRoute: ActivatedRoute) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, public router: Router, private activeRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.activeRoute.queryParams.subscribe((params: Params) => {
-     
+    this.activeRoute.queryParams.subscribe((params: Params) => {     
     this.alert_msg = null; this.customerForm = {};
     this.pageLoader = true;
     let filterType = "all";
@@ -32,24 +31,6 @@ export class CustomersComponent implements OnInit {
       }
       else console.log("response", result);
     });
-
-    localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
-      
-    let fullUrl = this.router.url.split('?');
-    let splitValue = fullUrl[1].split('=');   
-    // if(splitValue[0] === "gclid"){
-    //   localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}')
-    // }
-    // else 
-    if(splitValue[0] === "utm_source"){
-      localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
-    }
-    else if(splitValue[0] === "li_fat_id"){
-      localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
-    }
-    else{
-      localStorage.removeItem("urltype");
-    }
     })
   }
 
@@ -70,32 +51,12 @@ export class CustomersComponent implements OnInit {
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            this.customerForm.website_url = JSON.parse(localStorage.getItem('website_url'));
-            if(!localStorage.getItem('urltype'))
-                {
-                    this.customerForm.lead_source = "SA Website";
-                }
-                else
-                {
-                    let params = JSON.parse(localStorage.getItem('urltype'));
-                    // if(params.gclid)
-                    // {
-                    // this.customerForm.lead_source = "SA Website Google";
-                    // }
-                    // else 
-                    if(params.utm_source)
-                    {
-                    this.customerForm.lead_source = "SA Website Facebook";
-                    }
-                    else if(params.li_fat_id)
-                    {
-                    this.customerForm.lead_source = "SA Website Instagram";
-                    }
-                    else
-                    {
-                    this.customerForm.lead_source = "SA Website";
-                    }
-                }
+            this.customerForm.website_url = this.commonService.origin;
+            this.customerForm.lead_source = "SA Website";
+            if(isPlatformBrowser(this.platformId)) {
+            if(sessionStorage.getItem("website_url")) this.customerForm.website_url = sessionStorage.getItem("website_url");
+            if(sessionStorage.getItem("lead_source")) this.customerForm.lead_source = sessionStorage.getItem("lead_source");    
+            }  
             let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.customerForm.name+'&Mobile='+this.customerForm.mobile+'&Email='+this.customerForm.email+'&LEADCF15='+this.customerForm.project+'&Description='+this.customerForm.message+'&LEADCF11='+this.customerForm.type+'&Lead Source='+this.customerForm.lead_source+'&Lead Status=Not Contacted&Website='+this.customerForm.website_url+'&LEADCF82='+currentDate;
             try {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { formatDate } from '@angular/common';
+import { isPlatformBrowser, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-land-owners',
@@ -17,31 +17,14 @@ export class LandOwnersComponent implements OnInit {
   template_setting: any = environment.template_setting;
   currentYear:any;
 
-  constructor(private storeApi: StoreApiService, public commonService: CommonService, private router: Router, private activeRoute: ActivatedRoute) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, private router: Router, private activeRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.activeRoute.queryParams.subscribe((params: Params) => {
       this.alert_msg = null; this.landOwnerForm = {};
     this.pageLoader = true;
     this.currentYear = new Date().getFullYear();
-    setTimeout(() => { this.pageLoader = false; }, 500);
-    localStorage.setItem("website_url", JSON.stringify(this.commonService.origin+this.router.url));
-      
-    let fullUrl = this.router.url.split('?');
-    let splitValue = fullUrl[1].split('=');   
-    // if(splitValue[0] === "gclid"){
-    //   localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}')
-    // }
-    // else 
-    if(splitValue[0] === "utm_source"){
-      localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
-    }
-    else if(splitValue[0] === "li_fat_id"){
-      localStorage.setItem("urltype", '{"'+splitValue[0]+'" : "'+ splitValue[1]+'"}');
-    }
-    else{
-      localStorage.removeItem("urltype");
-    }
+    setTimeout(() => { this.pageLoader = false; }, 500);    
     })
     
   }
@@ -63,32 +46,12 @@ export class LandOwnersComponent implements OnInit {
       this.storeApi.MAIL(this.landOwnerForm).subscribe((result)=>{
         if(result.status) {
           setTimeout(()=>{
-            this.landOwnerForm.website_url = JSON.parse(localStorage.getItem('website_url'));
-            if(!localStorage.getItem('urltype'))
-                {
-                    this.landOwnerForm.lead_source = "SA Website";
-                }
-                else
-                {
-                    let params = JSON.parse(localStorage.getItem('urltype'));
-                    // if(params.gclid)
-                    // {
-                    // this.landOwnerForm.lead_source = "SA Website Google";
-                    // }
-                    // else 
-                    if(params.utm_source)
-                    {
-                    this.landOwnerForm.lead_source = "SA Website Facebook";
-                    }
-                    else if(params.li_fat_id)
-                    {
-                    this.landOwnerForm.lead_source = "SA Website Instagram";
-                    }
-                    else
-                    {
-                    this.landOwnerForm.lead_source = "SA Website";
-                    }
-                }
+            this.landOwnerForm.website_url = this.commonService.origin;
+            this.landOwnerForm.lead_source = "SA Website";
+            if(isPlatformBrowser(this.platformId)) {
+            if(sessionStorage.getItem("website_url")) this.landOwnerForm.website_url = sessionStorage.getItem("website_url");
+            if(sessionStorage.getItem("lead_source")) this.landOwnerForm.lead_source = sessionStorage.getItem("lead_source");    
+            }
             let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.landOwnerForm.name+'&Mobile='+this.landOwnerForm.mobile+'&Email='+this.landOwnerForm.email+'&Description=&LEADCF11='+this.landOwnerForm.type+'&LEADCF5='+this.landOwnerForm.location+'&LEADCF6='+this.landOwnerForm.Landextent+'&LEADCF10='+this.landOwnerForm.Landextent_type+'&Lead Source='+this.landOwnerForm.lead_source+'&Lead Status=Not Contacted&Website='+this.landOwnerForm.website_url+'&LEADCF82='+currentDate;
             try {
               let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
