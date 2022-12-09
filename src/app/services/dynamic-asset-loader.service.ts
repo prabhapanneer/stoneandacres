@@ -15,6 +15,7 @@ export const CssStore: Scripts[] = [
   { name: 'headroom-js', type: 'js', src: 'https://cdnjs.cloudflare.com/ajax/libs/headroom/0.10.2/headroom.min.js' },
   { name: 'square-sandbox', type: 'js', src: 'https://js.squareupsandbox.com/v2/paymentform' },
   { name: 'square-live', type: 'js', src: 'https://js.squareup.com/v2/paymentform' },
+  { name: 'zoho', type: 'js', src: 'https://crm.zoho.com/crm/javascript/zcga.js' },
   { name: 'foloosipay', type: 'js', src: 'assets/js/foloosi.js' }
 ];
 

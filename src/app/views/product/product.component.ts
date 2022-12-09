@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { isPlatformBrowser, DOCUMENT, formatDate } from '@angular/common';
 import { Meta, DomSanitizer } from '@angular/platform-browser';
@@ -55,6 +55,8 @@ export class ProductComponent implements OnInit {
   page: number; pageSize: number = 10; review_sort: string;
   projectForm:any={}; currentYear:any;  styleIndex: number = 0;
   brochureForm:any={}; btn_loader1:boolean=false; btn_loader2:boolean=false;
+  @ViewChild('zohoForm', {static: false}) zohoForm: ElementRef;
+  @ViewChild('zohoForm1', {static: false}) zohoForm1: ElementRef;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private renderer: Renderer2, @Inject(DOCUMENT) private document, private assetLoader: DynamicAssetLoaderService,
@@ -77,8 +79,10 @@ export class ProductComponent implements OnInit {
       if(isPlatformBrowser(this.platformId)) $(".product_image").css("visibility", "hidden");
       this.params = params; this.swipeProductIndex = 0; this.swipe_product_list = []; this.activeImgIndex = 0;
       this.category_details = {}; this.related_products = []; this.reviews = [];this.page = 1; this.review_sort = 'rating';
+      if(isPlatformBrowser(this.platformId)) {
+        if(sessionStorage.getItem("website_url")) sessionStorage.setItem("website_url", sessionStorage.getItem("website_url")); 
+        else sessionStorage.setItem("website_url", window.location.href);
 
-      sessionStorage.setItem("website_url", this.commonService.origin+this.router.url);
       if(this.router.url.indexOf("li_fat_id") != -1)
       {
         sessionStorage.setItem("lead_source","SA Website LinkedIn")
@@ -87,14 +91,18 @@ export class ProductComponent implements OnInit {
       {
         sessionStorage.setItem("lead_source","SA Website Facebook")
       }
-      // else if(this.router.url.indexOf("gclid") != -1)
-      // {
-      //   sessionStorage.setItem("lead_source","SA Website - Google Ads")
-      // }
+      else if(this.router.url.indexOf("gclid") != -1)
+      {
+        sessionStorage.setItem("lead_source","SA Website Google")
+      }
       else
       {
         sessionStorage.setItem("lead_source","SA Website")
-      }      
+      }   
+    }
+
+      this.assetLoader.load('zoho').then(data => {       
+      });
 
       if(this.commonService.product_page_attr) 
       {
@@ -303,6 +311,7 @@ export class ProductComponent implements OnInit {
       }
 
     });
+    
   }
 
   getTabList() {
@@ -1469,8 +1478,13 @@ export class ProductComponent implements OnInit {
 
   // Form Submit
 
-  onSubmit(){
-    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+  onSubmit(){    
+    this.projectForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.urlFormat(this.productDetails.name).then((router_link)=>{
+      setTimeout(()=>{ 
+        this.projectForm.redirect_url = this.commonService.origin+"/enquiry/"+router_link+"-thankyou-page";
+      }, 500)
+    }) 
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
@@ -1486,27 +1500,13 @@ export class ProductComponent implements OnInit {
       this.projectForm.form_data = { name: this.projectForm.name, email:this.projectForm.email, mobile: this.projectForm.mobile, message: this.projectForm.message };
       this.storeApi.MAIL(this.projectForm).subscribe((result)=>{
       if(result.status) {
-      this.projectForm.website_url = this.commonService.origin;
-      this.projectForm.lead_source = "SA Website";
+      this.projectForm.website_url = window.location.href;
+      this.projectForm.lead_source = "SA Website";           
       if(isPlatformBrowser(this.platformId)) {
-      if(sessionStorage.getItem("website_url")) this.projectForm.website_url = sessionStorage.getItem("website_url");
-      if(sessionStorage.getItem("lead_source")) this.projectForm.lead_source = sessionStorage.getItem("lead_source");    
-      }          
-          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.projectForm.name+'&Mobile='+this.projectForm.mobile+'&Email='+this.projectForm.email+'&LEADCF15='+this.projectForm.project+'&Description=&LEADCF11='+this.projectForm.form_type+'&Lead Source='+this.projectForm.lead_source+'&Lead Status=Not Contacted&Website='+this.projectForm.website_url+'&LEADCF82='+currentDate;
-          try {
-            let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
-            result.then((res)=>{
-              this.projectForm.submit = false;
-          localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
-          localStorage.setItem("enquiry_type", this.commonService.encryptData(this.projectForm.form_type));
-          this.urlFormat(this.productDetails.name).then((router_link)=>{
-            setTimeout(()=>{ 
-              this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
-          }) 
-            })
-            } catch (error) {
-            console.log("err",error);
-          } 
+        if(sessionStorage.getItem("website_url")) this.projectForm.website_url = sessionStorage.getItem("website_url"); 
+        if(sessionStorage.getItem("lead_source")) this.projectForm.lead_source = sessionStorage.getItem("lead_source");    
+      }    
+      setTimeout(_ => this.zohoForm.nativeElement.submit());     
           
         }
         else console.log("response", result)
@@ -1676,7 +1676,12 @@ export class ProductComponent implements OnInit {
   }
 
   onSubmitBrochure(){
-    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.brochureForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.urlFormat(this.productDetails.name).then((router_link)=>{
+      setTimeout(()=>{ 
+        this.brochureForm.redirect_url = this.commonService.origin+"/enquiry/"+router_link+"-thankyou-page";
+      }, 500)
+    }) 
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.brochureForm.submit = true;
@@ -1692,28 +1697,13 @@ export class ProductComponent implements OnInit {
       this.brochureForm.form_data = { name: this.brochureForm.name, email:this.brochureForm.email, mobile: this.brochureForm.mobile, message: this.brochureForm.message };
       this.storeApi.MAIL(this.brochureForm).subscribe((result)=>{
         if(result.status) {
-          this.brochureForm.website_url = this.commonService.origin;
-          this.brochureForm.lead_source = "SA Website";
-          if(isPlatformBrowser(this.platformId)) {
-          if(sessionStorage.getItem("website_url")) this.brochureForm.website_url = sessionStorage.getItem("website_url");
-          if(sessionStorage.getItem("lead_source")) this.brochureForm.lead_source = sessionStorage.getItem("lead_source");    
-          }
-          let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.brochureForm.name+'&Mobile='+this.brochureForm.mobile+'&Email='+this.brochureForm.email+'&LEADCF15='+this.brochureForm.project+'&Description=&LEADCF11='+this.brochureForm.form_type+'&Lead Source='+this.brochureForm.lead_source+'&Lead Status=Not Contacted&Website='+this.brochureForm.website_url+'&LEADCF82='+currentDate;
-          try {
-            let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
-            result.then((res)=>{
-              this.brochureForm.submit = false;
-              localStorage.setItem("enquiry_proj_id", this.productDetails.product_id);
-              localStorage.setItem("enquiry_type", this.commonService.encryptData(this.brochureForm.form_type));
-              this.urlFormat(this.productDetails.name).then((router_link)=>{
-                setTimeout(()=>{ 
-                  this.router.navigate(["/enquiry/"+router_link+"-thankyou-page"]); }, 500)
-              }) 
-            })
-            } catch (error) {
-            console.log("err",error);
-          } 
-                 
+            this.brochureForm.website_url = window.location.href;
+            this.brochureForm.lead_source = "SA Website";           
+            if(isPlatformBrowser(this.platformId)) {
+              if(sessionStorage.getItem("website_url")) this.brochureForm.website_url = sessionStorage.getItem("website_url"); 
+              if(sessionStorage.getItem("lead_source")) this.brochureForm.lead_source = sessionStorage.getItem("lead_source");    
+            }    
+            setTimeout(_ => this.zohoForm1.nativeElement.submit());                   
         }
         else console.log("response", result)
       })

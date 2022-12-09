@@ -263,7 +263,7 @@
               <aside class="widget widget-shadow widget-reservation">
                 <h2 class="mb-3">GET IN TOUCH</h2>
                 <form class="form-underline" (ngSubmit)="onSubmit();" autocomplete="off"  ngNativeValidate>
-                  <input type="hidden" id="zc_gad" name="zc_gad" value=""/>
+                  <!-- <input type="hidden" id="zc_gad" name="zc_gad" value=""/> -->
                   <div class="field-select has-sub field-guest">
                     <span class="sl-icon"><i class="la la-user-friends"></i></span>
                     <input type="text" name="name"  [(ngModel)]="projectForm.name" placeholder="Name" required>
@@ -1021,7 +1021,7 @@
       <div class="row">
         <div class="col-md-12">
         <form class="form-underline" (ngSubmit)="onSubmitBrochure();" autocomplete="off"  ngNativeValidate>
-          <input type="hidden" id="zc_gad" name="zc_gad" value=""/>
+          <!-- <input type="hidden" id="zc_gad" name="zc_gad" value=""/> -->
           <div class="mb-3 field-select has-sub field-guest">
             <span class="sl-icon"><i class="la la-user-friends"></i></span>
             <input type="text" name="name" class="w-100" [(ngModel)]="brochureForm.name" placeholder="Name" required>
@@ -1050,3 +1050,50 @@
     </div>
   </div>
 </div>
+<!-- zoho form -->
+<form #zohoForm action='https://crm.zoho.com/crm/WebToLeadForm' name=WebToLeads3283272000001447003 method='POST' onSubmit='javascript:document.charset="UTF-8";' accept-charset='UTF-8'>
+   <input type='hidden' name='xnQsjsdp' value='f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2' />
+   <input type='hidden' name='zc_gad' id='zc_gad' value='' />
+   <input type='hidden' name='xmIwtLD' value='d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde' />
+   <input type='hidden' name='actionType' value='TGVhZHM=' />
+   <input type='hidden' id='returnURL' name='returnURL' value="{{projectForm.redirect_url}}" />
+   <input type='hidden' id='Last_Name' name='Last Name' value="{{projectForm.name}}" />
+   <input type='hidden' id='Lead_Source' name='Lead Source' value="{{projectForm.lead_source}}">
+   <input type='hidden' id='LEADCF11' name='LEADCF11' value="{{projectForm.form_type}}"> 
+   <input type="hidden" id='Lead_Status' name='Lead Status' value="Not Contacted" />
+   <input type='hidden' id='Mobile' name='Mobile' value="{{projectForm.mobile}}">
+   <input type='hidden' id='Email' name='Email' value="{{projectForm.email}}">
+   <input type='hidden' id='LEADCF15' name='LEADCF15' value="{{projectForm.project}}" />
+   <input type='hidden' id='LEADCF82' name='LEADCF82' value="{{projectForm.current_date}}" />
+   <input type="hidden" id='Website' name='Website' value="{{projectForm.website_url}}" />
+</form>
+<form #zohoForm1 action='https://crm.zoho.com/crm/WebToLeadForm' name=WebToLeads3283272000001447003 method='POST' onSubmit='javascript:document.charset="UTF-8";' accept-charset='UTF-8'>
+  <input type='hidden' name='xnQsjsdp' value='f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2' />
+  <input type='hidden' name='zc_gad' id='zc_gad' value='' />
+  <input type='hidden' name='xmIwtLD' value='d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde' />
+  <input type='hidden' name='actionType' value='TGVhZHM=' />
+  <input type='hidden' id='returnURL' name='returnURL' value="{{brochureForm.redirect_url}}" />
+  <input type='hidden' id='Last_Name' name='Last Name' value="{{brochureForm.name}}" />
+  <input type='hidden' id='Lead_Source' name='Lead Source' value="{{brochureForm.lead_source}}">
+  <input type='hidden' id='LEADCF11' name='LEADCF11' value="{{brochureForm.form_type}}"> 
+  <input type="hidden" id='Lead_Status' name='Lead Status' value="Not Contacted" />
+  <input type='hidden' id='Mobile' name='Mobile' value="{{brochureForm.mobile}}">
+  <input type='hidden' id='Email' name='Email' value="{{brochureForm.email}}">
+  <input type='hidden' id='LEADCF15' name='LEADCF15' value="{{brochureForm.project}}" />
+  <input type='hidden' id='LEADCF82' name='LEADCF82' value="{{brochureForm.current_date}}" />
+  <input type="hidden" id='Website' name='Website' value="{{brochureForm.website_url}}" />
+</form>
+<!-- <form #zohoForm action='https://crm.zoho.com/crm/WebToLeadForm' name=WebToLeads3283272000001447003 method='POST' onSubmit='javascript:document.charset="UTF-8"; ' accept-charset='UTF-8'>
+  <input type='hidden' style='display:none;' name='xnQsjsdp' value='f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2'> 
+  <input type='hidden' name='zc_gad' id='zc_gad' value=''> 
+  <input type='hidden' style='display:none;' name='xmIwtLD' value='d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde'> 
+  <input type='hidden'  style='display:none;' name='actionType' value='TGVhZHM='>
+  <input type='hidden' style='display:none;' name='returnURL' value='https&#x3a;&#x2f;&#x2f;stoneandacres.com' > 
+  <input type='text' id='Last_Name' name='Last Name' maxlength='80'>
+  <input type='text' id='Website' name='Website' value="https://www.stoneandacres.com/?utm_source=google&utm_medium=cpc&utm_campaign=mofu_google_search_atmos3&campaignid=18320643035&device=c&gclid=Cj0KCQiA1sucBhDgARIsAFoytUsrWErymh5zMO5JlvSvhEOpxGV4mVkv4Pe2SgUZdmskx1PvIHaztbwaAno4EALw_wcB">
+  <input type='submit' id='formsubmit' class='formsubmit zcwf_button' value='Submit' title='Submit'>
+  </form> -->
+
+
+
+   
