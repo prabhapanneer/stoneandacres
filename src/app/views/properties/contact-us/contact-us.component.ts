@@ -1,10 +1,12 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StoreApiService } from '../../../services/store-api.service';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isPlatformBrowser, formatDate } from '@angular/common';
+import { DynamicAssetLoaderService } from '../../../services/dynamic-asset-loader.service';
+
 
 @Component({
   selector: 'app-contact-us',
@@ -17,9 +19,10 @@ export class ContactUsComponent implements OnInit {
   contactForm: any = {}; pageLoader: boolean;
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
+  @ViewChild('zohoForm', {static: false}) zohoForm: ElementRef;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private sanitizer: DomSanitizer, private storeApi: StoreApiService, public commonService: CommonService, 
-    private router: Router, private activeRoute: ActivatedRoute,) { }
+    private router: Router, private activeRoute: ActivatedRoute, private assetLoader: DynamicAssetLoaderService) { }
 
   ngOnInit() {
     this.activeRoute.queryParams.subscribe((params: Params) => {
@@ -40,15 +43,6 @@ export class ContactUsComponent implements OnInit {
           this.commonService.contact_page_info = {};
         }
       });
-      
-      // try {
-      // var result =  this.storeApi.ZOHO_ENQUIRY();
-      // result.then((res)=>{
-      // console.log(res);
-      // })
-      // } catch (error) {
-      // console.log("err",error)
-      // }
     }
 
     })
@@ -57,7 +51,9 @@ export class ContactUsComponent implements OnInit {
   }
 
   onSubmit() {   
-    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.assetLoader.load('zoho');
+    this.contactForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.contactForm.redirect_url = this.commonService.origin+"/enquiry/thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.contactForm.submit = true;
@@ -66,26 +62,22 @@ export class ContactUsComponent implements OnInit {
     this.contactForm.leadtype = "Contact Page";
     if(this.commonService.application_setting.enquiry_email) this.contactForm.to_mail = this.commonService.application_setting.enquiry_email;
 
-    this.contactForm.website_url = window.location.href;
-    this.contactForm.lead_source = "SA Website";
-    if(isPlatformBrowser(this.platformId)) {
-    if(sessionStorage.getItem("lead_source")) this.contactForm.lead_source = sessionStorage.getItem("lead_source");
-    }
-    let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.contactForm.name+'&Mobile='+this.contactForm.mobile+'&Email='+this.contactForm.email+'&Description='+this.contactForm.message+'&LEADCF11='+this.contactForm.leadtype+'&Lead Source='+this.contactForm.lead_source+'&Lead Status=Not Contacted&Website='+this.contactForm.website_url+'&LEADCF82='+currentDate;
-    this.storeApi.CONTACT_US(this.contactForm).subscribe(result => {
-      this.contactForm.submit = false;
-      this.contactForm = {};
-      this.success_alert = result.status;
-      if(result.status) {
-        try {
-          let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
-          result.then((res)=>{
-          this.alert_msg = "Your enquiry submitted successfully";
-          setTimeout(() => { this.router.navigate(["/enquiry/thankyou-page"]); }, 500);
-          })
-          } catch (error) {
-          console.log("err",error);
-        }        
+      this.contactForm.website_url = window.location.href;
+      this.contactForm.lead_source = "SA Website";           
+      if(isPlatformBrowser(this.platformId)) {
+        if(sessionStorage.getItem("website_url")) this.contactForm.website_url = sessionStorage.getItem("website_url"); 
+        if(sessionStorage.getItem("lead_source")) this.contactForm.lead_source = sessionStorage.getItem("lead_source");    
+      }   
+     
+    this.storeApi.CONTACT_US(this.contactForm).subscribe(result => {       
+      if(result.status) 
+      {
+          setTimeout(() => {
+            this.zohoForm.nativeElement.submit();
+            this.contactForm.submit = false;
+            this.contactForm = {};
+            this.success_alert = result.status;     
+          }, 1000);          
       }
       else {
         this.alert_msg = "Network error, try again later";

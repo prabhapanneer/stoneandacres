@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isPlatformBrowser, formatDate } from '@angular/common';
+import { DynamicAssetLoaderService } from '../../../services/dynamic-asset-loader.service';
 
 @Component({
   selector: 'app-land-owners',
@@ -16,8 +17,9 @@ export class LandOwnersComponent implements OnInit {
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
   currentYear:any;
+  @ViewChild('zohoForm', {static: false}) zohoForm: ElementRef;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, private router: Router, private activeRoute: ActivatedRoute) { }
+  constructor(private assetLoader: DynamicAssetLoaderService, @Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, private router: Router, private activeRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.activeRoute.queryParams.subscribe((params: Params) => {
@@ -30,7 +32,9 @@ export class LandOwnersComponent implements OnInit {
   }
 
   onSubmit(){
-    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.assetLoader.load('zoho');
+    this.landOwnerForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.landOwnerForm.redirect_url = this.commonService.origin+"/enquiry/land-owners-enquiry-thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.landOwnerForm.submit = true;
@@ -45,24 +49,15 @@ export class LandOwnersComponent implements OnInit {
       this.landOwnerForm.form_data = { name: this.landOwnerForm.name, email:this.landOwnerForm.email, mobile: this.landOwnerForm.mobile, message: this.landOwnerForm.message, location: this.landOwnerForm.location, land_extend:{Landextent_name: this.landOwnerForm.Landextent, Landextent_type: this.landOwnerForm.Landextent_type}};
       this.storeApi.MAIL(this.landOwnerForm).subscribe((result)=>{
         if(result.status) {
-          setTimeout(()=>{
-            this.landOwnerForm.website_url = window.location.href;
-            this.landOwnerForm.lead_source = "SA Website";
-            if(isPlatformBrowser(this.platformId)) {
-            if(sessionStorage.getItem("lead_source")) this.landOwnerForm.lead_source = sessionStorage.getItem("lead_source");    
-            }
-            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.landOwnerForm.name+'&Mobile='+this.landOwnerForm.mobile+'&Email='+this.landOwnerForm.email+'&Description=&LEADCF11='+this.landOwnerForm.type+'&LEADCF5='+this.landOwnerForm.location+'&LEADCF6='+this.landOwnerForm.Landextent+'&LEADCF10='+this.landOwnerForm.Landextent_type+'&Lead Source='+this.landOwnerForm.lead_source+'&Lead Status=Not Contacted&Website='+this.landOwnerForm.website_url+'&LEADCF82='+currentDate;
-            try {
-              let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
-              result.then((res)=>{
-                this.landOwnerForm.submit = false;
-                this.router.navigate(["/enquiry/land-owners-enquiry-thankyou-page"]);
-              })
-              } catch (error) {
-              console.log("err",error);
-            } 
-            
-          },500);
+              this.landOwnerForm.website_url = window.location.href;
+              this.landOwnerForm.lead_source = "SA Website";           
+              if(isPlatformBrowser(this.platformId)) {
+              if(sessionStorage.getItem("website_url")) this.landOwnerForm.website_url = sessionStorage.getItem("website_url"); 
+              if(sessionStorage.getItem("lead_source")) this.landOwnerForm.lead_source = sessionStorage.getItem("lead_source");    
+              }  
+              setTimeout(() => { 
+              this.zohoForm.nativeElement.submit();
+              }, 1000); 
         }
         else console.log("response", result)
       })

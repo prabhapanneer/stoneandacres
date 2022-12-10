@@ -80,25 +80,27 @@ export class ProductComponent implements OnInit {
       this.params = params; this.swipeProductIndex = 0; this.swipe_product_list = []; this.activeImgIndex = 0;
       this.category_details = {}; this.related_products = []; this.reviews = [];this.page = 1; this.review_sort = 'rating';
       if(isPlatformBrowser(this.platformId)) {
-        if(sessionStorage.getItem("website_url")) sessionStorage.setItem("website_url", sessionStorage.getItem("website_url")); 
-        else sessionStorage.setItem("website_url", window.location.href);
-
-      if(this.router.url.indexOf("li_fat_id") != -1)
+      if(!sessionStorage.getItem("website_url")) sessionStorage.setItem("website_url", window.location.href);
+      if(!sessionStorage.getItem("lead_source"))
       {
-        sessionStorage.setItem("lead_source","SA Website LinkedIn")
+              if(this.router.url.indexOf("li_fat_id") != -1)
+              {
+                sessionStorage.setItem("lead_source","SA Website LinkedIn")
+              }
+              else if(this.router.url.indexOf("fbclid") != -1)
+              {
+                sessionStorage.setItem("lead_source","SA Website Facebook")
+              }
+              else if(this.router.url.indexOf("gclid") != -1)
+              {
+                sessionStorage.setItem("lead_source","SA Website Google")
+              }
+              else
+              {
+                sessionStorage.setItem("lead_source","SA Website")
+              }   
       }
-      else if(this.router.url.indexOf("fbclid") != -1)
-      {
-        sessionStorage.setItem("lead_source","SA Website Facebook")
-      }
-      else if(this.router.url.indexOf("gclid") != -1)
-      {
-        sessionStorage.setItem("lead_source","SA Website Google")
-      }
-      else
-      {
-        sessionStorage.setItem("lead_source","SA Website")
-      }   
+      
     }
 
       this.assetLoader.load('zoho').then(data => {       
@@ -1506,7 +1508,7 @@ export class ProductComponent implements OnInit {
         if(sessionStorage.getItem("website_url")) this.projectForm.website_url = sessionStorage.getItem("website_url"); 
         if(sessionStorage.getItem("lead_source")) this.projectForm.lead_source = sessionStorage.getItem("lead_source");    
       }    
-      setTimeout(_ => this.zohoForm.nativeElement.submit());     
+      setTimeout(_ => this.zohoForm.nativeElement.submit());    
           
         }
         else console.log("response", result)

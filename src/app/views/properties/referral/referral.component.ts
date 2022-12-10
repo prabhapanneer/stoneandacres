@@ -1,9 +1,11 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isPlatformBrowser, formatDate } from '@angular/common';
+import { DynamicAssetLoaderService } from '../../../services/dynamic-asset-loader.service';
+
 
 @Component({
   selector: 'app-referral',
@@ -16,8 +18,10 @@ export class ReferralComponent implements OnInit {
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
   projectList:any={}; currentYear:any;
+  @ViewChild('zohoForm', {static: false}) zohoForm: ElementRef;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, private router: Router, private activeRoute: ActivatedRoute) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, private router: Router, private activeRoute: ActivatedRoute,
+  private assetLoader: DynamicAssetLoaderService) { }
 
   ngOnInit(): void {
     this.activeRoute.queryParams.subscribe((params: Params) => {
@@ -37,7 +41,9 @@ export class ReferralComponent implements OnInit {
   }
 
   onSubmit(){
-    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.assetLoader.load('zoho');
+    this.referralForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.referralForm.redirect_url = this.commonService.origin+"/enquiry/referral-enquiry-thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.referralForm.submit = true;
@@ -52,24 +58,15 @@ export class ReferralComponent implements OnInit {
       this.referralForm.form_data = { name: this.referralForm.name, email:this.referralForm.email, mobile: this.referralForm.mobile, message: this.referralForm.message, location: this.referralForm.location, land_extend:{Landextend_name: this.referralForm.Landextend, Landextend_type: this.referralForm.Landextend_type}};
       this.storeApi.MAIL(this.referralForm).subscribe((result)=>{
         if(result.status) {
-          setTimeout(()=>{
-            this.referralForm.website_url = window.location.href;
-            this.referralForm.lead_source = "SA Website";
-            if(isPlatformBrowser(this.platformId)) {
-            if(sessionStorage.getItem("lead_source")) this.referralForm.lead_source = sessionStorage.getItem("lead_source");    
-            }  
-            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.referralForm.name+'&Mobile='+this.referralForm.mobile+'&Email='+this.referralForm.email+'&Description=&LEADCF15='+this.referralForm.project+'&LEADCF5='+this.referralForm.location+'&LEADCF11='+this.referralForm.type+'&LEADCF4='+this.referralForm.flat_number+'&LEADCF1='+this.referralForm.friend_name+'&LEADCF2='+this.referralForm.friend_mobile+'&LEADCF3='+this.referralForm.friend_location+'&LEADCF8='+this.referralForm.friend_project+'&Lead Source='+this.referralForm.lead_source+'&Lead Status=Not Contacted&Website='+this.referralForm.website_url+'&LEADCF82='+currentDate;
-            try {
-              let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
-              result.then((res)=>{
-                this.referralForm.submit = false;
-                this.router.navigate(["/enquiry/referral-enquiry-thankyou-page"]);
-              })
-              } catch (error) {
-              console.log("err",error);
-            } 
-            
-          },500);
+          this.referralForm.website_url = window.location.href;
+              this.referralForm.lead_source = "SA Website";           
+              if(isPlatformBrowser(this.platformId)) {
+              if(sessionStorage.getItem("website_url")) this.referralForm.website_url = sessionStorage.getItem("website_url"); 
+              if(sessionStorage.getItem("lead_source")) this.referralForm.lead_source = sessionStorage.getItem("lead_source");    
+              }  
+              setTimeout(() => { 
+              this.zohoForm.nativeElement.submit();
+              }, 1000);  
         }
         else console.log("response", result)
       })

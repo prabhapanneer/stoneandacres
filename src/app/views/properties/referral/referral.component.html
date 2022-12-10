@@ -91,3 +91,26 @@
       </div>
     </section>
   </section>
+  <form #zohoForm action='https://crm.zoho.com/crm/WebToLeadForm' method='POST' onSubmit='javascript:document.charset="UTF-8";' accept-charset='UTF-8'>
+    <input type='hidden' name='xnQsjsdp' value='f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2' />
+    <input type='hidden' name='zc_gad' id='zc_gad' value='' />
+    <input type='hidden' name='xmIwtLD' value='d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde' />
+    <input type='hidden' name='actionType' value='TGVhZHM=' />
+    <input type='hidden' id='returnURL' name='returnURL' value="{{referralForm.redirect_url}}" />
+    <input type='hidden' id='Last_Name' name='Last Name' value="{{referralForm.name}}" />
+    <input type='hidden' id='Lead_Source' name='Lead Source' value="{{referralForm.lead_source}}">
+    <input type='hidden' id='LEADCF11' name='LEADCF11' value="{{referralForm.type}}"> 
+    <input type="hidden" id='Lead_Status' name='Lead Status' value="Not Contacted" />
+    <input type='hidden' id='Mobile' name='Mobile' value="{{referralForm.mobile}}">
+    <input type='hidden' id='Email' name='Email' value="{{referralForm.email}}">
+    <input type='hidden' id='LEADCF15' name='LEADCF15' value="{{referralForm.project}}" />
+    <input type='hidden' id='LEADCF82' name='LEADCF82' value="{{referralForm.current_date}}" />
+    <input type='hidden' id='Description' name='Description' value="{{referralForm.message}}" />
+    <input type="hidden" id='Website' name='Website' value="{{referralForm.website_url}}" />
+    <input type="hidden" id='LEADCF5' name='LEADCF5' value="{{referralForm.location}}" />
+    <input type="hidden" id='LEADCF4' name='LEADCF4' value="{{referralForm.flat_number}}" />
+    <input type="hidden" id='LEADCF1' name='LEADCF1' value="{{referralForm.friend_name}}" />
+    <input type="hidden" id='LEADCF2' name='LEADCF2' value="{{referralForm.friend_mobile}}" />
+    <input type="hidden" id='LEADCF3' name='LEADCF3' value="{{referralForm.friend_location}}" />
+    <input type="hidden" id='LEADCF8' name='LEADCF8' value="{{referralForm.friend_project}}" />
+   </form>

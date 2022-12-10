@@ -40,29 +40,29 @@ export class HomeComponent {
 
   ngOnInit() {
     // this.setSliderHeight();  
-    if(isPlatformBrowser(this.platformId)) 
-    {
-      if(sessionStorage.getItem("website_url")) sessionStorage.setItem("website_url", sessionStorage.getItem("website_url")); 
-      else sessionStorage.setItem("website_url", window.location.href);
-
-      if(this.router.url.indexOf("li_fat_id") != -1)
+    if(isPlatformBrowser(this.platformId)) {
+      if(!sessionStorage.getItem("website_url")) sessionStorage.setItem("website_url", window.location.href);
+      if(!sessionStorage.getItem("lead_source"))
       {
-        sessionStorage.setItem("lead_source","SA Website LinkedIn")
+              if(this.router.url.indexOf("li_fat_id") != -1)
+              {
+                sessionStorage.setItem("lead_source","SA Website LinkedIn")
+              }
+              else if(this.router.url.indexOf("fbclid") != -1)
+              {
+                sessionStorage.setItem("lead_source","SA Website Facebook")
+              }
+              else if(this.router.url.indexOf("gclid") != -1)
+              {
+                sessionStorage.setItem("lead_source","SA Website Google")
+              }
+              else
+              {
+                sessionStorage.setItem("lead_source","SA Website")
+              }   
       }
-      else if(this.router.url.indexOf("fbclid") != -1)
-      {
-        sessionStorage.setItem("lead_source","SA Website Facebook")
-      }
-      else if(this.router.url.indexOf("gclid") != -1)
-      {
-        sessionStorage.setItem("lead_source","SA Website Google")
-      }
-      else
-      {
-        sessionStorage.setItem("lead_source","SA Website")
-      }   
-
-    }  
+      
+    }
   }
 
   

@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 import { StoreApiService } from 'src/app/services/store-api.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isPlatformBrowser, formatDate } from '@angular/common';
+import { DynamicAssetLoaderService } from '../../../services/dynamic-asset-loader.service';
 
 
 @Component({
@@ -16,7 +17,9 @@ export class CustomersComponent implements OnInit {
   alert_msg: string; success_alert: boolean;
   template_setting: any = environment.template_setting;
   projectList:any={}; currentYear:any;
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, public router: Router, private activeRoute: ActivatedRoute) { }
+  @ViewChild('zohoForm', {static: false}) zohoForm: ElementRef;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService, public router: Router, private activeRoute: ActivatedRoute,
+  private assetLoader: DynamicAssetLoaderService) { }
 
   ngOnInit(): void {
     this.activeRoute.queryParams.subscribe((params: Params) => {     
@@ -35,7 +38,9 @@ export class CustomersComponent implements OnInit {
   }
 
   onSubmit(){
-    const currentDate = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.assetLoader.load('zoho');
+    this.customerForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
+    this.customerForm.redirect_url = this.commonService.origin+"/enquiry/customer-enquiry-thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
     localStorage.removeItem("enquiry_type");
     this.customerForm.submit = true;
@@ -50,23 +55,15 @@ export class CustomersComponent implements OnInit {
       this.customerForm.form_data = { name: this.customerForm.name, email:this.customerForm.email, mobile: this.customerForm.mobile, message: this.customerForm.message };
       this.storeApi.MAIL(this.customerForm).subscribe((result)=>{
         if(result.status) {
-          setTimeout(()=>{
-            this.customerForm.website_url = window.location.href;
-            this.customerForm.lead_source = "SA Website";
-            if(isPlatformBrowser(this.platformId)) {
-            if(sessionStorage.getItem("lead_source")) this.customerForm.lead_source = sessionStorage.getItem("lead_source");    
-            }  
-            let zohourl = 'https://crm.zoho.com/crm/WebToLeadForm?xnQsjsdp=f6f7384c8d22675f81dd9671ac44b92bb9604e92c1248f154accb7a54c5158f2&zc_gad&xmIwtLD=d24eb38063b01d62d67919337c899972d97c3986eb1c9294bc609eae6d438bde&actionType=TGVhZHM=&returnURL=https://www.stoneandacres.com&Last Name='+this.customerForm.name+'&Mobile='+this.customerForm.mobile+'&Email='+this.customerForm.email+'&LEADCF15='+this.customerForm.project+'&Description='+this.customerForm.message+'&LEADCF11='+this.customerForm.type+'&Lead Source='+this.customerForm.lead_source+'&Lead Status=Not Contacted&Website='+this.customerForm.website_url+'&LEADCF82='+currentDate;
-            try {
-              let result =  this.storeApi.ZOHO_ENQUIRY(zohourl);
-              result.then((res)=>{
-                this.customerForm.submit = false;
-                this.router.navigate(["/enquiry/customer-enquiry-thankyou-page"]);
-              })
-              } catch (error) {
-              console.log("err",error);
-            }      
-          },500);          
+              this.customerForm.website_url = window.location.href;
+              this.customerForm.lead_source = "SA Website";           
+              if(isPlatformBrowser(this.platformId)) {
+              if(sessionStorage.getItem("website_url")) this.customerForm.website_url = sessionStorage.getItem("website_url"); 
+              if(sessionStorage.getItem("lead_source")) this.customerForm.lead_source = sessionStorage.getItem("lead_source");    
+              }  
+              setTimeout(() => { 
+              this.zohoForm.nativeElement.submit();
+              }, 1000);      
         }
         else console.log("response", result)
       })
