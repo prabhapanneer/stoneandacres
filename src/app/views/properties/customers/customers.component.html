@@ -22,12 +22,12 @@
                           </div>
                           <div class="primary-card form-group p-3 mb-3 col-md-6">
                               <p>Mobile</p>
-                              <input type="tel" name="mobile" class="form-control w-100" maxlength="10" minlength="10" [(ngModel)]="customerForm.mobile" appNumberOnly required />
+                              <input type="tel" name="mobile" class="form-control w-100" maxlength="10" minlength="10" [(ngModel)]="customerForm.mobile" appNumberOnly required autocomplete="new-password" />
                           </div>
                           <div class="primary-card form-group p-3 mb-3 col-md-6">
                             <p>Email</p>
                             <input type="email" name="email" class="form-control w-100" [(ngModel)]="customerForm.email"
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required autocomplete="new-password" />
                           </div>
                           <div class="primary-card form-group p-3 mb-3 col-md-6">
                             <p>Project</p>

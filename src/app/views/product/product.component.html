@@ -271,11 +271,11 @@
                   <div class="field-select field-date">
                     <span class="sl-icon"><i class="las la-at"></i></span>
                     <input type="email" name="email" placeholder="Email" [(ngModel)]="projectForm.email"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" required/>
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" required autocomplete="new-password" />
                   </div>
                   <div class="field-select has-sub field-time">
                     <span class="sl-icon"><i class="las la-phone"></i></span>
-                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="10" appNumberOnly required>
+                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="10" appNumberOnly required autocomplete="new-password">
                   </div>
                   <button class="primary-btn d-flex justify-content-center align-items-center w-100" [disabled]="projectForm.submit" type="submit">
                     SUBMIT
@@ -1029,11 +1029,11 @@
           <div class="mb-3 field-select field-date">
             <span class="sl-icon"><i class="las la-at"></i></span>
             <input type="email" name="email" placeholder="Email" class="w-100" [(ngModel)]="brochureForm.email"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" required />
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  title="Please enter a valid Email ID" appLowercase [readonly]="commonService.customer_token" required autocomplete="new-password" />
           </div>
           <div class="mb-3 field-select has-sub field-time">
             <span class="sl-icon"><i class="las la-phone"></i></span>
-            <input type="tel" name="mobile" placeholder="Phone Number" class="w-100" [(ngModel)]="brochureForm.mobile" maxlength="10" appNumberOnly required>
+            <input type="tel" name="mobile" placeholder="Phone Number" class="w-100" [(ngModel)]="brochureForm.mobile" maxlength="10" appNumberOnly required autocomplete="new-password">
           </div>
           <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit" [disabled]="brochureForm.submit">
             SUBMIT

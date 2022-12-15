@@ -45,11 +45,11 @@
               <div class="primary-card p-3 mb-3">
                 <p>Email</p>
                 <input type="email" name="email" class="w-100" [(ngModel)]="contactForm.email"
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required autocomplete="new-password" />
               </div>
               <div class="primary-card p-3 mb-3">
                 <p>Mobile</p>
-                <input type="tel" name="mobile" class="w-100" maxlength="10" [(ngModel)]="contactForm.mobile" appNumberOnly />
+                <input type="tel" name="mobile" class="w-100" maxlength="10" [(ngModel)]="contactForm.mobile" appNumberOnly autocomplete="new-password" />
               </div>
               <div class="primary-card p-3 mb-3">
                 <p>Message</p>
