@@ -88,13 +88,17 @@
               <!-- account & wishlist & search -->
               <ng-container *ngIf="commonService?.screen_width<=991">
                 <li>
+                  <a routerLink="/blogs">Blogs</a>
+                </li>
+                <li><a (click)="commonService.openEmi(); commonService.resetMegaMenu();">EMI Calculator</a></li>
+                <!-- <li>
                   <a routerLink="/account">My Account</a>
                 </li>
                 <li>
                   <a (click)="(commonService?.customer_token)? '': commonService.after_login_event={ redirect: '/wishlist' }" [routerLink]="(commonService?.customer_token)? '/wishlist' : '/account'">
                     Wishlist
                   </a>
-                </li>
+                </li> -->
                 
                 <li *ngIf="commonService.ys_features.indexOf('product_search')!=-1">
                   <a routerLink="/search">Search</a>

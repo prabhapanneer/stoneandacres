@@ -202,19 +202,19 @@
       <div class="modal-body slim-scroll">
         
         <div class="row">
-          <div class="form-group col-6">
+          <div class="form-group col-md-6 col-12">
             <label for="name">Loan amount</label>
             <input type="tel" appNumberOnly name="loan_amount" id="loan_amount" [(ngModel)]="emiForm.loan_amount" #loan_amount="ngModel"
               (input)="emiForm.errorMsg=null;" required />
           </div>
 
-          <div class="form-group col-6">
+          <div class="form-group col-md-6 col-12">
             <label for="name">Interest rate (%)</label>
             <input type="tel" appNumberOnly name="interest_rate" id="interest_rate" [(ngModel)]="emiForm.interest_rate" #interest_rate="ngModel"
               (input)="emiForm.errorMsg=null;" required />
           </div>
 
-          <div class="form-group col-6">
+          <div class="form-group col-md-6 col-12">
             <label for="name">Loan duration (in years)</label>
             <input type="tel" appNumberOnly name="duration" id="duration" [(ngModel)]="emiForm.duration" #duration="ngModel"
               (input)="emiForm.errorMsg=null;" required />
