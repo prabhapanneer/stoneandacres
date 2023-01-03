@@ -311,7 +311,7 @@ export class ProductComponent implements OnInit {
           }
         });
       }
-
+      
     });
     
   }
@@ -1484,11 +1484,13 @@ export class ProductComponent implements OnInit {
     this.projectForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.urlFormat(this.productDetails.name).then((router_link)=>{
       setTimeout(()=>{ 
+        localStorage.setItem("enquiry_proj_id", this.productDetails._id);
+        localStorage.setItem("enquiry_type", this.commonService.encryptData("Project Enquiry"));
         this.projectForm.redirect_url = this.commonService.origin+"/enquiry/"+router_link+"-thankyou-page";
       }, 500)
     }) 
-    localStorage.removeItem("enquiry_proj_id");
-    localStorage.removeItem("enquiry_type");
+    // localStorage.removeItem("enquiry_proj_id");
+    // localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
     this.projectForm.form_type = "Get in Touch";
     this.projectForm.project = this.productDetails.name;
@@ -1681,11 +1683,14 @@ export class ProductComponent implements OnInit {
     this.brochureForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.urlFormat(this.productDetails.name).then((router_link)=>{
       setTimeout(()=>{ 
+        localStorage.setItem("enquiry_proj_id", this.productDetails._id);
+        localStorage.setItem("enquiry_type", this.commonService.encryptData("Download Brochure"));
         this.brochureForm.redirect_url = this.commonService.origin+"/enquiry/"+router_link+"-thankyou-page";
       }, 500)
     }) 
-    localStorage.removeItem("enquiry_proj_id");
-    localStorage.removeItem("enquiry_type");
+    // localStorage.removeItem("enquiry_proj_id");
+    // localStorage.removeItem("enquiry_type");
+    
     this.brochureForm.submit = true;
     this.brochureForm.form_type = "Download Brochure";
     this.brochureForm.project = this.productDetails.name;

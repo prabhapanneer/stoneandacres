@@ -54,4 +54,10 @@ export class ThankyouPageComponent implements OnInit {
       this.btn_loader = false;}, 500)
   }
 
+  backToHome(){
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
+    this.router.navigate(['/']);
+  }
+
 }
