@@ -24,12 +24,11 @@ export class ThankyouPageComponent implements OnInit {
       this.params= params.type;
       let x = this.params.split("-");
       this.params_type = x[0];
-      this.enquiry_type = this.commonService.decryptData(localStorage.getItem("enquiry_type"));
-      this.project_id = localStorage.getItem("enquiry_proj_id");
+      if(localStorage.getItem("enquiry_type")) this.enquiry_type = localStorage.getItem("enquiry_type");
+      if(localStorage.getItem("enquiry_proj_id")) this.project_id = localStorage.getItem("enquiry_proj_id");
 
       if(environment.gtag_conversion_id) gtag('event', 'conversion', {'send_to': environment.gtag_conversion_id});
-
-      if(this.enquiry_type == 'Download Brochure'){
+      if(this.enquiry_type == 'brochure'){
         this.brochure_status = true;
         this.storeApi.PRODUCT_DETAILS({ product_id: this.project_id }).subscribe(result => {
           if(result.status) {

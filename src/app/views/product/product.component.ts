@@ -1485,7 +1485,7 @@ export class ProductComponent implements OnInit {
     this.urlFormat(this.productDetails.name).then((router_link)=>{
       setTimeout(()=>{ 
         localStorage.setItem("enquiry_proj_id", this.productDetails._id);
-        localStorage.setItem("enquiry_type", this.commonService.encryptData("Project Enquiry"));
+        localStorage.setItem("enquiry_type", "Project Enquiry");
         this.projectForm.redirect_url = this.commonService.origin+"/enquiry/"+router_link+"-thankyou-page";
       }, 500)
     }) 
@@ -1684,7 +1684,7 @@ export class ProductComponent implements OnInit {
     this.urlFormat(this.productDetails.name).then((router_link)=>{
       setTimeout(()=>{ 
         localStorage.setItem("enquiry_proj_id", this.productDetails._id);
-        localStorage.setItem("enquiry_type", this.commonService.encryptData("Download Brochure"));
+        localStorage.setItem("enquiry_type", "brochure");
         this.brochureForm.redirect_url = this.commonService.origin+"/enquiry/"+router_link+"-thankyou-page";
       }, 500)
     }) 
