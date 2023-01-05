@@ -41,7 +41,7 @@
     <div class="{{template_setting?.body_type}}">
       <div *ngIf="list?.length" class="row">
         <div class="col-md-6 d-flex" *ngFor="let x of list | orderDesc:'created_on' | paginate: { itemsPerPage: pageSize, currentPage: page };">
-          <div class="blog-post primary-card p-3 mb-4">
+          <div class="blog-post primary-card p-3 mb-4" routerLink="{{ x.seo_status ? '/blogs/'+x.seo_details.page_url : '/blogs/'+x._id }}">
             <figure class="blog-image w-100 d-flex justify-content-center">
               <img width="100%" height="100%" appImgLazyLoad [ImagelazyLoad]="imgBaseUrl+x.image" alt="{{(x.img_alt)? x.img_alt: 'blog-image'}}">
             </figure>
