@@ -102,7 +102,7 @@ export class StoreApiService {
 
 
   MAIL(x){
-    return this.http.post<any>('https://yourstore.io/api/others/enquiry_email',x);
+    return this.http.post<any>(environment.ws_url+'/others/enquiry_email',x);
   }
 
 }
