@@ -285,9 +285,13 @@ export class LandOwnersComponent implements OnInit {
     if (!this.enquiry_list?.length) bodyContent = bodyContent.replace("##project##", formData.project);
     else if (this.enquiry_list?.length) {
       for (let i = 0; i < this.enquiry_list?.length; i++) {
-        bodyContent = bodyContent.replace("##created_on" + i + "##", this.datePipe.transform(this.enquiry_list[i]?.created_on, "dd MMM y "));
-        bodyContent = bodyContent.replace("##project" + i + "##", this.enquiry_list[i]?.form_data.project);
-        bodyContent = bodyContent.replace("##form_type" + i + "##", this.enquiry_list[i]?.form_data.form_type);
+        let createdOn = 'NA'; let proName = 'NA'; let formType = 'NA';
+        if(this.enquiry_list[i]?.created_on) createdOn = this.datePipe.transform(this.enquiry_list[i]?.created_on, "dd MMM y ");
+        if(this.enquiry_list[i]?.form_data.project) proName = this.enquiry_list[i]?.form_data.project;
+        if(this.enquiry_list[i]?.form_data.form_type) formType = this.enquiry_list[i]?.form_data.form_type;
+        bodyContent = bodyContent.replace("##created_on" + i + "##", createdOn);
+        bodyContent = bodyContent.replace("##project" + i + "##", proName);
+        bodyContent = bodyContent.replace("##form_type" + i + "##", formType);
       }
     }
 
