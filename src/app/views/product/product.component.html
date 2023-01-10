@@ -199,6 +199,13 @@
                 <div class="place__desc" [innerHtml]="productDetails.description"></div><!-- .place__desc -->
                 <!-- <a href="#" class="show-more" title="Show More">Show more</a> -->
               </div>
+              <!-- video -->
+              <div *ngIf="productDetails.video_details?.image && productDetails.video_details?.src" class="col-md-10 offset-md-1">
+                <div class="home-video-inner">
+                  <video id="vs-{{productDetails._id}}" class="w-100 {{imgBaseUrl+productDetails.video_details.src}}" appVideoIntersection controls muted
+                  poster="{{imgBaseUrl+productDetails.video_details.image}}"></video>
+                </div>
+              </div>
               
               <div class="place__box place__box-map" *ngIf="productDetails?.location_url">
                 <h3 class="place__title--additional">

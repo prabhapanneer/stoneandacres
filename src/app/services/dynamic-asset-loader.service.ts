@@ -10,13 +10,15 @@ export const CssStore: Scripts[] = [
   { name: 'default-skin', type: 'css', src: 'assets/css/default-skin.min.css' },
   { name: 'squarepay', type: 'css', src: 'assets/css/squarepay.css' },
   { name: 'headroom-css', type: 'css', src: 'assets/css/headroom.css' },
+  { name: 'plyr-css', type: 'css', src: 'assets/css/plyr.min.css' },
   { name: 'bs-datepicker', type: 'css', src: 'https://unpkg.com/ngx-bootstrap@6.2.0/datepicker/bs-datepicker.css' },
   { name: 'photoswipe', type: 'css', src: 'https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css' },
   { name: 'headroom-js', type: 'js', src: 'https://cdnjs.cloudflare.com/ajax/libs/headroom/0.10.2/headroom.min.js' },
   { name: 'square-sandbox', type: 'js', src: 'https://js.squareupsandbox.com/v2/paymentform' },
   { name: 'square-live', type: 'js', src: 'https://js.squareup.com/v2/paymentform' },
   { name: 'zoho', type: 'js', src: 'https://crm.zoho.com/crm/javascript/zcga.js' },
-  { name: 'foloosipay', type: 'js', src: 'assets/js/foloosi.js' }
+  { name: 'foloosipay', type: 'js', src: 'assets/js/foloosi.js' },
+  { name: 'plyr-js', type: 'js', src: 'assets/js/plyr.min.js' }
 ];
 
 @Injectable({
