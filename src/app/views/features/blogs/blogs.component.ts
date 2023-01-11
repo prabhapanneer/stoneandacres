@@ -19,15 +19,16 @@ export class BlogsComponent implements OnInit {
   constructor(private storeApi: StoreApiService, public commonService: CommonService) { }
 
   ngOnInit() {
-    if(Object.entries(this.commonService.blog_page_attr).length) {
+    this.pageLoader = true;
+    if(Object.entries(this.commonService.blog_page_attr).length > 0) {
       this.list = this.commonService.blog_page_attr.list;
       this.page = this.commonService.blog_page_attr.page;
       let scrollPos = this.commonService.blog_page_attr.scroll_y_pos;
-      setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); }, 500);
+      setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); this.pageLoader = false; }, 500);
       this.commonService.blog_page_attr.scroll_y_pos = 0;
       this.commonService.blog_page_attr.page = 1;
     }
-    else if(this.commonService.ys_features.indexOf('blogs')!=-1) {
+    else{
       this.page = 1; this.pageLoader = true;
       this.storeApi.BLOG_LIST().subscribe(result => {
         if(result.status) this.list = result.list;
@@ -35,6 +36,15 @@ export class BlogsComponent implements OnInit {
         setTimeout(() => { this.pageLoader = false; }, 500);
       });
     }
+    // else if(this.commonService.ys_features.indexOf('blogs')!=-1) {
+    //   console.log("fs")
+    //   this.page = 1; this.pageLoader = true;
+    //   this.storeApi.BLOG_LIST().subscribe(result => {
+    //     if(result.status) this.list = result.list;
+    //     else console.log("response", result);
+    //     setTimeout(() => { this.pageLoader = false; }, 500);
+    //   });
+    // }
     // SEO
     if(this.commonService.blog_seo.status) this.commonService.setSiteMetaData(this.commonService.blog_seo, null);
     else this.commonService.getStoreSeoDetails();
