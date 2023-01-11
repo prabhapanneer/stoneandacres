@@ -48,10 +48,10 @@
             </figure>
             <div class="blog-content d-flex flex-column">
               <small class="post-info">{{blog_details.created_on | date: "dd MMMM yyyy"}} | {{blog_details.author}}</small>
-              <h5>{{blog_details.name}}</h5>
-              <div class="ql-container">
+              <h1>{{blog_details.name}}</h1>
+              <div class="ql-container mt-2">
                 <div class="ql-editor">
-                  <div [innerHtml]="blog_details.description"></div>
+                  <p [innerHtml]="blog_details.description"></p>
                 </div>
               </div>
             </div>

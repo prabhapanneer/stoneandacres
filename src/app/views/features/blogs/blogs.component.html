@@ -61,7 +61,7 @@
         </div>
       </div>
 
-      <div *ngIf="!list?.length" class="row">
+      <div *ngIf="!list?.length && !pageLoader" class="row">
         <div class="col-12">
           <div class="live_order_id">
             <h5 align="center">No blogs found</h5>
