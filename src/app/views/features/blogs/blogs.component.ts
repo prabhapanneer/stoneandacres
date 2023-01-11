@@ -19,17 +19,17 @@ export class BlogsComponent implements OnInit {
   constructor(private storeApi: StoreApiService, public commonService: CommonService) { }
 
   ngOnInit() {
-    this.pageLoader = true;
-    if(Object.entries(this.commonService.blog_page_attr).length > 0) {
+    if(Object.entries(this.commonService.blog_page_attr).length) {
       this.list = this.commonService.blog_page_attr.list;
       this.page = this.commonService.blog_page_attr.page;
       let scrollPos = this.commonService.blog_page_attr.scroll_y_pos;
-      setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); this.pageLoader = false; }, 500);
+      setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); }, 500);
       this.commonService.blog_page_attr.scroll_y_pos = 0;
       this.commonService.blog_page_attr.page = 1;
     }
     else{
-      this.page = 1; this.pageLoader = true;
+      this.page = 1; 
+      this.pageLoader = true;
       this.storeApi.BLOG_LIST().subscribe(result => {
         if(result.status) this.list = result.list;
         else console.log("response", result);
