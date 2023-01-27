@@ -198,11 +198,15 @@
                 <h3>Overview</h3>
                 <div class="place__desc" [innerHtml]="productDetails.description"></div><!-- .place__desc -->
                 <!-- <a href="#" class="show-more" title="Show More">Show more</a> -->
-                <div *ngIf="productDetails.video_details?.image && productDetails.video_details?.src" class="col-md-10 offset-md-1">
+                <!-- <div *ngIf="productDetails.video_details?.image && productDetails.video_details?.src" class="col-md-10 offset-md-1">
                   <div class="home-video-inner">
                     <video id="vs-{{productDetails._id}}" class="w-100 {{imgBaseUrl+productDetails.video_details.src}}" appVideoIntersection controls muted
                     poster="{{imgBaseUrl+productDetails.video_details.image}}"></video>
                   </div>
+                </div> -->
+                <div *ngIf="productDetails._id === '62e799c34b8d3075ee4615fe'" class="col-md-12 mb-3">
+                  <iframe style="width: 100%; height: 400px;" src="https://www.youtube.com/embed/TR0Ks82twKU?loop=1&controls=0&rel=0" title="YouTube video player" rel="0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  <!-- <iframe style="width: 100%; height: 400px;" src="https://www.youtube.com/embed/TR0Ks82twKU&rel=0" title="{{productDetails.name}}" frameborder="0" allowfullscreen></iframe> -->
                 </div>
               </div>
               <!-- video -->

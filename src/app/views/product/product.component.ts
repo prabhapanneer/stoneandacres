@@ -152,6 +152,7 @@ export class ProductComponent implements OnInit {
         }
         // product details
         this.storeApi.PRODUCT_DETAILS({ product_id: this.params.product_id }).subscribe(result => {
+          console.log(result)
           setTimeout(() => { this.pageLoader = false; }, 500);
           if (result.status) {
             this.productDetails = result.data;
