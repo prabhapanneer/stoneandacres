@@ -287,7 +287,7 @@
                   </div>
                   <div class="field-select has-sub field-time">
                     <span class="sl-icon"><i class="las la-phone"></i></span>
-                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="10" appNumberOnly required autocomplete="new-password">
+                    <input type="tel" name="mobile" placeholder="Phone Number" [(ngModel)]="projectForm.mobile" maxlength="15" minlength="10" pattern="[0-9]*" required autocomplete="new-password">
                   </div>
                   <button class="primary-btn d-flex justify-content-center align-items-center w-100" [disabled]="projectForm.submit" type="submit">
                     SUBMIT
@@ -1045,7 +1045,7 @@
           </div>
           <div class="mb-3 field-select has-sub field-time">
             <span class="sl-icon"><i class="las la-phone"></i></span>
-            <input type="tel" name="mobile" placeholder="Phone Number" class="w-100" [(ngModel)]="brochureForm.mobile" maxlength="10" appNumberOnly required autocomplete="new-password">
+            <input type="tel" name="mobile" placeholder="Phone Number" class="w-100" [(ngModel)]="brochureForm.mobile" maxlength="15" minlength="10" pattern="[0-9]*" required autocomplete="new-password">
           </div>
           <button class="primary-btn d-flex justify-content-center align-items-center w-100" type="submit" [disabled]="brochureForm.submit">
             SUBMIT
