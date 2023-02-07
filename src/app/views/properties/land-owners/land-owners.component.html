@@ -22,7 +22,7 @@
                         </div>
                         <div class="primary-card form-group p-3 mb-3 col-md-6">
                           <p>Mobile</p>
-                          <input type="tel" name="mobile" class="form-control w-100" [(ngModel)]="landOwnerForm.mobile" maxlength="15" minlength="10" pattern="[0-9]*" required autocomplete="new-password" />
+                          <input type="tel" name="mobile" class="form-control w-100" [(ngModel)]="landOwnerForm.mobile" maxlength="15" minlength="10" pattern=".{10,15}" title="Please fill 10 digit mobile number" appNumberOnly required autocomplete="new-password" />
                         </div>
                         <div class="primary-card form-group p-3 mb-3 col-md-12">
                           <p>Email</p>

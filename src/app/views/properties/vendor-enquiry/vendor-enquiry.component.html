@@ -32,7 +32,7 @@
             </div>
             <div class="primary-card p-3 mb-3">
               <p>Mobile</p>
-              <input type="tel" name="mobile" class="w-100" [(ngModel)]="contactForm.mobile" maxlength="15" minlength="10" pattern="[0-9]*" />
+              <input type="tel" name="mobile" class="w-100" [(ngModel)]="contactForm.mobile" maxlength="15" minlength="10" pattern=".{10,15}" title="Please fill 10 digit mobile number" appNumberOnly />
             </div>
             <div *ngIf="alert_msg" [ngClass]="success_alert? 'success-alert': 'danger-alert'">
               <div class="alert-msg d-flex align-items-center justify-content-center p-2">

@@ -49,7 +49,7 @@
               </div>
               <div class="primary-card p-3 mb-3">
                 <p>Mobile</p>
-                <input type="tel" name="mobile" class="w-100" maxlength="15" minlength="10" [(ngModel)]="contactForm.mobile" pattern="[0-9]*" autocomplete="new-password" required />
+                <input type="tel" name="mobile" class="w-100" maxlength="15" minlength="10" [(ngModel)]="contactForm.mobile" pattern=".{10,15}" title="Please fill 10 digit mobile number" appNumberOnly autocomplete="new-password" required />
               </div>
               <div class="primary-card p-3 mb-3">
                 <p>Message</p>
