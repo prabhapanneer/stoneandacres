@@ -1279,7 +1279,7 @@ a.place__comments__reply i { display: inline-block; vertical-align: middle; marg
 .form-underline .field-select select { width: 100%; border: 0; padding: 0; border-bottom: 2px solid #2d2d2d; height: 40px; line-height: 40px; color: #8d8d8d; padding-left: 30px; }
 .form-underline .field-select select:focus { border: 0; box-shadow: none; outline-offset: 0; outline: 0; border-bottom: 2px solid #2d2d2d; }
 
-.widget-reservation .field-select input { margin-bottom: 0; padding-left: 30px; cursor: pointer; background-color: transparent; position: relative; z-index: 2; }
+.widget-reservation .field-select input { margin-bottom: 0; padding-left: 30px; cursor: auto; background-color: transparent; position: relative; z-index: 2; }
 .widget-reservation .field-select > i { bottom: auto; top: 13px; }
 
 .field-sub { padding: 30px; box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1); display: none; position: absolute; top: 100%; left: 0; right: 0; background-color: #ffffff; z-index: 9; }
