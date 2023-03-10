@@ -59,4 +59,9 @@ export class ThankyouPageComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  ngOnDestroy(): void {
+    localStorage.removeItem("enquiry_proj_id");
+    localStorage.removeItem("enquiry_type");
+  }
+
 }
