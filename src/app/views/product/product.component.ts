@@ -86,10 +86,10 @@ export class ProductComponent implements OnInit {
           if (this.router.url.indexOf("li_fat_id") != -1) {
             sessionStorage.setItem("lead_source", "SA Website LinkedIn")
           }
-          else if (this.router.url.indexOf("fbclid") != -1) {
+          else if (this.router.url.indexOf("fbclid") != -1 || this.router.url.indexOf("utm_source=meta") != -1) {
             sessionStorage.setItem("lead_source", "SA Website Facebook")
           }
-          else if (this.router.url.indexOf("gclid") != -1) {
+          else if (this.router.url.indexOf("gclid") != -1 || this.router.url.indexOf("utm_source=google") != -1) {
             sessionStorage.setItem("lead_source", "SA Website Google")
           }
           else {
