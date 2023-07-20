@@ -44,6 +44,14 @@
       body { margin: 0; }
       .disp-none { display: none; }
       .dynamic-height { height: calc(100vh - 80px); }
+      #pre-bg {
+        background-color: #f2f2f2;
+        width: 100%;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+      }
     </style>
   </head>
   <body>
@@ -64,6 +72,7 @@
         document.getElementById("mobile_primary_slider").src = "https://yourstore.io/api/uploads/"+parentFolder+"/layouts/mobile_primary_slider_s.jpg?v="+randomNum;
       }
     </script>
+    <div id="pre-bg"></div>
     <app-root id="app-root"></app-root>
   </body>
 </html>

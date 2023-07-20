@@ -152,7 +152,6 @@ export class ProductComponent implements OnInit {
         }
         // product details
         this.storeApi.PRODUCT_DETAILS({ product_id: this.params.product_id }).subscribe(result => {
-          console.log(result)
           setTimeout(() => { this.pageLoader = false; }, 500);
           if (result.status) {
             this.productDetails = result.data;
@@ -1308,9 +1307,8 @@ export class ProductComponent implements OnInit {
     this.addMeta();
     // addons
     this.filterProductAddons();
-
-    if (this.productDetails.amenity_list) {
-      this.productDetails.updated_amenities_list = [];
+    this.productDetails.updated_amenities_list = [];
+    if(this.productDetails.amenity_list?.length) {
       this.productDetails.amenity_list.forEach(element => {
         let amenIndex = this.commonService.product_features.amenities_list?.findIndex(x => x._id == element)
         if (amenIndex != -1) {

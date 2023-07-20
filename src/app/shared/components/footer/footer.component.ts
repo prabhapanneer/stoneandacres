@@ -27,7 +27,6 @@ export class FooterComponent {
   onCalc()
   {
     this.emiForm.submit = true;
-    console.log(this.emiForm)
     let princ = this.emiForm.loan_amount;
     let term  = this.emiForm.duration;
     let intr   = (this.emiForm.interest_rate/100)/12;
@@ -37,7 +36,6 @@ export class FooterComponent {
     this.emiForm.result = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(x);
     if(this.emiForm.result) { setTimeout(()=>{this.emiForm.submit = false;},500) }
     if(!this.emiForm.result) {  setTimeout(()=>{this.emiForm.submit = false;},500) }
-    console.log("EMI",this.emiForm.calc.toFixed(0));
   }
   onSubscribe(modalName) {
     this.subscribeForm.submit = true;

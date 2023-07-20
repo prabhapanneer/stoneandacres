@@ -87,9 +87,13 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    if(isPlatformBrowser(this.platformId) && !sessionStorage.getItem('sid')) {
-      this.commonService.session_id = this.randomString(8)+new Date().valueOf()+this.randomString(8);
-      sessionStorage.setItem('sid', this.commonService.session_id);
+    if(isPlatformBrowser(this.platformId)) {
+      if(!sessionStorage.getItem('sid')) {
+        this.commonService.session_id = this.randomString(8)+new Date().valueOf()+this.randomString(8);
+        sessionStorage.setItem('sid', this.commonService.session_id);
+      }
+      let bgElem = this.document.getElementById('pre-bg');
+      if(bgElem && bgElem.style.display != "none") bgElem.style.display = "none";
     }
   }
 
