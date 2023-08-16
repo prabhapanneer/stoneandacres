@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID, HostListener } from '@angular/core';
 import { Location, isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Subscription, interval } from 'rxjs';
+import { fromEvent, Subscription, interval } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { ConnectionService } from 'ng-connection-service';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -79,11 +79,19 @@ export class AppComponent {
       this.connectionService.monitor().subscribe(isConnected => {
         this.isConnected = isConnected;
       });
+      // interaction
+      fromEvent(document, 'mousemove').subscribe(() => this.onInteract());
+      fromEvent(document, 'touchmove').subscribe(() => this.onInteract());
+      fromEvent(document, 'scroll').subscribe(() => this.onInteract());
     }
     // window loaded
     // this.document.addEventListener('readystatechange', event => {
     //   if(event.target.readyState === "complete") this.commonService.window_loaded = true;
     // });
+  }
+
+  onInteract() {
+    this.assetLoader.load('chat').then(() => { });
   }
 
   ngOnInit() {

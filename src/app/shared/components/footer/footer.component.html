@@ -107,7 +107,7 @@
 </footer>
 
 <!-- scroll to top -->
-<ng-container *ngIf="commonService.ys_features.indexOf('whatsapp_chat')!=-1 || commonService.ys_features.indexOf('messenger')!=-1">
+<!-- <ng-container *ngIf="commonService.ys_features.indexOf('whatsapp_chat')!=-1 || commonService.ys_features.indexOf('messenger')!=-1">
   <a *ngIf="!commonService.application_setting.chat_status || commonService.application_setting.chat_status && commonService.application_setting.chat_config?.only_on_home && router.url!='/'" (click)="commonService.pageScrollTop();" class="scrollup">
     <div class="h-100 d-flex align-items-center justify-content-center">
       <i class="material-icons" aria-hidden="true">keyboard_arrow_up</i>
@@ -118,7 +118,7 @@
   <div class="h-100 d-flex align-items-center justify-content-center">
     <i class="material-icons" aria-hidden="true">keyboard_arrow_up</i>
   </div>
-</a>
+</a> -->
 
 <!-- whatsapp chat -->
 <ng-container *ngIf="commonService.ys_features.indexOf('whatsapp_chat')!=-1 && commonService.application_setting.chat_status && commonService.application_setting.chat_config?.type=='whatsapp'">

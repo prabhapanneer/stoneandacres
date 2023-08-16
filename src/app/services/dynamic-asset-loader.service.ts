@@ -18,7 +18,8 @@ export const CssStore: Scripts[] = [
   { name: 'square-live', type: 'js', src: 'https://js.squareup.com/v2/paymentform' },
   { name: 'zoho', type: 'js', src: 'https://crm.zoho.com/crm/javascript/zcga.js' },
   { name: 'foloosipay', type: 'js', src: 'assets/js/foloosi.js' },
-  { name: 'plyr-js', type: 'js', src: 'assets/js/plyr.min.js' }
+  { name: 'plyr-js', type: 'js', src: 'assets/js/plyr.min.js' },
+  { name: 'chat', type: 'js', src: 'assets/js/chat.js' }
 ];
 
 @Injectable({
