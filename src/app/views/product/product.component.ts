@@ -269,6 +269,7 @@ export class ProductComponent implements OnInit {
                     tax_rates: productFeatures.tax_rates.filter(obj => obj.status == 'active'),
                     size_chart: productFeatures.size_chart.filter(obj => obj.status == 'active'),
                     faq_list: productFeatures.faq_list.filter(obj => obj.status == 'active'),
+                    highlights: productFeatures.nearby.filter(obj => obj.status == 'active'),
                     sizing_assistant: productFeatures.sizing_assistant.filter(obj => obj.status == 'active'),
                     taxonomy: productFeatures.taxonomy.filter(obj => obj.status == 'active'),
                     color_list: productFeatures.color_list,
@@ -1310,13 +1311,12 @@ export class ProductComponent implements OnInit {
     this.productDetails.updated_amenities_list = [];
     if(this.productDetails.amenity_list?.length) {
       this.productDetails.amenity_list.forEach(element => {
-        let amenIndex = this.commonService.product_features.amenities_list?.findIndex(x => x._id == element)
+        let amenIndex = this.commonService.product_features?.amenities_list?.findIndex(x => x._id == element)
         if (amenIndex != -1) {
           this.productDetails.updated_amenities_list.push(this.commonService.product_features.amenities_list[amenIndex]);
         }
       });
     }
-
     // tax rates
     if (this.productDetails.taxrate_id) {
       let taxRates = this.commonService.product_features.tax_rates;
@@ -1338,6 +1338,20 @@ export class ProductComponent implements OnInit {
       this.buildFAQList(this.productDetails.faq_list, this.commonService.product_features.faq_list).then((resp: any) => {
         this.productDetails.faq_list = resp;
       });
+    }
+    // highlights
+    if(this.productDetails.highlights?.length && this.commonService.product_features.highlights?.length) {
+      this.productDetails.highlights.forEach(el => {
+        let hlKey = Object.keys(el)[0];
+        let hInd = this.commonService.product_features.highlights.findIndex(hl => hl._id==hlKey);
+        if(hInd!=-1) {
+          el.name = this.commonService.product_features.highlights[hInd].name;
+          el.image = this.commonService.product_features.highlights[hInd].image;
+          el.rank = this.commonService.product_features.highlights[hInd].rank;
+          el.value = el[hlKey];
+        }
+      });
+      this.productDetails.highlights = this.productDetails.highlights.filter(el => el.name).sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1));
     }
   }
 

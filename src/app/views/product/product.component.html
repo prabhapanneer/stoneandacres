@@ -165,54 +165,18 @@
                 </div>
               </aside><!-- .widget-reservation -->
 
-              <div class="place__box place__box-hightlight">
-                <div class="row hightlight-grid">
-                  <div *ngIf="productDetails.bhk_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
-                    <img src="assets/images/overview_icons/type.png" alt="type" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>Type</b></span>
-                    <span *ngIf="productDetails.product_type != 'plot'">{{ productDetails.bhk_list.join(', ') }}</span>    
-                    <span *ngIf="productDetails.product_type == 'plot'">Plots</span>                    
+              <!-- highlights -->
+              <div class="place__box place__box-hightlight pb-0" *ngIf="productDetails?.highlights?.length">
+                <div class="hightlight-grid row">
+                  <div *ngFor="let x of productDetails.highlights; let i=index;" class="col-md-4 col-4 place__amenities mb-5">									
+                    <img [src]="imgBaseUrl+x.image" alt="{{x.name}}">
+                    <span class="fs-12 mt-1"><b>{{x.name}}</b></span>
+                    <span>{{x.value}}</span>                    
                   </div>
-                  <div *ngIf="productDetails.product_area" class="col-md-4 col-4 place__amenities mb-5">									
-                    <img src="assets/images/overview_icons/area.png" alt="area" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>Area</b></span>
-                    <span>{{ productDetails.product_area }}</span>                    
-                  </div>
-                  <div *ngIf="productDetails.sqft_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
-                    <img src="assets/images/overview_icons/availability.png" alt="No. of units" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>No. of units</b></span>
-                    <span>{{ productDetails.stock }} Units</span>                    
-                  </div>
-                  <div *ngIf="productDetails.price_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
-                    <img src="assets/images/overview_icons/budget.png" alt="budget" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>Budget</b></span>
-                    <!-- <span>{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>  -->
-                    <span *ngIf="(commonService.thausandFormatConverter(productDetails.price_list[0])) != 0 && (commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1])) != 0">{{ commonService.thausandFormatConverter(productDetails.price_list[0]) }} - {{ commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1]) }}</span>
-                    <span *ngIf="(commonService.thausandFormatConverter(productDetails.price_list[0])) <= 0 && (commonService.thausandFormatConverter(productDetails.price_list[productDetails.price_list.length-1])) <= 0">Price on request</span>                   
-                  </div>
-                  <!-- <div class="col-md-4 col-4 place__amenities mb-5">									
-                    <img src="assets/images/overview_icons/handover.png" alt="handover" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>Handover</b></span>
-                    <span>{{productDetails.handover_on | date: "MMMM yyyy"}}</span>                    
-                  </div> -->
-                  <div *ngIf="productDetails.sqft_list?.length" class="col-md-4 col-4 place__amenities mb-5">									
-                    <img src="assets/images/overview_icons/plot_range.png" alt="area" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>Plot Range</b></span>
-                    <span>{{ productDetails.sqft_list[0] }} - {{ productDetails.sqft_list[productDetails.sqft_list.length-1] }} sq. ft.</span>                    
-                  </div>
-                  <div class="col-md-4 col-4 place__amenities mb-5" *ngIf="productDetails.rera_id">									
-                    <img src="assets/images/overview_icons/rera_id.png" alt="rera" style="height:32px; width:auto;">
-                    <span class="fs-12 mt-1"><b>RERA ID</b></span>
-                    <span>{{productDetails.rera_id}}</span>                    
-                  </div>
-                  
-
                 </div>
-              </div><!-- .place__box -->
-             
+              </div>
 
-
-
+              <!-- amenties -->
               <div class="place__box place__box-hightlight" *ngIf="productDetails?.updated_amenities_list?.length">
                 <h3 class="place__title--additional">Amenities</h3>
                 <div class="hightlight-grid row">
@@ -400,7 +364,7 @@
                     <img width="100%" height="100%" appLqimgLoad appDeferLoad *ngIf="commonService?.desktop_device && x.image_list.length > 1" [ImagelazyLoad]="imgBaseUrl+x.image_list[1]?.image"
                     alt="{{(x.image_list[1].img_alt)? x.image_list[1].img_alt: 'product-img'}}" class="image-hover">
                   </figure>
-                  <div class="product-content">
+                  <!-- <div class="product-content">
                     <h3 *ngIf="x.brand">{{x.brand}}</h3>
                     <h4>{{x.name}}</h4>
                     <div>
@@ -408,6 +372,18 @@
                       <span>{{ x.temp_discounted_price | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
                       <div class="purchase-div">
                         <a>PURCHASE</a>
+                      </div>
+                    </div>
+                  </div> -->
+                  <div class="product-content">
+                    <h3 *ngIf="x.brand">{{x.brand}}</h3>
+                    <h4>{{x.name}}</h4>
+                    <div>
+                      <span *ngIf="x.disc_status" class="strike">{{ x.temp_selling_price | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
+                      <span *ngIf="x.discounted_price > 0" style="text-transform: none !important;color: rgba(0, 0, 0, 0.64);letter-spacing: 0.1em;font-size: 0.75rem;">Starts from {{ commonService.thausandFormatConverter(x.temp_discounted_price)  }}</span>
+                      <span *ngIf="x.discounted_price <= 0" style="text-transform: none !important;color: rgba(0, 0, 0, 0.64);letter-spacing: 0.1em;font-size: 0.75rem;">Price on request</span>
+                      <div class="purchase-div">
+                        <a>BOOK A SITE VISIT</a>
                       </div>
                     </div>
                   </div>

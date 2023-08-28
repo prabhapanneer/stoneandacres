@@ -98,6 +98,7 @@ export class UserModelsComponent implements OnInit {
                         tax_rates: productFeatures.tax_rates.filter(obj => obj.status == 'active'),
                         size_chart: productFeatures.size_chart.filter(obj => obj.status == 'active'),
                         faq_list: productFeatures.faq_list.filter(obj => obj.status == 'active'),
+                        highlights: productFeatures.nearby.filter(obj => obj.status == 'active'),
                         sizing_assistant: productFeatures.sizing_assistant.filter(obj => obj.status == 'active'),
                         taxonomy: productFeatures.taxonomy.filter(obj => obj.status == 'active'),
                         color_list: productFeatures.color_list
