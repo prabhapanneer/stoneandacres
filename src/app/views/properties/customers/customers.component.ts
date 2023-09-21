@@ -42,7 +42,6 @@ export class CustomersComponent implements OnInit {
     this.customerForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.customerForm.redirect_url = this.commonService.origin + "/enquiry/customer-enquiry-thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
-    localStorage.removeItem("enquiry_type");
     this.customerForm.submit = true;
     this.customerForm.type = "Customer Enquiry";
     this.customerForm.store_id = environment.store_id;

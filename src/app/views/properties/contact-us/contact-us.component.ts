@@ -55,7 +55,6 @@ export class ContactUsComponent implements OnInit {
     this.contactForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.contactForm.redirect_url = this.commonService.origin+"/enquiry/thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
-    localStorage.removeItem("enquiry_type");
     this.contactForm.submit = true;
     this.contactForm.store_id = environment.store_id;
     this.contactForm.subject = "New Enquiry";

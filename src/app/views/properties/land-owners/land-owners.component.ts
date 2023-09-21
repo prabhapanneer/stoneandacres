@@ -37,7 +37,6 @@ export class LandOwnersComponent implements OnInit {
     this.landOwnerForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.landOwnerForm.redirect_url = this.commonService.origin + "/enquiry/land-owners-enquiry-thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
-    localStorage.removeItem("enquiry_type");
     this.landOwnerForm.submit = true;
     this.landOwnerForm.type = "For Land Owners";
     this.landOwnerForm.store_id = environment.store_id;

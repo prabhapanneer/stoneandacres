@@ -309,10 +309,7 @@ export class ProductComponent implements OnInit {
 
     });
 
-    if(localStorage.getItem("enquiry_type")) localStorage.removeItem("enquiry_type");;
-    if(localStorage.getItem("enquiry_proj_id")) localStorage.removeItem("enquiry_proj_id");;
-
-
+    if(localStorage.getItem("enquiry_proj_id")) localStorage.removeItem("enquiry_proj_id");
   }
 
   getTabList() {
@@ -1488,12 +1485,9 @@ export class ProductComponent implements OnInit {
     this.urlFormat(this.productDetails.name).then((router_link) => {
       // setTimeout(() => {
         localStorage.setItem("enquiry_proj_id", this.productDetails._id);
-        localStorage.setItem("enquiry_type", "Project Enquiry");
         this.projectForm.redirect_url = this.commonService.origin + "/enquiry/" + router_link + "-thankyou-page";
       // }, 500)
     })
-    // localStorage.removeItem("enquiry_proj_id");
-    // localStorage.removeItem("enquiry_type");
     this.projectForm.submit = true;
     this.projectForm.form_type = "Get in Touch";
     this.projectForm.project = this.productDetails.name;
@@ -1753,12 +1747,10 @@ export class ProductComponent implements OnInit {
   }
 
   onSubmitBrochure() {
-
     this.brochureForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.urlFormat(this.productDetails.name).then((router_link) => {
         localStorage.setItem("enquiry_proj_id", this.productDetails._id);
-        localStorage.setItem("enquiry_type", "brochure");
-        this.brochureForm.redirect_url = this.commonService.origin + "/enquiry/" + router_link + "-thankyou-page";
+        this.brochureForm.redirect_url = this.commonService.origin + "/brochure-enquiry/" + router_link + "-thankyou-page";
     })
 
     this.brochureForm.submit = true;

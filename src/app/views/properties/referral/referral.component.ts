@@ -45,7 +45,6 @@ export class ReferralComponent implements OnInit {
     this.referralForm.current_date = formatDate(new Date(), 'dd/MM/yyyy', 'en-US');
     this.referralForm.redirect_url = this.commonService.origin + "/enquiry/referral-enquiry-thankyou-page";
     localStorage.removeItem("enquiry_proj_id");
-    localStorage.removeItem("enquiry_type");
     this.referralForm.submit = true;
     this.referralForm.type = "Referral Program";
     this.referralForm.store_id = environment.store_id;
@@ -59,7 +58,6 @@ export class ReferralComponent implements OnInit {
 
     this.storeApi.MAIL(this.referralForm).subscribe((result) => {
       this.referralForm.enquiry_list = false;
-      console.log("-----", result);
       if (result.status) {
         this.enquiry_list = result.list;
         this.emailBody(this.referralForm).then((bodyContent) => {
@@ -276,7 +274,6 @@ export class ReferralComponent implements OnInit {
       bodyContent += "</tr>";
 
       this.enquiry_list.forEach((el, i) => {
-        console.log("i", i);
         if (typeof el.form_data == 'object') {
           bodyContent += "<tr>";
           bodyContent += "<td align='left' valign='top'>";

@@ -55,6 +55,7 @@ const routes: Routes = [
   { path: 'referral', loadChildren:() => import('./views/properties/referral/referral.module').then(m => m.ReferralModule) },
   // { path: 'enquiry/thankyou-page', loadChildren:()=>import('./views/properties/thankyou-page/thankyou-page.module').then(m=> m.ThankyouPageModule) },
   { path: 'enquiry/:type', loadChildren:()=>import('./views/properties/thankyou-page/thankyou-page.module').then(m=> m.ThankyouPageModule) },
+  { path: 'brochure-enquiry/:type', loadChildren:()=>import('./views/properties/thankyou-page-brochur/thankyou-page-brochur.module').then(m=> m.ThankyouPageBrochurModule) },
   
   { path: '**', redirectTo: '/others/404' }
 ];
