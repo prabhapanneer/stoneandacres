@@ -1,8 +1,9 @@
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 import { environment } from './src/environments/environment';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
+import * as compression from 'compression';
 import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
@@ -17,6 +18,7 @@ export function app(): express.Express {
 
   const request = require('request');
   const server = express();
+  server.use(compression());
   const distFolder = join(process.cwd(), 'dist/ecommerce/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
   const robotsAccess = "Allow"; // Allow (or) Disallow
@@ -62,8 +64,9 @@ export function app(): express.Express {
 // Start up the Node server
 function run(): void {
   const server = app();
-  server.listen(environment.port, () => {
-    console.log(`Node Express server listening on http://localhost:${environment.port}`);
+  const port = environment.port;
+  server.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 

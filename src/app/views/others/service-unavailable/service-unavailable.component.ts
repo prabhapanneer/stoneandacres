@@ -16,14 +16,11 @@ export class ServiceUnavailableComponent implements OnInit {
   constructor(private router: Router, private storeApi: StoreApiService) { }
 
   ngOnInit(): void {
-    this.storeApi.STORE_DETAILS().subscribe(result => {
-      if(result.status) {
-        let storeDetails = JSON.parse(result.store_details);
-        if(storeDetails.status=='active') {
-          this.router.navigate(['/']);
-        }
-      }
-    });
+    if(this.storeApi.store_id) {
+      this.storeApi.STORE_STATUS().subscribe(result => {
+        if(result.status) this.router.navigate(['/']);
+      });
+    }
   }
 
 }

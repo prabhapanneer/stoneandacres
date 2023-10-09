@@ -1,0 +1,166 @@
+<footer>
+  <div class="footer">
+    <div class="inner">
+      <div class="row">
+        <!-- logo -->
+        <div class="col-lg-3 col-md-6">
+          <div class="d-flex flex-column">
+            <div>
+              <img loading="lazy" routerLink="/" width="100%" height="100%" class="logo footer_logo cursor" [src]="imgBaseUrl+cs.store_logo" alt="{{cs.store_details?.name}}">
+            </div>
+            <div *ngIf="cs.nl_config?.subscription_status" class="zindex-0">
+              <button type="button" (click)="subscribeForm={}; subscribeModal.show();" class="secondary-btn w-100">SUBSCRIBE</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- address -->
+        <div class="col-lg-3 col-md-6">
+          <h2 *ngIf="cs.footer_config.address_config?.title" class="footer-title" [innerHtml]="cs.footer_config.address_config.title"></h2>
+          <p *ngIf="cs.footer_config.address_config?.content" [innerHtml]="cs.footer_config.address_config.content"></p>
+        </div>
+
+        <!-- contact -->
+        <div class="col-lg-3 col-md-6">
+          <h2 *ngIf="cs.footer_config.contact_config?.title" class="footer-title" [innerHtml]="cs.footer_config.contact_config.title"></h2>
+          <p *ngIf="cs.footer_config.contact_config?.content" [innerHtml]="cs.footer_config.contact_config.content"></p>
+        </div>
+
+        <!-- social media -->
+        <div class="col-lg-3 col-md-4">
+          <h2 *ngIf="cs.footer_config.social_media_title" class="footer-title" [innerHtml]="cs.footer_config.social_media_title"></h2>
+          <ul class="footer-menu footer-social">
+            <li *ngFor="let x of cs.footer_config.social_media_links;">
+              <a [href]="x.url" target="_blank">
+                <img loading="lazy" width="100%" height="100%" appImgIntersection ImagelazyLoad="assets/images/icons/social-media/{{gs.footer}}/{{x.type}}.svg" alt="{{x.type}}">
+              </a>
+            </li>
+          </ul>
+        </div>
+        <hr class="hr_line">
+
+        <!-- payment methods -->
+        <div *ngIf="cs.footer_config.payment_methods?.length" class="col-lg-12 col-md-12 col-sm-12">
+          <div class="payment_method d-flex align-items-center" [ngClass]="(cs.screen_width>=768)? 'justify-content-end': 'justify-content-center'">
+            <div *ngFor="let x of cs.footer_config.payment_methods;" class="payment_card_logo">
+              <img loading="lazy" width="100%" height="100%" appImgIntersection ImagelazyLoad="assets/images/icons/payments/{{x}}.svg" alt="{{x}}">
+            </div>
+          </div>
+        </div>
+
+        <!-- copyrights -->
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="footer-copyright">
+            <small class="d-flex justify-content-md-start justify-content-sm-center">© {{currentYear}} {{cs.store_details?.company_details?.name}}. All rights reserved.</small>
+          </div>
+        </div>
+
+        <!-- footer links -->
+        <div *ngIf="cs.footer_config.other_links?.length" class="col-lg-6 col-md-6 col-sm-12">
+          <div class="terms">
+            <small *ngFor="let x of cs.footer_config.other_links;">
+              <a (click)="(x.link_type!='internal')? linkNavigate(x): null;" [routerLink]="(x.link_type=='internal')? x.link: null">{{x.name}}</a>
+            </small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- band -->
+  <div class="yourstore-band p-3" *ngIf="cs.store_details.additional_features?.band_status">
+    <div class="yourstore-inner">
+      <div class="d-flex justify-content-md-start justify-content-sm-center align-items-center col-md-4 px-0">
+        <a href="https://yourstore.io/?ref={{cs.store_details?.domain}}" class="yourstore-text d-flex align-items-center" target="_blank">
+        <span class="px-0 float-left band-txt">Powered by</span>
+        <span class="px-0 float-right">
+          <img loading="lazy" width="100%" height="100%" appImgIntersection ImagelazyLoad="assets/images/ys-logos/band-logo-{{gs.footer}}.svg" class="yourstore-logo band-txt" alt="Yourstore">
+        </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- scroll to top -->
+<!-- <a *ngIf="!cs.wc_config || cs.wc_config?.only_on_home && router.url!='/'" (click)="cs.pageScrollTop();" id="scrollup">
+  <div class="h-100 d-flex align-items-center justify-content-center">
+    <i class="material-icons" aria-hidden="true">keyboard_arrow_up</i>
+  </div>
+</a> -->
+
+<!-- whatsapp chat -->
+<ng-container *ngIf="cs.wc_config?.type=='whatsapp'">
+  <div *ngIf="router.url=='/' || !cs.wc_config?.only_on_home" class="whatsapp-chat">
+    <a href="https://api.whatsapp.com/send?phone={{cs.wc_config.mobile}}&text={{cs.wc_config.message}}" target="_blank">
+      <img loading="lazy" width="100%" height="100%" src="assets/images/icons/whatsapp.svg" alt="whatsapp">
+    </a>
+  </div>
+</ng-container>
+
+<!-- newsletter subscription -->
+<a [hidden]="true" id="openSubscribeModal" (click)="subscribeForm={}; subscribeModal.show();"></a>
+<div bsModal #subscribeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="subscribe-model">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content home-news-letter">
+      <!-- before submit -->
+      <div *ngIf="!subscribeForm.alert_msg && cs.nl_config" class="modal-body p-0">
+        <div class="widget newsletter d-flex flex-column align-items-center justify-content-center newsletter-body" align="center">
+          <div (click)="subscribeModal.hide();" class="modal-close">
+            <i class="material-icons" [ngClass]="!cs.nl_config.image? 'material-icons-b': 'material-icons-w'">close</i>
+          </div>
+          <figure *ngIf="cs.nl_config.image" class="w-100">
+            <img loading="lazy" width="100%" height="100%" class="w-100" appImgLazyLoad [ImagelazyLoad]="imgBaseUrl+cs.nl_config.image" alt="subscribe-banner">
+          </figure>
+          <div class="row m-0 w-100">
+            <div class="container px-4" [ngClass]="!cs.nl_config.image? 'pt-4' : ''">
+              <h4 *ngIf="cs.nl_config.heading" class="widget-title">
+                {{ cs.nl_config.heading }}
+              </h4>
+              <p *ngIf="cs.nl_config.sub_heading" [innerHtml]="cs.nl_config.sub_heading"></p>
+              <form *ngIf="cs.nl_config.subscription_status" autocomplete="off" (ngSubmit)="onSubscribe();" ngNativeValidate class="w-100">
+                <div>
+                  <input class="w-100" type="email" name="email" placeholder="Please type your e-mail" [(ngModel)]="subscribeForm.email" #email="ngModel"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
+                  <div class="btn-div">
+                    <button class="primary-btn d-flex justify-content-center align-items-center" type="submit" [disabled]="subscribeForm.submit">
+                      {{ cs.nl_config.btn_text }}
+                      <div class="box" *ngIf="subscribeForm.submit">
+                        <div class="spinner"></div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <div class="btn-div" *ngIf="!cs.nl_config.subscription_status">
+                <button (click)="subscribeModal.hide(); linkNavigate(cs.nl_config);" class="primary-btn d-flex justify-content-center align-items-center" type="button">
+                  {{ cs.nl_config.btn_text }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- after submit -->
+      <div *ngIf="subscribeForm.alert_msg" class="modal-body">
+        <div class="widget newsletter d-flex flex-column align-items-center justify-content-center newsletter-body" align="center">
+          <div (click)="subscribeModal.hide();" class="modal-close">
+            <i class="material-icons material-icons-b">close</i>
+          </div>
+          <div class="row m-0 w-100 subscribe-alert">
+            <div class="container px-4 pt-3">
+              <p style="opacity:1!important">
+                <span *ngIf="subscribeForm?.status" class="material-icons" style="color:green; font-size:50px;">check_circle</span>
+                <span *ngIf="!subscribeForm?.status" class="material-icons" style="color:red; font-size:50px;">cancel</span>
+              </p>
+              <h4 class="widget-title pt-2">{{subscribeForm.alert_msg}}</h4>
+              <p class="mb-3" *ngIf="subscribeForm?.status && cs.nl_config.response_msg"
+              [innerHtml]="cs.nl_config.response_msg"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- #newsletter subscription -->

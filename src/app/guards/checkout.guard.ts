@@ -15,14 +15,14 @@ export class CheckoutGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if(localStorage.getItem('customer_token') && localStorage.getItem('store_details')) {
+    if(localStorage.getItem('customer_token') && localStorage.getItem("by_sd")) {
       return true;
     }
-    else if(isPlatformBrowser(this.platformId) && sessionStorage.getItem('guest_email') && localStorage.getItem('store_details')) {
+    else if(isPlatformBrowser(this.platformId) && sessionStorage.getItem("guest_token") && localStorage.getItem("by_sd")) {
       return true;
     }
     else {
-      this.router.navigate(['/']);
+      this.router.navigate(['/account']);
       return false;
     }
   }

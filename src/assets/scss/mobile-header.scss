@@ -1,0 +1,130 @@
+.cd-main-header {
+  li {
+    list-style-type: none;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .cd-primary-nav li {
+    &:first-of-type{
+      .main-menu{
+        margin-top: 3.5rem;
+      }
+    }
+  }
+  .cd-primary-nav,
+  .cd-primary-nav ul {
+    left: 0 !important;
+    // width: 350px !important;\
+    width: calc(100% - 15px)!important;
+  }
+  .cd-primary-nav .go-back a {
+    margin-left: -20px;
+    margin-top: 3.5rem;
+  }
+  .cd-main-content.nav-is-visible,
+  .cd-main-header.nav-is-visible {
+    transform: translateX(0px) !important;
+  }
+
+  .cd-nav-trigger.nav-is-visible span {
+    background: #000 !important;
+  }
+
+  .cd-nav-trigger.nav-is-visible span::before,
+  .cd-nav-trigger.nav-is-visible span::after {
+    transform: translateX(0px) translateY(0px) rotate(-0deg) !important;
+  }
+
+  .menu-overlay {
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    z-index: 999 !important;
+    position: fixed;
+  }
+
+  .cd-primary-nav,
+  .cd-primary-nav ul {
+    right: unset !important;
+    position: fixed;
+    left: 0;
+  }
+}
+
+.nav-active {
+  animation: nav-slide-in 0.5s forwards;
+  -webkit-animation: nav-slide-in 0.5s forwards;
+}
+
+.nav-dismiss {
+  animation: nav-slide-out 0.5s forwards;
+  -webkit-animation: nav-slide-out 0.5s forwards;
+}
+
+.nav-close {
+  justify-content: end;
+  align-items: center;
+  padding-right: 15px;
+}
+
+@keyframes nav-slide-in {
+  0% {
+    -webkit-transform: translateX(-100%);
+  }
+
+  100% {
+    -webkit-transform: translateX(0%);
+  }
+}
+
+@-webkit-keyframes nav-slide-in {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes nav-slide-out {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@-webkit-keyframes nav-slide-out {
+  0% {
+    -webkit-transform: translateX(0%);
+  }
+
+  100% {
+    -webkit-transform: translateX(-100%);
+  }
+}
+
+
+
+.nav-div {
+  position: fixed;
+  z-index: 999999;
+  top: 0px;
+  right: 0px;
+  padding: 9px 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 25px;
+  border-bottom: 1px solid #eee !important;
+  width: 100%;
+}
+.cd-primary-nav li .nav-img {
+  height: 100%;
+}

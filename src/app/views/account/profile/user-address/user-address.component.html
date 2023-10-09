@@ -14,8 +14,8 @@
               <h2>Addresses</h2>
               <p>Edit your address here</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@
       <div class="row">
         <div class="col-md-12 navigation-ngx">
           <div>
-            <pagination-controls (pageChange)="page=$event; commonService.pageScrollTop();" autoHide="true" responsive="true" maxSize="5" previousLabel="" nextLabel=""></pagination-controls>
+            <pagination-controls (pageChange)="page=$event; cs.pageScrollTop();" autoHide="true" responsive="true" maxSize="5" previousLabel="" nextLabel=""></pagination-controls>
           </div>
         </div>
       </div>
@@ -105,9 +105,9 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title">{{ (addressFormType=='add')? 'Add New': 'Update' }} Address</h6>
+        <h6 class="modal-title">{{ (addressForm.form_type=='add')? 'Add New': 'Update' }} Address</h6>
       </div>
-      <form autocomplete="off" (ngSubmit)="onSubmit(addressFormType, addressModal);" ngNativeValidate>
+      <form autocomplete="off" (ngSubmit)="onSubmit(addressModal);" ngNativeValidate>
         <div class="modal-body modal-scroll slim-scroll">
           <div class="row">
             <div class="col-12">
@@ -164,8 +164,8 @@
               <div class="gray-card primary-card p-3">
                 <p>Country:</p>
                 <select class="w-100" name="country" [(ngModel)]="addressForm.country" (change)="addressForm.state=null; onCountryChange(addressForm.country);"
-                [disabled]="commonService?.application_setting?.ship_only_in_domestic" required>
-                  <option *ngFor="let x of commonService.country_list | orderAsc: 'name';" [ngValue]="x.name">{{x.name}}</option>
+                [disabled]="cs?.application_setting?.ship_only_in_domestic" required>
+                  <option *ngFor="let x of rs.country_list | sortAsc: 'name';" [ngValue]="x.name">{{x.name}}</option>
                 </select>
               </div>
             </div>
@@ -175,7 +175,7 @@
                 <div class="input-group modal-phone-no">
                   <div class="input-group-prepend">
                     <select name="dial_code" [(ngModel)]="addressForm.dial_code" #dial_code="ngModel" required class="form-control h-auto">
-                      <option *ngFor="let x of commonService.country_list | orderAsc: 'dial_code';" [ngValue]="x.dial_code">{{x.dial_code}}</option>
+                      <option *ngFor="let x of rs.country_list | sortAsc: 'dial_code';" [ngValue]="x.dial_code">{{x.dial_code}}</option>
                     </select>
                   </div>
                   <input *ngIf="!mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="addressForm.mobile" #mobile="ngModel" appNumberOnly required>
@@ -234,7 +234,7 @@
           <div class="col-12 px-0 d-flex justify-content-end">
             <button type="button" class="secondary-btn mr-2" (click)="addressModal.hide();">CLOSE</button>
             <button class="primary-btn d-flex justify-content-center align-items-center" type="submit" [disabled]="addressForm.submit">
-              {{ (addressFormType=='add')? 'ADD': 'SAVE CHANGES' }}
+              {{ (addressForm.form_type=='add')? 'ADD': 'SAVE CHANGES' }}
               <div class="box" *ngIf="addressForm.submit">
                 <div class="spinner"></div>
               </div>

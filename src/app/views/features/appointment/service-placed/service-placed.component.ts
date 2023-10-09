@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonService } from '../../../../services/common.service';
 
 @Component({
@@ -7,15 +7,16 @@ import { CommonService } from '../../../../services/common.service';
   templateUrl: './service-placed.component.html',
   styleUrls: ['./service-placed.component.scss']
 })
+
 export class ServicePlacedComponent implements OnInit {
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, public commonService: CommonService) { }
+  constructor(public cs: CommonService, private router: Router) { }
 
   ngOnInit(): void {
-    if(this.commonService.ys_features.indexOf('appointment_scheduler')!=-1) {
-
+    if(this.cs.customer_token) {
+      // 
     }
-    else this.router.navigate(["/services"]);
+    else this.router.navigate(['/account']);
   }
 
 }

@@ -14,8 +14,8 @@
               <h2>Profile Info</h2>
               <p>Edit your personal details</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -37,8 +37,8 @@
 
   <section class="common-site-section">
     <div class="{{template_setting?.body_type}}">
-      <!-- email -->
       <div class="row">
+        <!-- email -->
         <div class="col-md-12 mb-3">
           <h5>Email</h5>
           <div class="gray-card primary-card p-3">
@@ -47,10 +47,7 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- name -->
-      <div class="row">
+        <!-- name -->
         <div class="col-md-12 mb-3">
           <h5>Name</h5>
           <div class="gray-card primary-card profile-detail-card p-3">
@@ -58,7 +55,7 @@
               <div class="row">
                 <div class="col-md-6 d-flex align-items-center">
                   <h6 class="m-0" *ngIf="!customer_details?.name_change">{{customer_details.name}}</h6>
-                  <input *ngIf="customer_details?.name_change" type="text" name="name" [(ngModel)]="customer_details.name" #name="ngModel" required>
+                  <input *ngIf="customer_details?.name_change" type="text" name="name" [(ngModel)]="customer_details.name" required>
                 </div>
                 <div class="col-md-6 d-flex align-items-center justify-content-end">
                   <button class="primary-btn" *ngIf="!customer_details?.name_change" type="button" (click)="customer_details.name_change=true;">CHANGE</button>
@@ -73,10 +70,7 @@
             </form>
           </div>
         </div>
-      </div>
-
-      <!-- mobile -->
-      <div class="row">
+        <!-- mobile -->
         <div class="col-md-12 mb-3">
           <h5>Mobile No</h5>
           <div class="gray-card primary-card profile-detail-card p-3">
@@ -88,12 +82,12 @@
                   </h6>
                   <div *ngIf="customer_details?.mobile_change" class="input-group modal-phone-no">
                     <div class="input-group-prepend">
-                      <select name="dial_code" [(ngModel)]="customer_details.dial_code" #dial_code="ngModel" (change)="onDialCodeChange(customer_details.dial_code);" required class="form-control h-auto">
-                        <option *ngFor="let x of commonService.country_list | orderAsc: 'dial_code';" [ngValue]="x.dial_code">{{x.dial_code}}</option>
+                      <select name="dial_code" [(ngModel)]="customer_details.dial_code" (change)="onDialCodeChange(customer_details.dial_code);" required class="form-control h-auto">
+                        <option *ngFor="let x of rs.country_list | orderAsc: 'dial_code';" [ngValue]="x.dial_code">{{x.dial_code}}</option>
                       </select>
                     </div>
-                    <input *ngIf="!mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="customer_details.mobile" #mobile="ngModel" appNumberOnly required>
-                    <input *ngIf="mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="customer_details.mobile" #mobile="ngModel" [pattern]="mobile_pattern"
+                    <input *ngIf="!mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="customer_details.mobile" appNumberOnly required>
+                    <input *ngIf="mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="customer_details.mobile" [pattern]="mobile_pattern"
                     maxlength="{{mobileno_length}}" title="Please fill {{mobileno_length}} digit mobile number" appNumberOnly required>
                   </div>
                 </div>
@@ -120,11 +114,43 @@
             </form>
           </div>
         </div>
-      </div>
-
-      <!-- password -->
-      <div *ngIf="customer_details?.password" class="row">
-        <div class="col-md-12 mb-3">
+        <!-- GST -->
+        <div *ngIf="template_setting.customer_gst" class="col-md-12 mb-3">
+          <h5>GST</h5>
+          <div class="gray-card primary-card p-3">
+            <form autocomplete="off" (ngSubmit)="customer_details.gst_update=true; onUpdateGst({ gst: customer_details.gst });" ngNativeValidate>
+              <div class="row">
+                <div *ngIf="!customer_details?.gst_change" class="col-md-6 col-6 d-flex align-items-center pr-0">
+                  <h6 *ngIf="customer_details.gst?.company" class="m-0">
+                    {{customer_details.gst.company}} ({{customer_details.gst.number}})
+                  </h6>
+                  <h6 *ngIf="!customer_details.gst?.company" class="m-0">NA</h6>
+                </div>
+                <div *ngIf="customer_details?.gst_change" class="col-md-6 col-8 d-flex flex-column justify-content-center pr-0">
+                  <div class="mb-3">
+                    <input type="text" placeholder="Company Name" name="comp_name" [(ngModel)]="customer_details.gst.company" required>
+                  </div>
+                  <div>
+                    <input type="text" placeholder="GSTIN" name="gst_num" [(ngModel)]="customer_details.gst.number" required>
+                  </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-center justify-content-end">
+                  <button *ngIf="!customer_details?.gst_change" type="button" class="primary-btn" (click)="customer_details.gst_change=true; (!customer_details.gst)? customer_details.gst={}: '';">
+                    {{ (customer_details?.gst?.number)? 'CHANGE': 'ADD' }}
+                  </button>
+                  <button *ngIf="customer_details?.gst_change" type="submit" class="primary-btn d-flex justify-content-center align-items-center" [disabled]="customer_details?.gst_update">
+                    SAVE
+                    <div class="box" *ngIf="customer_details?.gst_update">
+                      <div class="spinner"></div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- password -->
+        <div *ngIf="customer_details?.password" class="col-md-12 mb-3">
           <h5>Password</h5>
           <div class="gray-card primary-card profile-detail-card p-3">
             <div class="row">
@@ -138,7 +164,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 </section>
@@ -156,16 +181,15 @@
             <div class="col-md-12">
               <div class="gray-card primary-card p-3">
                 <p>Current Password</p>
-                <input class="w-100" type="password" name="current_pwd" [(ngModel)]="pwdForm.current_pwd" #current_pwd="ngModel" required
-                />
+                <input class="w-100" type="password" name="current_pwd" [(ngModel)]="pwdForm.current_pwd" required />
               </div>
             </div>
             <div class="col-md-12">
               <div class="gray-card primary-card p-3">
                 <p>New Password</p>
                 <div class="input-group icon-input-group">
-                  <input class="form-control" [type]="pwdForm.input_txt? 'text': 'password'" name="new_pwd" [(ngModel)]="pwdForm.new_pwd" #new_pwd="ngModel"
-                    pattern=".{6,}" title="Six or more characters" required />
+                  <input class="form-control" [type]="pwdForm.input_txt? 'text': 'password'" name="new_pwd" [(ngModel)]="pwdForm.new_pwd"
+                  pattern=".{6,}" title="Six or more characters" required />
                   <div class="input-group-append icon-append">
                     <span class="input-group-text">
                       <i class="material-icons" *ngIf="!pwdForm.input_txt" (click)="pwdForm.input_txt = !pwdForm.input_txt" aria-hidden="true">visibility</i>
@@ -179,8 +203,7 @@
               <div class="gray-card primary-card p-3">
                 <p>Confirm New Password</p>
                 <div class="input-group icon-input-group">
-                  <input class="form-control" type="password" name="confirm_new_pwd" [(ngModel)]="pwdForm.confirm_new_pwd" #confirm_new_pwd="ngModel"
-                    required />
+                  <input class="form-control" type="password" name="confirm_new_pwd" [(ngModel)]="pwdForm.confirm_new_pwd" required />
                   <div class="input-group-append icon-append">
                     <span class="input-group-text">
                       <i *ngIf="pwdForm.confirm_new_pwd && pwdForm.new_pwd==pwdForm.confirm_new_pwd" class="material-icons verified" aria-hidden="true">check_circle_outline</i>

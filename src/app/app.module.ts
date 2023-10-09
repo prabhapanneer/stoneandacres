@@ -1,18 +1,17 @@
-import { NgModule } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule, HammerModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { QuicklinkModule } from 'ngx-quicklink';
-import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { StartupService } from './services/startup.service';
 
-import { SharedModule } from './shared/shared.module';
-import { environment } from '../environments/environment';
+export function startupServiceFactory(startupService: StartupService): Function {
+  return () => startupService.load();
+}
 
 @NgModule({
   declarations: [
@@ -20,15 +19,21 @@ import { environment } from '../environments/environment';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    HammerModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     QuicklinkModule,
-    SharedModule,
-    FormsModule,
+    NgOptimizedImage,
     HttpClientModule
   ],
-  providers: [DatePipe, DeviceDetectorService],
+  providers: [
+    DatePipe,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: startupServiceFactory,
+      deps: [StartupService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 

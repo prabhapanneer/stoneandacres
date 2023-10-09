@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../services/api.service';
-import { StoreApiService } from '../../../services/store-api.service';
+import { CheckoutService } from '../../../services/checkout.service';
 import { CommonService } from '../../../services/common.service';
 import { CurrencyConversionService } from '../../../services/currency-conversion.service';
 
@@ -26,30 +26,30 @@ export class QuickOrderDetailsComponent implements OnInit {
   subscription: Subscription; fnCalled: boolean;
 
   constructor(
-    private router: Router, private activeRoute: ActivatedRoute, public commonService: CommonService, public cc: CurrencyConversionService,
-    @Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService,private api: ApiService
+    private router: Router, private activeRoute: ActivatedRoute, public cs: CommonService, public cc: CurrencyConversionService,
+    @Inject(PLATFORM_ID) private platformId: Object, private cApi: CheckoutService, private api: ApiService
   ) {
-    this.subscription = this.commonService.currency_type.subscribe(currency => {
-      if(!this.fnCalled) this.getQuickOrderInfo();
+    this.subscription = this.cs.currency_type.subscribe(currency => {
+      if(!this.fnCalled) this.getData();
     });
   }
 
   ngOnInit(): void {
     this.pageLoader = true;
-    if(this.commonService.selected_currency && !this.fnCalled) this.getQuickOrderInfo();
+    if(this.cs.selected_currency && !this.fnCalled) this.getData();
   }
 
-  getQuickOrderInfo() {
+  getData() {
     this.fnCalled = true;
     this.activeRoute.params.subscribe((params: Params) => {
-      if(params.id) {
+      if(params['id']) {
         this.pageLoader = true; delete this.redirectRoute;
-        this.storeApi.QUICK_ORDER_DETAILS({ store_id: environment.store_id, _id: params.id, currency_type: this.commonService.selected_currency.country_code }).subscribe(result => {
+        this.cApi.QUICK_ORDER_DETAILS({ store_id: this.cs.store_id, _id: params['id'], currency_type: this.cs.selected_currency.country_code }).subscribe(result => {
           if(result.status) {
             this.quickOrderData = result.qo_data;
             this.orderForm = result.order_data;
             this.orderForm.manualDiscAmount = 0; this.orderForm.tempManualDiscAmount = 0;
-            this.orderForm.dispGiftWrappingCharges = this.cc.CALC(this.commonService.application_setting.gift_wrapping_charges);
+            this.orderForm.dispGiftWrappingCharges = this.cc.CALC(this.cs.application_setting.gift_wrapping_charges);
             this.item_list = this.orderForm.item_list;
             this.item_list.forEach((obj, index) => {
               obj.cart_id = index+1;
@@ -59,8 +59,8 @@ export class QuickOrderDetailsComponent implements OnInit {
             this.orderForm.tempSubTotal = this.cc.CALC_WO_AC(this.orderForm.sub_total);
             // packaging charges
             this.orderForm.packaging_charges = 0; this.orderForm.tempPackagingCharges = 0;
-            if(this.commonService.store_details.packaging_charges && this.commonService.store_details.packaging_charges.value>0) {
-              let packConfig = this.commonService.store_details.packaging_charges;
+            if(this.cs.store_details.packaging_charges && this.cs.store_details.packaging_charges.value>0) {
+              let packConfig = this.cs.store_details.packaging_charges;
               if(packConfig.type=='percentage') {
                 this.orderForm.packaging_charges = Math.ceil(this.orderForm.selling_sub_total*(packConfig.value/100));
                 if(packConfig.min_package_amt > this.orderForm.packaging_charges) this.orderForm.packaging_charges = packConfig.min_package_amt;
@@ -77,8 +77,8 @@ export class QuickOrderDetailsComponent implements OnInit {
               this.orderForm.tempManualDiscAmount = this.cc.CALC_WO_AC(this.orderForm.manualDiscAmount);
             }
             this.checkoutDetails = { item_list: this.quickOrderData.item_list, order_type: 'delivery', quick_order_id: this.quickOrderData._id };
-            if(this.commonService.customer_token || this.commonService.application_setting.guest_checkout) {
-              if(this.commonService.customer_token) {
+            if(this.cs.customer_token || this.cs.application_setting.guest_checkout) {
+              if(this.cs.customer_token) {
                 this.api.USER_DETAILS().subscribe(result => {
                   if(result.status) {
                     let addressList = result.data.address_list;
@@ -89,27 +89,27 @@ export class QuickOrderDetailsComponent implements OnInit {
                       let billingIndex = addressList.findIndex(obj => obj.billing_address);
                       this.billing_address = addressList[billingIndex];
                       // pincode verification
-                      if(this.commonService.ys_features.indexOf('pincode_service')!=-1 && this.commonService.store_properties.pincodes.indexOf(this.checkoutDetails.shipping_address.pincode)==-1) {
+                      if(this.cs.ys_features.indexOf('pincode_service')!=-1 && this.cs.store_properties.pincodes.length && this.cs.store_properties.pincodes.indexOf(this.checkoutDetails.shipping_address.pincode)==-1) {
                         // redirect to address list
                         this.checkoutNavigation(this.checkoutDetails, '/checkout/address-list/product');
                       }
                       else {
                         // shipping
-                        if(this.commonService.ys_features.indexOf('time_based_delivery')!=-1) {
+                        if(this.cs.ys_features.indexOf('time_based_delivery')!=-1) {
                           // redirect to delivery methods
                           this.checkoutNavigation(this.checkoutDetails, '/checkout/delivery-methods');
                         }
                         else {
                           let sendData: any = {
-                            sid: this.commonService.session_id, store_id: environment.store_id, shipping_address: this.checkoutDetails.shipping_address._id,
-                            order_type: this.checkoutDetails.order_type, currency_type: this.commonService.selected_currency.country_code, quick_order_id: this.checkoutDetails.quick_order_id
+                            sid: this.cs.session_id, store_id: this.cs.store_id, shipping_address: this.checkoutDetails.shipping_address._id,
+                            order_type: this.checkoutDetails.order_type, currency_type: this.cs.selected_currency.country_code, quick_order_id: this.checkoutDetails.quick_order_id
                           };
-                          sendData.item_list = this.commonService.getItemList(this.checkoutDetails.item_list);
+                          sendData.item_list = this.cs.getItemList(this.checkoutDetails.item_list);
                           this.api.SHIPPING_DETAILS(sendData).subscribe(result => {
                             if(result.status) {
                               this.checkoutDetails.shipping_method = result.data.shipping_method;
                               this.api.USER_UPDATE({ checkout_details: this.checkoutDetails }).subscribe(result => {
-                                if(result.status) this.router.navigate(['/checkout/product-order-details']);
+                                if(result.status) this.router.navigate(['/checkout/order-details/product']);
                                 else {
                                   console.log("response", result);
                                   this.router.navigate(["/"]);
@@ -130,36 +130,36 @@ export class QuickOrderDetailsComponent implements OnInit {
                 });
               }
               else if(isPlatformBrowser(this.platformId)) {
-                if(sessionStorage.getItem("guest_email")) {
-                  if(sessionStorage.getItem("checkout_address")) {
-                    let guestAddress = this.commonService.decryptData(sessionStorage.getItem("checkout_address"));
+                if(sessionStorage.getItem("guest_token")) {
+                  if(sessionStorage.getItem("by_ca")) {
+                    let guestAddress = this.cs.decode(sessionStorage.getItem("by_ca"));
                     this.checkoutDetails.shipping_address = guestAddress;
                     this.shipping_address = this.checkoutDetails.shipping_address;
                     this.billing_address = this.checkoutDetails.shipping_address;
-                    sessionStorage.setItem("checkout_details", this.commonService.encryptData(this.checkoutDetails));
+                    sessionStorage.setItem("by_cd", this.cs.encode(this.checkoutDetails));
                     // pincode verification
-                    if(this.commonService.ys_features.indexOf('pincode_service')!=-1 && this.commonService.store_properties.pincodes.indexOf(this.checkoutDetails.shipping_address.pincode)==-1) {
+                    if(this.cs.ys_features.indexOf('pincode_service')!=-1 && this.cs.store_properties.pincodes.length && this.cs.store_properties.pincodes.indexOf(this.checkoutDetails.shipping_address.pincode)==-1) {
                       // redirect to address list
                       this.setCheckoutDetails(this.checkoutDetails, "/checkout/address-list/product");
                     }
                     else {
                       // shipping
-                      if(this.commonService.ys_features.indexOf('time_based_delivery')!=-1) {
+                      if(this.cs.ys_features.indexOf('time_based_delivery')!=-1) {
                         // redirect to delivery methods
                         this.setCheckoutDetails(this.checkoutDetails, "/checkout/delivery-methods");
                       }
                       else {
                         let sendData: any = {
-                          sid: this.commonService.session_id, store_id: environment.store_id, shipping_address: this.checkoutDetails.shipping_address._id,
-                          order_type: this.checkoutDetails.order_type, currency_type: this.commonService.selected_currency.country_code, quick_order_id: this.checkoutDetails.quick_order_id
+                          sid: this.cs.session_id, store_id: this.cs.store_id, shipping_address: this.checkoutDetails.shipping_address._id,
+                          order_type: this.checkoutDetails.order_type, currency_type: this.cs.selected_currency.country_code, quick_order_id: this.checkoutDetails.quick_order_id
                         };
-                        sendData.item_list = this.commonService.getItemList(this.checkoutDetails.item_list);
+                        sendData.item_list = this.cs.getItemList(this.checkoutDetails.item_list);
                         this.api.SHIPPING_DETAILS(sendData).subscribe(result => {
                           if(result.status) {
                             this.checkoutDetails.shipping_method = result.data.shipping_method;
-                            sessionStorage.setItem("checkout_details", this.commonService.encryptData(this.checkoutDetails));
-                            sessionStorage.setItem("qo-cd", this.commonService.encryptData(this.checkoutDetails));
-                            this.router.navigate(['/checkout/product-order-details']);
+                            sessionStorage.setItem("by_cd", this.cs.encode(this.checkoutDetails));
+                            sessionStorage.setItem("by_qo_cd", this.cs.encode(this.checkoutDetails));
+                            this.router.navigate(['/checkout/order-details/product']);
                           }
                           else this.setCheckoutDetails(this.checkoutDetails, "/checkout/shipping-methods");
                         });
@@ -197,12 +197,12 @@ export class QuickOrderDetailsComponent implements OnInit {
 
   setCheckoutDetails(checkoutDetails, redirect) {
     this.pageLoader = false;
-    sessionStorage.setItem("checkout_details", this.commonService.encryptData(checkoutDetails));
+    sessionStorage.setItem("by_cd", this.cs.encode(checkoutDetails));
     this.redirectRoute = redirect;
   }
 
   routeNavigate() {
-    sessionStorage.setItem("qo-cd", this.commonService.encryptData(this.checkoutDetails));
+    sessionStorage.setItem("by_qo_cd", this.cs.encode(this.checkoutDetails));
     this.router.navigate([this.redirectRoute]);
   }
 

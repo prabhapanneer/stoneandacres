@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
-import { StoreApiService } from '../../../services/store-api.service';
+import { FeaturesService } from '../../../services/features.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -17,17 +18,28 @@ export class SizingAssistantComponent implements OnInit {
   assistIndex: number = 0; pageLoader: boolean;
   assist_list: any = []; assist_details: any;
   imgBaseUrl: string = environment.img_baseurl;
+  storeSubscription: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private activeRoute: ActivatedRoute,
-    public commonService: CommonService, private storeApi: StoreApiService
-  ) { }
+    public cs: CommonService, private fApi: FeaturesService
+  ) {
+    this.storeSubscription = this.cs.storeDataListener.subscribe(() => {
+      this.getData();
+    });
+  }
 
   ngOnInit(): void {
-    this.activeRoute.params.subscribe((params: Params) => {
-      if(this.commonService.ys_features.indexOf('sizing_assistant')!=-1) {
+    if(this.cs.storeDataLoaded) this.getData();
+    else this.pageLoader = true;
+  }
+
+  getData(): void {
+    this.pageLoader = true;
+    if(this.cs.ys_features.indexOf('sizing_assistant')!=-1) {
+      this.activeRoute.params.subscribe((params: Params) => {
         this.pageLoader = true; this.measurement_list = [];
-        this.storeApi.SIZING_ASSISTANT({sizing_id: params.id}).subscribe(result => {
+        this.fApi.SIZING_ASSISTANT({sizing_id: params['id']}).subscribe(result => {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
             this.assist_details = result.data;
@@ -42,29 +54,16 @@ export class SizingAssistantComponent implements OnInit {
                 this.getRadioNextList(this.assist_list[this.assistIndex].selected_option)
               }
             }
+            // measurement sets
+            this.store_mm_sets = result.measurements;
           }
           else {
             console.log("response", result);
             this.router.navigate(['/']);
           }
         });
-        // measurement sets
-        if(isPlatformBrowser(this.platformId) && sessionStorage.getItem("measurement_sets")) {
-          this.store_mm_sets = this.commonService.decryptData(sessionStorage.getItem("measurement_sets"));
-        }
-        else {
-          this.storeApi.PRODUCT_FEATURES().subscribe(result => {
-            if(result.status) {
-              let productFeatures = JSON.parse(result.data);
-              this.store_mm_sets = productFeatures.measurement_set.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1));
-              if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("measurement_sets", this.commonService.encryptData(this.store_mm_sets));
-            }
-            else console.log("response", result);
-          });
-        }
-      }
-      else this.router.navigate(['/']);
-    });
+      });
+    }
   }
 
   getRadioNextList(optionId) {
@@ -94,7 +93,7 @@ export class SizingAssistantComponent implements OnInit {
   }
   onNext() {
     this.assistIndex = this.assistIndex+1;
-    this.commonService.pageScrollTop();
+    this.cs.pageScrollTop();
     if(this.assist_list[this.assistIndex].type=='either_or') {
       if(this.assist_list[this.assistIndex].selected_option) {
         if(this.assist_list[this.assistIndex].filtered_option_list.findIndex(obj => obj._id==this.assist_list[this.assistIndex].selected_option) == -1) {
@@ -111,13 +110,13 @@ export class SizingAssistantComponent implements OnInit {
   // save measurement
   onSave() {
     this.processAiStyles(this.assist_list).then((resp) => {
-      if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("sizing_mm", this.commonService.encryptData(this.measurement_list));
-      this.commonService.goBack();
+      if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("by_s_mm", this.cs.encode(this.measurement_list));
+      this.cs.goBack();
     });
   }
   onSaveWithUpdatedMm() {
-    if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("sizing_mm", this.commonService.encryptData(this.measurement_list));
-    this.commonService.goBack();
+    if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("by_s_mm", this.cs.encode(this.measurement_list));
+    this.cs.goBack();
   }
 
   // view measurement
@@ -178,6 +177,10 @@ export class SizingAssistantComponent implements OnInit {
   decQty(i, j) {
     this.measurement_list[i].list[j].value -= 0.5;
     if((this.measurement_list[i].list[j].value % 1) != 0) this.measurement_list[i].list[j].value = parseFloat(this.measurement_list[i].list[j].value.toFixed(2));
+  }
+
+  ngOnDestroy() {
+    this.storeSubscription.unsubscribe();
   }
 
 }

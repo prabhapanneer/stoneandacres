@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { environment } from './../../../environments/environment';
 import { StoreApiService } from '../../services/store-api.service';
 import { CommonService } from '../../services/common.service';
+import { RedirectService } from '../../services/redirect.service';
 import { CurrencyConversionService } from '../../services/currency-conversion.service';
 
 @Component({
@@ -15,7 +16,6 @@ import { CurrencyConversionService } from '../../services/currency-conversion.se
 
 export class CategoryComponent implements OnInit {
 
-  page: number = 1; pageSize: number;
   tag_list: any = []; params: any = {};
   category_details: any = {};
   parent_list: any = []; list: any = [];
@@ -26,52 +26,64 @@ export class CategoryComponent implements OnInit {
   collapseIndex: number; showMore: boolean;
   sort_list: any = [
     { name: "Latest", value: "latest" },
+    // { name: "Discounted", value: "discounted" },
     { name: "Price: Low to High", value: "price_asc" },
     { name: "Price: High to Low", value: "price_desc" }
   ];
   subscription: Subscription;
+  gridType: string = "four";
+  rangeMin: number; rangeMax: number;
+  range_disp: any = { min: 0, max: 0 };
+  randomProducts: any = []; page: number = 1;
+  pageSize: number = this.template_setting.products_per_page;
+  pageUrl: string;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private activeRoute: ActivatedRoute,
-    private storeApi: StoreApiService, public cc: CurrencyConversionService, public commonService: CommonService
+    @Inject(PLATFORM_ID) private platformId: Object, public router: Router, private activeRoute: ActivatedRoute,
+    private storeApi: StoreApiService, public cc: CurrencyConversionService, public cs: CommonService, public rs: RedirectService
   ) {
-    this.subscription = this.commonService.currency_type.subscribe(currency => {
+    this.subscription = this.cs.currency_type.subscribe(currency => {
       this.findCurrency();
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activeRoute.params.subscribe((params: Params) => {
-      this.showMore = false;
-      this.pageSize = this.template_setting.products_per_page; this.params = params; this.tag_list = [];
-      if(this.router.url=='/recommended-products' || this.router.url=='/all-products' || this.router.url=='/new-arrivals' || this.router.url=='/on-sale'|| this.router.url=='/featured-products') {
-        this.params = { category_id: this.router.url };
-        if(this.commonService.category_page_attr.category_id == this.router.url) {
-          this.page = this.commonService.category_page_attr.page;
-          this.sort_value = this.commonService.category_page_attr.sort_value;
-          this.collapseIndex = this.commonService.category_page_attr.collapse_index;
-          this.category_details = this.commonService.category_page_attr.category_details;
+      this.pageUrl = this.router.url.split('?')[0];
+      if(this.template_setting.price_range) this.gridType = "three";
+      this.showMore = false; this.params = params; this.tag_list = [];
+      if(this.pageUrl=='/recommended-products' || this.pageUrl=='/all-products' || this.pageUrl=='/new-arrivals' || this.pageUrl=='/on-sale'|| this.pageUrl=='/featured-products') {
+        this.params = { category_id: this.pageUrl };
+        if(this.cs.category_page_attr.category_id == this.pageUrl) {
+          this.page = this.cs.category_page_attr.page;
+          this.gridType = this.cs.category_page_attr.grid_type;
+          this.sort_value = this.cs.category_page_attr.sort_value;
+          this.collapseIndex = this.cs.category_page_attr.collapse_index;
+          this.category_details = this.cs.category_page_attr.category_details;
+          this.rangeMin = this.cs.category_page_attr.range_min;
+          this.rangeMax = this.cs.category_page_attr.range_max;
+          this.range_disp = this.cs.category_page_attr.range_disp;
           // seo
           this.updateMetaData();
-          this.parent_list = this.commonService.category_page_attr.parent_list;
+          this.parent_list = this.cs.category_page_attr.parent_list;
           this.list = this.parent_list;
           this.findCurrency();
           // tag filter
-          this.tag_list = this.commonService.category_page_attr.tag_list;
+          this.tag_list = this.cs.category_page_attr.tag_list;
           this.onTagFilter(false);
-          let scrollPos = this.commonService.category_page_attr.scroll_y_pos;
+          let scrollPos = this.cs.category_page_attr.scroll_y_pos;
           setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); }, 500);
-          this.commonService.category_page_attr = {};
+          this.cs.category_page_attr = {};
         }
         else {
           this.page = 1; this.sort_value = "latest";
           this.pageLoader = true; this.collapseIndex = 0;
           // seo
           this.updateMetaData();
-          if(this.router.url=='/recommended-products') {
-            this.category_details = { name: "Specially curated for you", route: this.router.url };
-            if(isPlatformBrowser(this.platformId) && sessionStorage.getItem("ai_styles")) {
-              let filterList = this.commonService.decryptData(sessionStorage.getItem("ai_styles"));
+          if(this.pageUrl=='/recommended-products') {
+            this.category_details = { name: "Specially curated for you", route: this.pageUrl };
+            if(isPlatformBrowser(this.platformId) && sessionStorage.getItem("by_ais")) {
+              let filterList = this.cs.decode(sessionStorage.getItem("by_ais"));
               this.storeApi.AI_STYLES_FILTER({styles: filterList}).subscribe(result => {
                 setTimeout(() => { this.pageLoader = false; }, 500);
                 if(result.status) this.filterProducts(result.list);
@@ -82,19 +94,19 @@ export class CategoryComponent implements OnInit {
           }
           else {
             let categoryName = ""; let filterType = "";
-            if(this.router.url == "/all-products") {
+            if(this.pageUrl == "/all-products") {
               categoryName = "All Products"; filterType = "all";
             }
-            else if(this.router.url == "/new-arrivals") {
+            else if(this.pageUrl == "/new-arrivals") {
               categoryName = "New Arrivals"; filterType = "new_arrivals";
             }
-            else if(this.router.url == "/on-sale") {
+            else if(this.pageUrl == "/on-sale") {
               categoryName = "On Sale"; filterType = "discount";
             }
-            else if(this.router.url == "/featured-products") {
+            else if(this.pageUrl == "/featured-products") {
               categoryName = "Featured Products"; filterType = "featured";
             }
-            this.category_details = { name: categoryName, route: this.router.url };
+            this.category_details = { name: categoryName, route: this.pageUrl };
             this.storeApi.FILTERED_PRODUCT_LIST({ type: filterType }).subscribe(result => {
               setTimeout(() => { this.pageLoader = false; }, 500);
               if(result.status) this.filterProducts(result.list);
@@ -105,27 +117,34 @@ export class CategoryComponent implements OnInit {
       }
       else if(this.params.category_id) {
         // product list
-        if(this.commonService.category_page_attr.category_id == this.params.category_id) {
-          this.page = this.commonService.category_page_attr.page;
-          this.sort_value = this.commonService.category_page_attr.sort_value;
-          this.collapseIndex = this.commonService.category_page_attr.collapse_index;
-          this.category_details = this.commonService.category_page_attr.category_details;
+        if(this.cs.category_page_attr.category_id == this.params.category_id) {
+          this.page = this.cs.category_page_attr.page;
+          this.gridType = this.cs.category_page_attr.grid_type;
+          this.sort_value = this.cs.category_page_attr.sort_value;
+          this.collapseIndex = this.cs.category_page_attr.collapse_index;
+          this.category_details = this.cs.category_page_attr.category_details;
+          this.rangeMin = this.cs.category_page_attr.range_min;
+          this.rangeMax = this.cs.category_page_attr.range_max;
+          this.range_disp = this.cs.category_page_attr.range_disp;
+          this.randomProducts = this.cs.category_page_attr.random_products;
           // seo
           this.updateMetaData();
-          this.parent_list = this.commonService.category_page_attr.parent_list;
+          this.parent_list = this.cs.category_page_attr.parent_list;
           this.list = this.parent_list;
           this.findCurrency();
           // tag filter
-          this.tag_list = this.commonService.category_page_attr.tag_list;
+          this.tag_list = this.cs.category_page_attr.tag_list;
           this.onTagFilter(false);
-          let scrollPos = this.commonService.category_page_attr.scroll_y_pos;
+          let scrollPos = this.cs.category_page_attr.scroll_y_pos;
           setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); }, 500);
-          this.commonService.category_page_attr = {};
+          this.cs.category_page_attr = {};
         }
         else {
           this.page = 1; this.sort_value = "latest";
           this.pageLoader = true; this.collapseIndex = 0;
-          this.storeApi.PRODUCT_LIST({ category_id: this.params.category_id }).subscribe(result => {
+          let sendData: any = { category_id: this.params.category_id };
+          if(this.pageUrl.includes('/vendor/')) sendData = { vendor_id: this.params.category_id };
+          this.storeApi.PRODUCT_LIST(sendData).subscribe(result => {
             setTimeout(() => { this.pageLoader = false; }, 500);
             if(result.status)
             {
@@ -135,38 +154,27 @@ export class CategoryComponent implements OnInit {
               // filter products
               this.parent_list = [];
               result.list.forEach(object => {
+                object.created_on = new Date(new Date(new Date(object.created_on).setHours(23,59,59,59)).setDate(new Date(object.created_on).getDate() + 30));
+                if(object.badge_list?.length) object.badge_list = this.cs.buildTags(object.badge_list);
                 if(object.hold_till) {
                   let balanceStock = object.stock;
                   if(new Date() < new Date(object.hold_till)) balanceStock = object.stock - object.hold_qty;
-                  if(balanceStock >= this.commonService.min_qty[object.unit]) this.parent_list.push(object);
+                  object.stock = balanceStock;
                 }
-                else if(object.stock >= this.commonService.min_qty[object.unit]) this.parent_list.push(object);
+                if(this.cs.store_details?.additional_features?.disp_all_products) {
+                  if(object.stock < this.cs.min_qty[object.unit]) object.stock = 0;
+                  this.parent_list.push(object);
+                }
+                else {
+                  if(object.stock >= this.cs.min_qty[object.unit]) this.parent_list.push(object);
+                }
               });
-              this.list = this.parent_list; this.sorting(this.sort_value);
-              this.findCurrency();
-              // PRODUCT FEATURES
-              if(!Object.entries(this.commonService.product_features).length) {
-                this.storeApi.PRODUCT_FEATURES().subscribe(result => {
-                  if(result.status) {
-                    let productFeatures = JSON.parse(result.data);
-                    this.commonService.product_features = {
-                      addon_list: productFeatures.addon_list.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-                      measurement_set: productFeatures.measurement_set.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-                      tag_list: productFeatures.tag_list.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-                      tax_rates: productFeatures.tax_rates.filter(obj => obj.status == 'active'),
-                      size_chart: productFeatures.size_chart.filter(obj => obj.status == 'active'),
-                      faq_list: productFeatures.faq_list.filter(obj => obj.status == 'active'),
-                      highlights: productFeatures.nearby.filter(obj => obj.status == 'active'),
-                      sizing_assistant: productFeatures.sizing_assistant.filter(obj => obj.status == 'active'),
-                      taxonomy: productFeatures.taxonomy.filter(obj => obj.status == 'active'),
-                      color_list: productFeatures.color_list
-                    };
-                    this.onCreateTagList(this.list);
-                  }
-                  else console.log("response", result);
-                });
+              this.list = this.parent_list;
+              if(this.list.length > this.pageSize && this.category_details.prod_list_status) {
+                this.randomProducts = this.getRandomProds(this.list, 15);
               }
-              else this.onCreateTagList(this.list);
+              this.findCurrency();
+              this.getProductTags();
             }
             else {
               console.log("response", result);
@@ -178,74 +186,79 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+  getProductTags() {
+    if(isPlatformBrowser(this.platformId)) {
+      if(this.cs.product_tags) {
+        this.onCreateTagList(this.list, false);
+      }
+      else {
+        this.storeApi.PRODUCT_TAGS().subscribe(result => {
+          if(result.status) {
+            this.cs.product_tags = JSON.parse(result.list);
+            this.onCreateTagList(this.list, false);
+          }
+          else console.log("response", result);
+        });
+      }
+    }
+    this.findMinMax();
+  }
+
   filterProducts(productList) {
     this.parent_list = [];
     productList.forEach(object => {
+      object.created_on = new Date(new Date(new Date(object.created_on).setHours(23,59,59,59)).setDate(new Date(object.created_on).getDate() + 30));
+      if(object.badge_list?.length) object.badge_list = this.cs.buildTags(object.badge_list);
       if(object.hold_till) {
         let balanceStock = object.stock;
         if(new Date() < new Date(object.hold_till)) balanceStock = object.stock - object.hold_qty;
-        if(balanceStock >= this.commonService.min_qty[object.unit]) this.parent_list.push(object);
+        object.stock = balanceStock;
       }
-      else if(object.stock >= this.commonService.min_qty[object.unit]) this.parent_list.push(object);
+      if(this.cs.store_details?.additional_features?.disp_all_products) {
+        if(object.stock < this.cs.min_qty[object.unit]) object.stock = 0;
+        this.parent_list.push(object);
+      }
+      else {
+        if(object.stock >= this.cs.min_qty[object.unit]) this.parent_list.push(object);
+      }
     });
-    this.list = this.parent_list; this.sorting(this.sort_value);
+    this.list = this.parent_list;
     this.findCurrency();
-    // PRODUCT FEATURES
-    if(!Object.entries(this.commonService.product_features).length) {
-      this.storeApi.PRODUCT_FEATURES().subscribe(result => {
-        if(result.status) {
-          let productFeatures = JSON.parse(result.data);
-          this.commonService.product_features = {
-            addon_list: productFeatures.addon_list.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-            measurement_set: productFeatures.measurement_set.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-            tag_list: productFeatures.tag_list.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-            tax_rates: productFeatures.tax_rates.filter(obj => obj.status == 'active'),
-            size_chart: productFeatures.size_chart.filter(obj => obj.status == 'active'),
-            faq_list: productFeatures.faq_list.filter(obj => obj.status == 'active'),
-            highlights: productFeatures.nearby.filter(obj => obj.status == 'active'),
-            sizing_assistant: productFeatures.sizing_assistant.filter(obj => obj.status == 'active'),
-            taxonomy: productFeatures.taxonomy.filter(obj => obj.status == 'active'),
-            color_list: productFeatures.color_list
-          };
-          this.onCreateTagList(this.list);
-        }
-        else console.log("response", result);
-      });
-    }
-    else this.onCreateTagList(this.list);
+    this.getProductTags();
   }
 
   findCurrency() {
     for(let product of this.parent_list) {
-      product.temp_selling_price = this.cc.CALC(product.selling_price);
-      product.temp_discounted_price = this.cc.CALC(product.discounted_price);
+      product.temp_selling_price = this.cc.CALC_TEXT(product.selling_price);
+      product.temp_discounted_price = this.cc.CALC_TEXT(product.discounted_price);
     }
   }
 
   onSelectProduct(x) {
-    this.commonService.selected_product = x;
+    this.cs.selected_product = x;
     // set page attributes
-    this.commonService.category_page_attr = {
-      category_id: this.params.category_id, page: this.page, sort_value: this.sort_value, tag_list: this.tag_list, collapse_index: this.collapseIndex,
-      scroll_y_pos: this.commonService.scroll_y_pos, category_details: this.category_details, parent_list: this.parent_list, page_url: this.router.url
-    }
+    this.cs.category_page_attr = {
+      category_id: this.params.category_id, page: this.page, sort_value: this.sort_value, tag_list: this.tag_list,
+      collapse_index: this.collapseIndex, scroll_y_pos: this.cs.scroll_y_pos, category_details: this.category_details,
+      parent_list: this.parent_list, page_url: this.pageUrl, grid_type: this.gridType, random_products: this.randomProducts,
+      range_min: this.rangeMin, range_max: this.rangeMax, range_disp: this.range_disp
+    };
     if(isPlatformBrowser(this.platformId)) {
-      sessionStorage.setItem("category_details", this.commonService.encryptData(this.category_details));
+      sessionStorage.setItem("by_cat_d", this.cs.encode(this.category_details));
       if(this.template_setting.product_swiper) {
         let swipeProList: any = [];
         this.list.forEach(obj => {
           if(obj.seo_status) swipeProList.push(obj.seo_details.page_url);
           else swipeProList.push(obj._id);
         });
-        sessionStorage.setItem("swipe_product_list", this.commonService.encryptData(swipeProList));
+        sessionStorage.setItem("by_spl", this.cs.encode(swipeProList));
       }
     }
   }
 
-  onCreateTagList(list) {
+  onCreateTagList(list, click) {
     let duplicateTagList: any = this.tag_list;
     this.tag_list = [];
-    let storeTags = this.commonService.product_features.tag_list;
     list.forEach(prod => {
       if(prod.tag_status) {
         prod.tag_list.forEach(tagObj => {
@@ -258,11 +271,11 @@ export class CategoryComponent implements OnInit {
           else {
             let tagIndex = this.tag_list.findIndex(x => x._id == tagId);
             if(tagIndex == -1) {
-              let filterTagList = storeTags.filter(element => element._id==tagId);
-              if(filterTagList.length) {
+              let tIndex = this.cs.product_tags?.findIndex(element => element._id==tagId);
+              if(tIndex!=-1) {
                 let optionArray = [];
                 tagObj[tagId].forEach(element => { optionArray.push({name: element}) });
-                if(optionArray.length) this.tag_list.push({ _id: tagId, name: filterTagList[0].name, rank: filterTagList[0].rank, option_list: optionArray });
+                if(optionArray.length) this.tag_list.push({ _id: tagId, name: this.cs.product_tags[tIndex].name, rank: this.cs.product_tags[tIndex].rank, option_list: optionArray });
               }
             }
             else {
@@ -277,6 +290,7 @@ export class CategoryComponent implements OnInit {
         });
       }
     });
+    if(this.tag_list.length && !click) this.gridType = "three";
   }
   onTagFilter(changeEvent) {
     let parentProducts: any = this.parent_list;
@@ -309,8 +323,8 @@ export class CategoryComponent implements OnInit {
       this.list = parentProducts;
     }
     else this.list = this.parent_list;
-    if(this.sort_value) this.sorting(this.sort_value);
     if(changeEvent) this.page = 1;
+    this.findMinMax();
   }
   clearTagFilter() {
     this.list = this.parent_list;
@@ -318,18 +332,24 @@ export class CategoryComponent implements OnInit {
       tag.option_list.forEach(tagOption => { delete tagOption.checked; });
     });
     this.tagSelected = false;
-    this.onCreateTagList(this.list);
+    this.onCreateTagList(this.list, false);
+    this.findMinMax();
   }
 
-  sorting(field) {
-    if(field=='latest') this.list.sort((a, b) => 0 - (a.rank > b.rank ? 1 : -1));
-    else if(field=='price_desc') this.list.sort((a, b) => 0 - (a.discounted_price > b.discounted_price ? 1 : -1));
-    else if(field=='price_asc') this.list.sort((a, b) => 0 - (a.discounted_price > b.discounted_price ? -1 : 1));
+  findMinMax() {
+    let minPrice = this.list.reduce((min, p) => parseFloat(p?.temp_discounted_price)<min ? parseFloat(p?.temp_discounted_price) : min, parseFloat(this.list[0]?.temp_discounted_price));
+    let maxPrice = this.list.reduce((max, p) => parseFloat(p?.temp_discounted_price)>max ? parseFloat(p?.temp_discounted_price) : max, parseFloat(this.list[0]?.temp_discounted_price));
+    this.range_disp = { min: minPrice, max: maxPrice };
   }
 
   updateMetaData() {
-    if(this.category_details.seo_status) this.commonService.setSiteMetaData(this.category_details.seo_details, null);
-    else this.commonService.getStoreSeoDetails();
+    if(this.category_details.seo_status) this.cs.setSiteMetaData(this.category_details.seo_details, null);
+    else this.cs.getStoreSeoDetails();
+  }
+
+  getRandomProds(arr, num) {
+    let shuffled = [...arr].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, num);
   }
 
   ngOnDestroy() {

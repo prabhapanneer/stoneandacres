@@ -14,8 +14,8 @@
               <h2>Choose Pickup Method</h2>
               <p>Available pickup services</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@
           <div class="breadcrumb-navigation mt-3">
             <ul class="collapsed">
               <li><a routerLink="/">Home</a></li>
-              <li *ngIf="!commonService?.customer_token">
+              <li *ngIf="!cs?.customer_token">
                 <a routerLink="/checkout/address-list/product">Address</a>
               </li>
               <li><a class="active-page">Choose Pickup Method</a></li>
@@ -91,7 +91,7 @@
               </div>
 
               <!-- desktop only -->
-              <div *ngIf="commonService.desktop_device && slot_list.length" class="col-lg-4">
+              <div *ngIf="cs.desktop_device && slot_list.length" class="col-lg-4">
                 <div class="delivery-time-card gray-card primary-card p-3 m-0">
                   <div>
                     <h6>Date:</h6>
@@ -120,7 +120,7 @@
       <!-- slot list end -->
 
       <!-- except desktop -->
-      <div *ngIf="!commonService.desktop_device && slot_list.length" class="mobile-delivery-time-card card-active">
+      <div *ngIf="!cs.desktop_device && slot_list.length" class="mobile-delivery-time-card card-active">
         <div class="{{template_setting?.body_type}}">
           <div class="row">
             <div class="col-6 d-flex align-items-center">

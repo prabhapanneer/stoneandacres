@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 import '../../../assets/js/ls.unveilhooks';
 import 'lazysizes/plugins/blur-up/ls.blur-up';
-import { lazySizes } from 'lazysizes';
+import lazySizes from 'lazysizes';
 import { environment } from '../../../environments/environment';
 
 @Directive({

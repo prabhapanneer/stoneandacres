@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { isPlatformBrowser, DatePipe } from '@angular/common';
+import { CheckoutService } from '../../../services/checkout.service';
 import { ApiService } from '../../../services/api.service';
-import { StoreApiService } from '../../../services/store-api.service';
 import { CommonService } from '../../../services/common.service';
 import { CurrencyConversionService } from '../../../services/currency-conversion.service';
 import { environment } from '../../../../environments/environment';
@@ -22,17 +23,27 @@ export class DeliveryMethodsComponent implements OnInit {
   dayIndex: number = -1;
   delivery_id: string;
   template_setting: any = environment.template_setting;
+  storeSubscription: Subscription;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, private api: ApiService, private storeApi: StoreApiService,
-    private router: Router, public cc: CurrencyConversionService, public commonService: CommonService, private datePipe: DatePipe
-  ) { }
+    @Inject(PLATFORM_ID) private platformId: Object, private api: ApiService, private cApi: CheckoutService,
+    private router: Router, public cc: CurrencyConversionService, public cs: CommonService, private datePipe: DatePipe
+  ) {
+    this.storeSubscription = this.cs.storeDataListener.subscribe(() => {
+      this.getData();
+    });
+  }
 
-  ngOnInit() {
-    if(this.commonService.ys_features.indexOf('time_based_delivery')!=-1) {
+  ngOnInit(): void {
+    this.pageLoader = true;
+    if(this.cs.storeDataLoaded) this.getData();
+  }
+
+  getData(): void {
+    if(this.cs.ys_features.indexOf('time_based_delivery')!=-1) {
       this.pageLoader = true; this.btnLoader = false;
       // delivery methods
-      this.storeApi.DELIVERY_METHODS().subscribe(result => {
+      this.cApi.DELIVERY_METHODS().subscribe(result => {
         setTimeout(() => { this.pageLoader = false; }, 500);
         if(result.status) {
           this.delivery_id = result.data._id;
@@ -88,7 +99,7 @@ export class DeliveryMethodsComponent implements OnInit {
         else console.log("response", result);
       });
       // user details
-      if(this.commonService.customer_token) {
+      if(this.cs.customer_token) {
         this.api.USER_DETAILS().subscribe(result => {
           if(result.status && result.data.checkout_details) {
             this.checkout_details = result.data.checkout_details;
@@ -100,8 +111,8 @@ export class DeliveryMethodsComponent implements OnInit {
           }
         });
       }
-      else if(isPlatformBrowser(this.platformId) && sessionStorage.getItem("checkout_details")) {
-        this.checkout_details = this.commonService.decryptData(sessionStorage.getItem("checkout_details"));
+      else if(isPlatformBrowser(this.platformId) && sessionStorage.getItem("by_cd")) {
+        this.checkout_details = this.cs.decode(sessionStorage.getItem("by_cd"));
         if(!this.checkout_details.item_list || !this.checkout_details.shipping_address) this.router.navigate(["/"]);
       }
       else this.router.navigate(["/"]);
@@ -120,20 +131,20 @@ export class DeliveryMethodsComponent implements OnInit {
     let deliveryDate = this.datePipe.transform(this.selected_day.date, 'dd MMM y')+" ("+this.selected_day.day+")";
     let deliveryTime = this.datePipe.transform(this.selected_slot.from, 'hh:mm a')+" - "+this.datePipe.transform(this.selected_slot.to, 'hh:mm a');
     let sendData: any = {
-      sid: this.commonService.session_id, shipping_address: this.checkout_details.shipping_address._id,
-      order_type: this.checkout_details.order_type, currency_type: this.commonService.selected_currency.country_code,
+      sid: this.cs.session_id, shipping_address: this.checkout_details.shipping_address._id,
+      order_type: this.checkout_details.order_type, currency_type: this.cs.selected_currency.country_code,
       shipping_method: {
         _id: this.delivery_id, delivery_date: deliveryDate, delivery_time: deliveryTime, shipping_price: this.selected_slot.price
       }
     };
-    sendData.item_list = this.commonService.getItemList(this.checkout_details.item_list);
+    sendData.item_list = this.cs.getItemList(this.checkout_details.item_list);
     if(this.checkout_details.quick_order_id) sendData.quick_order_id = this.checkout_details.quick_order_id;
-    this.api.DELIVERY_DETAILS(sendData).subscribe(result => {
+    this.cApi.DELIVERY_DETAILS(sendData).subscribe(result => {
       if(result.status) {
         this.checkout_details.shipping_method = result.data.shipping_method;
-        if(this.commonService.customer_token) {
+        if(this.cs.customer_token) {
           this.api.USER_UPDATE({ checkout_details: this.checkout_details }).subscribe(result => {
-            if(result.status) this.router.navigate(["checkout/product-order-details"]);
+            if(result.status) this.router.navigate(["/checkout/order-details/product"]);
             else {
               console.log("response", result);
               this.router.navigate(["/"]);
@@ -141,8 +152,8 @@ export class DeliveryMethodsComponent implements OnInit {
           });
         }
         else {
-          if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("checkout_details", this.commonService.encryptData(this.checkout_details));
-          this.router.navigate(["checkout/product-order-details"]);
+          if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("by_cd", this.cs.encode(this.checkout_details));
+          this.router.navigate(["/checkout/order-details/product"]);
         }
       }
       else {
@@ -184,6 +195,10 @@ export class DeliveryMethodsComponent implements OnInit {
       }
       resolve(updatedSlotList);
     });
+  }
+
+  ngOnDestroy() {
+    this.storeSubscription.unsubscribe();
   }
 
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ApiService } from '../../../../services/api.service';
-import { StoreApiService } from '../../../../services/store-api.service';
+import { FeaturesService } from '../../../../services/features.service';
 import { CommonService } from '../../../../services/common.service';
 import { CurrencyConversionService } from '../../../../services/currency-conversion.service';
 import { environment } from '../../../../../environments/environment';
@@ -19,14 +19,14 @@ export class GiftcardDetailsComponent implements OnInit {
   template_setting: any = environment.template_setting;
 
   constructor(
-    public commonService: CommonService, private router: Router, public cc: CurrencyConversionService,
-    private api: ApiService, private storeApi: StoreApiService, private activeRoute: ActivatedRoute
+    public cs: CommonService, private router: Router, public cc: CurrencyConversionService,
+    private api: ApiService, private fApi: FeaturesService, private activeRoute: ActivatedRoute
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activeRoute.params.subscribe((params: Params) => {
       this.pageLoader = true; this.cardForm = {};
-      this.storeApi.GIFT_CARD_DETAILS(params.id).subscribe(result => {
+      this.fApi.GIFT_CARD_DETAILS(params['id']).subscribe(result => {
         setTimeout(() => { this.pageLoader = false; }, 500);
         if(result.status) {
           this.card_details = result.data;
@@ -58,7 +58,7 @@ export class GiftcardDetailsComponent implements OnInit {
         if(addressIndex != -1) this.cardForm.billing_address = addressList[addressIndex];
         this.api.USER_UPDATE({ checkout_details: this.cardForm }).subscribe(result => {
           if(result.status) {
-            if(addressIndex != -1) this.router.navigate(['/checkout/giftcard-order-details']);
+            if(addressIndex != -1) this.router.navigate(['/checkout/order-details/giftcard']);
             else this.router.navigate(['/checkout/address-list/giftcard']);
           }
           else {

@@ -1,0 +1,111 @@
+<section *ngIf="pageLoader">
+  <app-loading-spinner></app-loading-spinner>
+</section>
+
+<section class="over-all smooth-fadein" *ngIf="!pageLoader">
+
+  <!-- breadcrumb -->
+  <section class="head-breadcrumb">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="head-breadcrumb-inner border-btm d-flex justify-content-between">
+            <div>
+              <h2>Order Confirmation</h2>
+            </div>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device"
+              class="d-flex align-items-center justify-content-end">
+              <span routerLink="/">GO BACK</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="template_setting?.breadcrumb" class="col-md-12">
+          <div class="breadcrumb-navigation mt-3">
+            <ul class="collapsed">
+              <li><a routerLink="/">Home</a></li>
+              <li><a class="active-page">Order Confirmation</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div clas="col-md-12">
+          <div class="order-confirmed mt-4 mb-4">
+            <ul>
+              Your order was placed successfully!
+              <li>- Thank you for shopping with us, your gift card has been sent to <strong>{{order_details?.to_email}}.</strong></li>
+              <li>- An automated payment receipt has been sent to your registered email.</li>
+              <li>- You can find your gift card under <strong class="cursor" routerLink="/account/my-orders/coupon-list">Gift Coupons</strong> in My Account.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--# breadcrumb #-->
+
+  <section class="common-site-section myaccount pt-0">
+    <div class="{{template_setting?.body_type}}">
+      <div clas="row">
+        <div class="col-md-12 p-0">
+          <h2>Order Summary</h2>
+          <p>#{{order_details?.order_number}}</p>
+        </div>
+      </div>
+
+      <div class="gray-card primary-card p-3">
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>Order On</h6>
+              <p>{{order_details?.created_on | date: "dd MMM yyyy"}}</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>Coupon Value</h6>
+              <p>
+                {{ order_details?.price | currency:order_details?.currency_type?.country_code:'symbol':cc.format }}
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>Payment Method</h6>
+              <p>{{order_details?.payment_details?.name}}</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>Valid Till</h6>
+              <p>{{order_details?.expiry_on | date: "dd MMM yyyy"}}</p>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>From</h6>
+              <p>{{order_details?.from_name}}</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>To</h6>
+              <p>{{order_details?.to_name}} ({{order_details?.to_email}})</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="live_order_card_inner">
+              <h6>Message</h6>
+              <p>{{order_details?.message}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>

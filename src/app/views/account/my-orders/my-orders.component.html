@@ -1,4 +1,8 @@
-<section class="over-all smooth-fadein">
+<section *ngIf="pageLoader">
+  <app-loading-spinner></app-loading-spinner>
+</section>
+
+<section *ngIf="!pageLoader" class="over-all smooth-fadein">
   <!-- breadcrumb -->
   <section class="head-breadcrumb">
     <div class="{{template_setting?.body_type}}">
@@ -9,8 +13,8 @@
               <h2>My Orders</h2>
               <p>Track, return or buy products again</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -85,7 +89,7 @@
         </div>
 
         <!-- gift coupons -->
-        <div class="col-md-6 mb-2 mt-2" *ngIf="commonService.ys_features.indexOf('giftcard')!=-1">
+        <div class="col-md-6 mb-2 mt-2" *ngIf="cs.ys_features.indexOf('giftcard')!=-1">
           <div class="d-sm-flex myaccount__card primary-card" routerLink="/account/my-orders/coupon-list">
             <div class="myaccount-icon d-flex justify-content-center align-items-center xs-pd-l-20">
               <i class="material-icons">

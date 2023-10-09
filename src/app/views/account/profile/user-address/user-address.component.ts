@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../../services/api.service';
-import { StoreApiService } from '../../../../services/store-api.service';
+import { RedirectService } from '../../../../services/redirect.service';
 import { CommonService } from '../../../../services/common.service';
 import { environment } from '../../../../../environments/environment';
 
@@ -13,16 +13,15 @@ import { environment } from '../../../../../environments/environment';
 export class UserAddressComponent implements OnInit {
 
   pageLoader: boolean; list: any = [];
-  state_list: any = [];
-  addressFormType: string; country_details: any;
+  state_list: any = []; country_details: any;
   addressForm: any = {}; deleteForm: any = {};
   template_setting: any = environment.template_setting;
   address_fields: any = []; mobile_pattern: any;
   page: number = 1; pageSize: number = 10;
 
-  constructor(private api: ApiService, private storeApi: StoreApiService, public commonService: CommonService) { }
+  constructor(private api: ApiService, public cs: CommonService, public rs: RedirectService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.pageLoader = true;
     this.api.USER_DETAILS().subscribe(result => {
       if(result.status) {
@@ -35,31 +34,30 @@ export class UserAddressComponent implements OnInit {
       setTimeout(() => { this.pageLoader = false; }, 500);
     });
     // country list
-    this.commonService.getCountryList();
+    this.rs.getCountryList();
   }
 
   onAddAddress(modalName) {
-    this.addressFormType = 'add';
-    this.addressForm = { type: 'home', country: this.commonService.store_details.country };
+    this.addressForm = { form_type: 'add', type: 'home', country: this.cs.store_details.country };
     if(!this.list.length) {
       this.addressForm.billing_address = true;
       this.addressForm.shipping_address = true;
     }
     this.onCountryChange(this.addressForm.country);
     modalName.show();
-    this.commonService.scrollModalTop(500);
+    this.cs.scrollModalTop(500);
   }
 
-  onSubmit(type, modalName) {
+  onSubmit(modalName) {
     this.address_fields.forEach(element => {
       if(element.value) this.addressForm[element.keyword] = element.value;
     });
-    if(this.commonService.ys_features.indexOf('pincode_service')!=-1 && this.commonService.store_properties.pincodes.indexOf(this.addressForm.pincode)==-1) {
+    if(this.cs.ys_features.indexOf('pincode_service')!=-1 && this.cs.store_properties.pincodes.length && this.cs.store_properties.pincodes.indexOf(this.addressForm.pincode)==-1) {
       this.addressForm.error_msg = "Service not available for this pincode.";
     }
     else {
       this.addressForm.submit = true;
-      if(type=='add') {
+      if(this.addressForm.form_type=='add') {
         this.api.ADD_ADDRESS(this.addressForm).subscribe(result => {
           if(result.status) {
             modalName.hide();
@@ -83,9 +81,8 @@ export class UserAddressComponent implements OnInit {
   }
 
   onEdit(x, modalName) {
-    this.addressFormType = "update";
     this.onCountryChange(x.country);
-    this.addressForm = {};
+    this.addressForm = { form_type: 'edit' };
     for(let key in x) {
       if(x.hasOwnProperty(key)) this.addressForm[key] = x[key];
     }
@@ -95,7 +92,7 @@ export class UserAddressComponent implements OnInit {
       element.value = this.addressForm[element.keyword];
     });
     modalName.show();
-    this.commonService.scrollModalTop(500);
+    this.cs.scrollModalTop(500);
   }
 
   onDelete(modalName) {
@@ -113,9 +110,9 @@ export class UserAddressComponent implements OnInit {
   onCountryChange(x) {
     this.state_list = []; this.address_fields = [];
     delete this.country_details; delete this.mobile_pattern;
-    let index = this.commonService.country_list.findIndex(object => object.name==x);
+    let index = this.rs.country_list.findIndex(object => object.name==x);
     if(index!=-1) {
-      this.country_details = this.commonService.country_list[index];
+      this.country_details = this.rs.country_list[index];
       this.state_list = this.country_details.states;
       this.addressForm.dial_code = this.country_details.dial_code;
       this.address_fields = this.country_details.address_fields;

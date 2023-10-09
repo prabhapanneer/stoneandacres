@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 import { ProductRoutingModule } from './product-routing.module';
 import { SharedModule } from '../../shared/shared.module';
+import { CustomizationModule } from '../../shared/modules/customization/customization.module';
 import { ProductComponent } from './product.component';
-import { VideoIntersectionDirective } from './directives/video-intersection.directive';
+import { RelatedProductsDirective } from './directives/related-products.directive';
+import { ThumbnailDirective } from './directives/thumbnail.directive';
 
 @NgModule({
-  declarations: [ProductComponent, VideoIntersectionDirective],
+  declarations: [ProductComponent, RelatedProductsDirective, ThumbnailDirective],
   imports: [
     SharedModule,
+    CustomizationModule,
     ProductRoutingModule,
-    YouTubePlayerModule,
     NgxPaginationModule,
     AccordionModule.forRoot()
   ]

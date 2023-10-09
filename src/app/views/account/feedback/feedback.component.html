@@ -9,9 +9,8 @@
               <h2>Feedback</h2>
               <p>Review our products and services</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device"
-              class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -34,7 +33,7 @@
     <form id="smileys" autocomplete="off" (ngSubmit)="onSubmit();" ngNativeValidate>
       <div class="{{template_setting?.body_type}}">
         <div class="gray-card primary-card p-3">
-          <div *ngIf="commonService.ys_features.indexOf('customer_feedback')!=-1 && commonService.application_setting?.feedback" class="row">
+          <div *ngIf="cs.ys_features.indexOf('customer_feedback')!=-1 && cs.application_setting?.feedback" class="row">
 
             <div class="col-lg-6">
               <div class="row pb-3">
@@ -52,31 +51,28 @@
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="quality_smiley" value="3" [(ngModel)]="feedForm.quality"
-                        class="average">
+                      <input type="radio" name="quality_smiley" value="2" [(ngModel)]="feedForm.quality" class="average">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Average</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="quality_smiley" value="4" [(ngModel)]="feedForm.quality"
-                        class="satisfactory">
+                      <input type="radio" name="quality_smiley" value="3" [(ngModel)]="feedForm.quality" class="satisfactory">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Satisfactory</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="quality_smiley" value="2" [(ngModel)]="feedForm.quality" class="good">
+                      <input type="radio" name="quality_smiley" value="4" [(ngModel)]="feedForm.quality" class="good">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Good</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="quality_smiley" value="5" [(ngModel)]="feedForm.quality"
-                        class="excellent">
+                      <input type="radio" name="quality_smiley" value="5" [(ngModel)]="feedForm.quality" class="excellent">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Excellent</div>
                       </div>
@@ -101,31 +97,28 @@
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="pricing_smiley" value="3" [(ngModel)]="feedForm.pricing"
-                        class="average">
+                      <input type="radio" name="pricing_smiley" value="2" [(ngModel)]="feedForm.pricing" class="average">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Average</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="pricing_smiley" value="4" [(ngModel)]="feedForm.pricing"
-                        class="satisfactory">
+                      <input type="radio" name="pricing_smiley" value="3" [(ngModel)]="feedForm.pricing" class="satisfactory">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Satisfactory</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="pricing_smiley" value="2" [(ngModel)]="feedForm.pricing" class="good">
+                      <input type="radio" name="pricing_smiley" value="4" [(ngModel)]="feedForm.pricing" class="good">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Good</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="pricing_smiley" value="5" [(ngModel)]="feedForm.pricing"
-                        class="excellent">
+                      <input type="radio" name="pricing_smiley" value="5" [(ngModel)]="feedForm.pricing" class="excellent">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Excellent</div>
                       </div>
@@ -150,31 +143,28 @@
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="shipping_smiley" value="3" [(ngModel)]="feedForm.shipping"
-                        class="average">
+                      <input type="radio" name="shipping_smiley" value="2" [(ngModel)]="feedForm.shipping" class="average">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Average</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="shipping_smiley" value="4" [(ngModel)]="feedForm.shipping"
-                        class="satisfactory">
+                      <input type="radio" name="shipping_smiley" value="3" [(ngModel)]="feedForm.shipping" class="satisfactory">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Satisfactory</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="shipping_smiley" value="2" [(ngModel)]="feedForm.shipping" class="good">
+                      <input type="radio" name="shipping_smiley" value="4" [(ngModel)]="feedForm.shipping" class="good">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Good</div>
                       </div>
                     </div>
 
                     <div class="hr-icon scale-up-animation">
-                      <input type="radio" name="shipping_smiley" value="5" [(ngModel)]="feedForm.shipping"
-                        class="excellent">
+                      <input type="radio" name="shipping_smiley" value="5" [(ngModel)]="feedForm.shipping" class="excellent">
                       <div class="hr-icon scale-up-animation">
                         <div class="emotion-name">Excellent</div>
                       </div>
@@ -225,7 +215,7 @@
 
           </div>
 
-          <div class="row" *ngIf="commonService.ys_features.indexOf('customer_feedback')==-1 || !commonService.application_setting?.feedback">
+          <div class="row" *ngIf="cs.ys_features.indexOf('customer_feedback')==-1 || !cs.application_setting?.feedback">
             <div class="col-lg-12">
               <h5 align="center">Temporarily not available</h5>
             </div>

@@ -99,8 +99,8 @@
           <div class="col-md-12 mt-4">
             <div class="proceed-sec d-flex justify-content-between w-100 m-0">
               <!-- left btn -->
-              <button *ngIf="assistIndex==0" click="commonService.goBack();" class="primary-btn">CLOSE</button>
-              <button *ngIf="assistIndex>0" (click)="assistIndex=assistIndex-1; commonService?.pageScrollTop();"
+              <button *ngIf="assistIndex==0" click="cs.goBack();" class="primary-btn">CLOSE</button>
+              <button *ngIf="assistIndex>0" (click)="assistIndex=assistIndex-1; cs?.pageScrollTop();"
                 class="primary-btn">PREVIOUS</button>
               <!-- right btn -->
               <button *ngIf="assist_list[assistIndex+1]?.filtered_option_list?.length" (click)="onNext();"

@@ -46,8 +46,8 @@
           <div *ngIf="item_list?.length" class="row">
             <div class="col-lg-6">
 
-              <!-- item list(desktop) -->
-              <div *ngIf="commonService?.screen_width>=992" class="gray-card primary-card p-3 mt-0 mb-3">
+              <!-- item list (desktop) -->
+              <div *ngIf="cs.desktop_device" class="gray-card primary-card p-3 mt-0 mb-3">
                 <table class="table checkout-table mb-5">
                   <thead class="wishlist-head">
                     <tr>
@@ -79,7 +79,7 @@
                         <small *ngIf="x.addon_status && x.selected_addon">
                           <strong>Addon: </strong>
                           <span>{{x.selected_addon?.name}}<ng-container *ngIf="x.customization_status"> - </ng-container></span>
-                          <span *ngIf="x.customization_status" class="cursor" (click)=" commonService.onViewModel(x.customized_model);">
+                          <span *ngIf="x.customization_status" class="cursor" (click)=" cs.onViewModel(x.customized_model);">
                             {{x.customized_model?.name}}
                           </span>
                         </small>
@@ -96,10 +96,10 @@
                   </tbody>
                 </table>
               </div>
-              <!-- #item list(desktop)# -->
+              <!-- # item list (desktop) # -->
 
-              <!-- item list(mobile) -->
-              <div *ngIf="commonService?.screen_width<992" class="mobile-cart">
+              <!-- item list (mobile) -->
+              <div *ngIf="!cs.desktop_device" class="mobile-cart">
                 <div class="gray-card primary-card mb-3 p-3">
                   <div class="row">
                     <div class="col-md-12">
@@ -126,7 +126,7 @@
                             <small *ngIf="x.addon_status && x.selected_addon">
                               <strong>Addon: </strong>
                               <span>{{x.selected_addon?.name}}<ng-container *ngIf="x.customization_status"> - </ng-container></span>
-                              <span *ngIf="x.customization_status" class="cursor" (click)=" commonService.onViewModel(x.customized_model);">
+                              <span *ngIf="x.customization_status" class="cursor" (click)=" cs.onViewModel(x.customized_model);">
                                 {{x.customized_model?.name}}
                               </span>
                             </small>
@@ -150,7 +150,7 @@
                   </div>
                 </div>
               </div>
-              <!-- #item list(mobile)# -->
+              <!-- # item list (mobile) # -->
 
               <!-- Shipping Address -->
               <div *ngIf="shipping_address" class="product-order-details gray-card primary-card p-3 mt-1 mb-3">
@@ -201,12 +201,12 @@
                   <div class="col-md-12">
                     <div class="product-order-type pb-3">
                       <div class="row">
-                        <div class="d-flex align-items-center" [ngClass]="commonService.guest_email? 'col-md-6': 'col-md-12'">
+                        <div class="d-flex align-items-center" [ngClass]="cs.guest_email? 'col-md-6': 'col-md-12'">
                           <h4>Billing Address</h4>
                         </div>
-                        <div *ngIf="commonService.guest_email" class="col-md-6 d-flex align-items-center justify-content-end">
+                        <div *ngIf="cs.guest_email" class="col-md-6 d-flex align-items-center justify-content-end">
                           <div class="billing-email">
-                            <span align="right">{{commonService.guest_email}}</span>
+                            <span align="right">{{cs.guest_email}}</span>
                           </div>
                         </div>
                       </div>
@@ -302,8 +302,8 @@
                     </div>
 
                     <!-- giftcard section-->
-                    <ng-container *ngIf="commonService.ys_features.indexOf('giftcard')!=-1 || commonService.ys_features.indexOf('manual_giftcard')!=-1">
-                      <div *ngIf="commonService.checkout_setting.apply_gift_card" class="col-md-12">
+                    <ng-container *ngIf="cs.ys_features.indexOf('giftcard')!=-1 || cs.ys_features.indexOf('manual_giftcard')!=-1">
+                      <div *ngIf="cs.checkout_setting.apply_gift_card" class="col-md-12">
                         <label class="store-label w-100 m-0 mt-2 mb-2">
                           <div class="d-flex align-items-center">
                             <input class="option-input checkbox" type="checkbox" name="coupon_status" [(ngModel)]="orderForm.coupon_status" #coupon_status="ngModel" [disabled]="true">
@@ -314,7 +314,7 @@
                     </ng-container>
 
                     <!-- coupon section -->
-                    <div *ngIf="commonService.checkout_setting.apply_coupon && !orderForm.offer_applied" class="col-md-12">
+                    <div *ngIf="cs.checkout_setting.apply_coupon && !orderForm.offer_applied" class="col-md-12">
                       <label class="store-label w-100 m-0 mt-2 mb-2">
                         <div class="d-flex align-items-center">
                           <input class="option-input checkbox" type="checkbox" name="offer_applied" [(ngModel)]="orderForm.offer_applied" [disabled]="true" #offer_applied="ngModel">
@@ -334,18 +334,18 @@
                     </div>
 
                     <!-- gift order -->
-                    <div *ngIf="commonService.ys_features.indexOf('gift_order')!=-1 && commonService.checkout_setting.gift_order" class="col-md-12">
+                    <div *ngIf="cs.ys_features.indexOf('gift_order')!=-1 && cs.checkout_setting.gift_order" class="col-md-12">
                       <label class="store-label w-100 m-0 mt-2 mb-2">
                         <div class="d-flex align-items-center">
                           <input class="option-input checkbox" type="checkbox" name="gift_status" [(ngModel)]="orderForm.gift_status" [disabled]="true" #gift_status="ngModel">
-                          <span *ngIf="commonService.application_setting.gift_wrapping_charges===0" class="m-0">This is a gift</span>
-                          <span *ngIf="commonService.application_setting.gift_wrapping_charges > 0" class="m-0">Gift wrapping ({{ orderForm.dispGiftWrappingCharges | currency:cc.currency?.country_code:'symbol':cc.format }})</span>
+                          <span *ngIf="cs.application_setting.gift_wrapping_charges===0" class="m-0">This is a gift</span>
+                          <span *ngIf="cs.application_setting.gift_wrapping_charges > 0" class="m-0">Gift wrapping ({{ orderForm.dispGiftWrappingCharges | currency:cc.currency?.country_code:'symbol':cc.format }})</span>
                         </div>
                       </label>
                     </div>
 
                     <!-- free sample -->
-                    <div *ngIf="commonService.ys_features.indexOf('sample_request')!=-1 && commonService.checkout_setting.sample_request" class="col-md-12">
+                    <div *ngIf="cs.ys_features.indexOf('sample_request')!=-1 && cs.checkout_setting.sample_request" class="col-md-12">
                       <label class="store-label w-100 m-0 mt-2 mb-2">
                         <div class="d-flex align-items-center">
                           <input class="option-input checkbox" type="checkbox" name="need_sample" [(ngModel)]="orderForm.need_sample" [disabled]="true" #need_sample="ngModel">
@@ -355,17 +355,17 @@
                     </div>
 
                     <!-- order note -->
-                    <div *ngIf="commonService.ys_features.indexOf('order_note')!=-1 && commonService.checkout_setting.order_note" class="col-md-12 mt-2 mb-2">
+                    <div *ngIf="cs.ys_features.indexOf('order_note')!=-1 && cs.checkout_setting.order_note" class="col-md-12 mt-2 mb-2">
                       <textarea placeholder="Order Notes" name="order_note" [(ngModel)]="orderForm.order_note" #order_note="ngModel" readonly></textarea>
                     </div>
 
                     <div *ngIf="((orderForm.sub_total*1)-(orderForm.manualDiscAmount*1)) > 0" class="col-md-12">
                       <!-- payment list -->
-                      <button *ngFor="let x of commonService.payment_methods | orderAsc: 'rank';" type="button" class="primary-btn w-100 mb-1" [disabled]="true">
+                      <button *ngFor="let x of cs.payment_methods | orderAsc: 'rank';" type="button" class="primary-btn w-100 mb-1" [disabled]="true">
                         {{ x.btn_name }}
                       </button>
                       <!-- call to store, if no payment methods exist -->
-                      <a *ngIf="!commonService?.payment_methods.length">
+                      <a *ngIf="!cs?.payment_methods.length">
                         <button class="primary-btn w-100 mb-1" [disabled]="true">PLACE ORDER</button>
                       </a>
                     </div>
@@ -404,3 +404,5 @@
     <!-- end container -->
   </section>
 </section>
+
+<app-customization></app-customization>

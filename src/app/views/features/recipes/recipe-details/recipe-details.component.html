@@ -1,0 +1,64 @@
+<section *ngIf="pageLoader">
+  <app-loading-spinner></app-loading-spinner>
+</section>
+
+<section class="over-all smooth-fadein" *ngIf="!pageLoader && recipe_details?.name">
+
+  <!-- SEO h1 tag -->
+  <h1 *ngIf="recipe_details?.seo_status" [hidden]="true">{{recipe_details?.seo_details?.h1_tag}}</h1>
+  <!-- #SEO h1 tag -->
+
+  <!-- breadcrumb -->
+  <section class="head-breadcrumb">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="head-breadcrumb-inner border-btm d-flex justify-content-between">
+            <div>
+              <h2>Recipes</h2>
+              <p>Easy and delicious recipes</p>
+            </div>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="template_setting?.breadcrumb" class="col-md-12">
+          <div class="breadcrumb-navigation mt-3">
+            <ul class="collapsed">
+              <li><a routerLink="/">Home</a></li>
+              <li><a routerLink="/recipes">Recipes</a></li>
+              <li><span class="active-page">{{recipe_details?.name}}</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--# breadcrumb #-->
+
+  <section class="common-site-section">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="blog-post blog-details">
+            <figure class="blog-image d-flex align-items-center justify-content-center">
+              <img width="100%" height="100%" appImgLazyLoad [ImagelazyLoad]="imgBaseUrl+recipe_details.image" alt="{{(recipe_details.img_alt)? recipe_details.img_alt: 'recipe-image'}}">
+            </figure>
+            <div class="blog-content d-flex flex-column">
+              <small class="post-info">{{recipe_details.created_on | date: "dd MMMM yyyy"}} | {{recipe_details.author}}</small>
+              <h5>{{recipe_details.name}}</h5>
+              <div class="ql-container">
+                <div class="ql-editor">
+                  <div [innerHtml]="recipe_details.description"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>

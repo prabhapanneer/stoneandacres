@@ -15,15 +15,15 @@ export class FeedbackComponent implements OnInit {
   feedbackSuccess: boolean; feedbackFailure: boolean;
   template_setting: any = environment.template_setting;
 
-  constructor(private api: ApiService, public commonService: CommonService) { }
+  constructor(private api: ApiService, public cs: CommonService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.feedForm = { quality: "5", pricing: "5", shipping: "5", comment: null };
   }
 
   onSubmit() {
     this.feedForm.submit = true;
-    this.feedForm.store_id = environment.store_id;
+    this.feedForm.store_id = this.cs.store_id;
     this.api.FEEDBACK(this.feedForm).subscribe(result => {
       if(result.status) {
         this.feedbackSuccess = true;

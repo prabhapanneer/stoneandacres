@@ -1,7 +1,6 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
-import { isPlatformBrowser, Location } from '@angular/common';
-import { StoreApiService } from '../../services/store-api.service';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { PropertiesService } from '../../services/properties.service';
 import { CommonService } from '../../services/common.service';
 import { environment } from './../../../environments/environment';
 
@@ -10,81 +9,48 @@ import { environment } from './../../../environments/environment';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
+
 export class SearchComponent implements OnInit {
 
   afterSearchEvent: boolean;
-  searchLoader: boolean;
-  searchForm: any = {};
+  searchLoader: boolean; searchTerm: String;
   imgBaseUrl: string = environment.img_baseurl;
   template_setting: any = environment.template_setting;
   product_list: any = [];
-  wcarosel: boolean = true;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, private storeApi: StoreApiService, public commonService: CommonService,
-    private router: Router, public location: Location) {
-    if(this.commonService.ys_features.indexOf('product_search')!=-1) {
-      if(!this.commonService.search_category_list.length) {
-        if(this.commonService.menu_list.length) {
-          this.createSearchCategoryList();
-        }
-        else {
-          this.storeApi.STORE_DETAILS().subscribe(result => {
+    private pApi: PropertiesService, public cs: CommonService, private activeRoute: ActivatedRoute, private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.activeRoute.queryParams.subscribe((params: Params) => {
+      this.searchTerm = ""; this.product_list = [];
+      this.afterSearchEvent = false; this.searchLoader = false;
+      if(params['q']) {
+        this.searchTerm = params['q']; this.afterSearchEvent = true;
+        if(this.searchTerm.length >= 3) {
+          this.searchLoader = true;
+          this.pApi.SEARCH_PRODUCT({ name: this.searchTerm }).subscribe(result => {
+            setTimeout(() => { this.searchLoader = false; }, 500);
             if(result.status) {
-              let storeDetails = JSON.parse(result.store_details);
-              this.commonService.menu_list = storeDetails.menu_list;
-              this.createSearchCategoryList();
+              this.product_list = result.list;
+              this.product_list.forEach(obj => {
+                if(obj.hold_till) {
+                  let balanceStock = obj.stock;
+                  if(new Date() < new Date(obj.hold_till)) balanceStock = obj.stock - obj.hold_qty;
+                  obj.stock = balanceStock;
+                }
+              });
             }
+            else console.log("response", result);
           });
         }
       }
-    }
-    else this.router.navigate(['/']);
-  }
-
-  ngOnInit() {
-    this.afterSearchEvent = false; this.searchLoader = false;
-    if(this.commonService.search_page_attr.search_form) {
-      this.afterSearchEvent = true;
-      this.searchForm = this.commonService.search_page_attr.search_form;
-      this.product_list = this.commonService.search_page_attr.product_list;
-      let scrollPos = this.commonService.search_page_attr.scroll_y_pos;
-      setTimeout(() => { window.scrollTo({ top: scrollPos, behavior: 'smooth' }); }, 500);
-      this.commonService.search_page_attr = {};
-    }
-    else this.searchForm = { category_id: '' };
+    });
   }
 
   onSubmit() {
-    this.afterSearchEvent = true; this.searchLoader = true;
-    this.storeApi.SEARCH_PRODUCT(this.searchForm).subscribe(result => {
-      setTimeout(() => { this.searchLoader = false; }, 500);
-      if(result.status) this.product_list = result.list;
-      else console.log("response", result);
-    });
+    this.router.navigate(['/search'], { queryParams: { q: this.searchTerm } });
   }
-  
-  createSearchCategoryList() {
-    if(isPlatformBrowser(this.platformId)) {
-      let menuList = this.commonService.menu_list.sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1));
-      const worker = new Worker('../../web-worker/app.worker', { type: 'module' });
-      worker.onmessage = ({ data }) => {
-        this.commonService.search_category_list = JSON.parse(data).reverse();
-      };
-      worker.postMessage({ type: 'search', list: menuList });
-    }
-  }
-  
-  onSelectProduct(x) {
-    this.commonService.selected_product = x;
-    this.commonService.search_page_attr = {
-      search_form: this.searchForm, product_list: this.product_list, scroll_y_pos: this.commonService.scroll_y_pos
-    }
-  }
-
-  mychange() {
-		document.getElementById("txt-focus")?.focus();
-	}
-
 
 }

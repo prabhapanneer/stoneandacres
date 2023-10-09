@@ -14,8 +14,8 @@
               <h2>{{card_details?.name}}</h2>
               <p>{{ (card_details?.description)? card_details.description: 'Celebrate every occasion' }}</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
                 </ng-container>
                 <ng-container *ngIf="card_details?.price_type=='fixed';">
                   <div class="primary-card p-3 mb-3">
-                    <p for="custom_price">Price ({{commonService.selected_currency?.country_code}})</p>
+                    <p for="custom_price">Price ({{cs.selected_currency?.country_code}})</p>
                     <input class="w-100" type="text" name="custom_price" id="custom_price" [(ngModel)]="cardForm.custom_price" #custom_price="ngModel" readonly />
                   </div>
                 </ng-container>

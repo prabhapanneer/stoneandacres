@@ -1,0 +1,407 @@
+<section *ngIf="pageLoader">
+  <app-loading-spinner></app-loading-spinner>
+</section>
+
+<section class="over-all smooth-fadein" *ngIf="!pageLoader">
+
+  <!-- breadcrumb -->
+  <section class="head-breadcrumb">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="head-breadcrumb-inner border-btm d-flex justify-content-between">
+            <div>
+              <h2>Order Details</h2>
+              <p>Finalise your quote details</p>
+            </div>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="template_setting?.breadcrumb" class="col-md-12">
+          <div class="breadcrumb-navigation mt-3">
+            <ul class="collapsed">
+              <li><a routerLink="/">Home</a></li>
+              <li>
+                <a routerLink="/checkout/address-list/quotation">Address</a>
+              </li>
+              <li><a class="active-page">Order Details</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--# breadcrumb #-->
+
+  <section class="common-site-section shopping-cart">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row m-0">
+        <div class="col-lg-12 p-0">
+
+          <div *ngIf="item_list?.length" class="row">
+            <div class="col-lg-6">
+
+              <!-- item list(desktop) -->
+              <div *ngIf="cs?.screen_width>=992" class="gray-card primary-card p-3 mt-0 mb-3">
+                <table class="table checkout-table mb-5">
+                  <thead class="wishlist-head">
+                    <tr>
+                      <td colspan="2">
+                        <h6>PRODUCT</h6>
+                      </td>
+                      <td>
+                        <h6>QUANTITY</h6>
+                      </td>
+                      <td>
+                        <h6>PRICE</h6>
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let x of item_list; let i=index;">
+                      <td>
+                        <figure>
+                          <img width="100%" height="100%" appImgLazyLoad [ImagelazyLoad]="imgBaseUrl+x.image" alt="thum">
+                        </figure>
+                      </td>
+                      <td>
+                        <h4 class="checkout-pro-name">{{x.name}}</h4>
+                        <ng-container *ngIf="x.variant_status">
+                          <small *ngFor="let y of x.variant_types; let j=index;">
+                            <strong>{{y.name}}:</strong> {{y.value}}
+                          </small>
+                        </ng-container>
+                        <small *ngIf="x.addon_status && x.selected_addon">
+                          <strong>Addon: </strong>
+                          <span>{{x.selected_addon?.name}}<ng-container *ngIf="x.customization_status"> - </ng-container></span>
+                          <span *ngIf="x.customization_status" class="cursor" (click)=" cs.onViewModel(x.customized_model);">
+                            {{x.customized_model?.name}}
+                          </span>
+                        </small>
+                        <p *ngIf="!x.allow_cod && orderForm.cod_alert" class="error-msg">COD not available</p>
+                        <p class="error-msg" *ngIf="unique_product_list?.length && x.unavailable">
+                          <ng-container *ngIf="x.available_qty>0">Only {{ x.available_qty }} {{ x.unit }} available in stock</ng-container>
+                          <ng-container *ngIf="x.available_qty==0">SOLD OUT</ng-container>
+                        </p>
+                      </td>
+                      <td>
+                        <!-- qty scale -->
+                        <div class="d-flex justify-content-start align-items-center">
+                          <ng-container *ngIf="unique_product_list?.length && x.unavailable">
+                            <div class="pro-qty d-flex justify-content-center align-items-center height-100">
+                              <!-- <button (click)="decProductQty(i);">
+                                <i class="material-icons">remove</i>
+                              </button> -->
+                              <button class="qty-btn-disabled">
+                                <i class="material-icons">remove</i>
+                              </button>
+                              <span class="btn-width">{{ x.quantity }}</span>
+                              <button class="qty-btn-disabled">
+                                <i class="material-icons">add</i>
+                              </button>
+                            </div>
+                            <span *ngIf="template_setting?.display_unit" class="ml-2">{{ x.unit }}</span>
+                          </ng-container>
+                          <span *ngIf="!x.unavailable" class="ml-2">{{ x.quantity }} {{ (template_setting?.display_unit)? x.unit: '' }}</span>
+                        </div>
+                        <!-- ## qty scale ## -->
+                      </td>
+                      <td>
+                        <span>{{ x.tempFinalPrice | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- #item list(desktop)# -->
+
+              <!-- item list(mobile) -->
+              <div *ngIf="cs?.screen_width<992" class="mobile-cart">
+                <div class="gray-card primary-card mb-3 p-3">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h6 class="m-0">PRODUCT</h6>
+                    </div>
+
+                    <div *ngFor="let x of item_list; let i=index;" class="col-md-12">
+                      <div class="product border-top border-btm pt-3 pb-3 mt-3 mb-3">
+                        <div class="product-img">
+                          <figure>
+                            <img width="100%" height="100%" appImgLazyLoad [ImagelazyLoad]="imgBaseUrl+x.image" alt="thum">
+                          </figure>
+                        </div>
+
+                        <div class="d-flex flex-column w-100">
+                          <div class="product-name mt-2 mb-2">
+                            <h4>{{x.name}}</h4>
+                            <ng-container *ngIf="x.variant_status">
+                              <small *ngFor="let y of x.variant_types; let j=index;">
+                                <strong>{{y.name}}</strong>
+                                <span>: {{y.value}}</span>
+                              </small>
+                            </ng-container>
+                            <small *ngIf="x.addon_status && x.selected_addon">
+                              <strong>Addon: </strong>
+                              <span>{{x.selected_addon?.name}}<ng-container *ngIf="x.customization_status"> - </ng-container></span>
+                              <span *ngIf="x.customization_status" class="cursor" (click)=" cs.onViewModel(x.customized_model);">
+                                {{x.customized_model?.name}}
+                              </span>
+                            </small>
+                            <p *ngIf="!x.allow_cod && orderForm.cod_alert" class="error-msg">COD not available</p>
+                            <p class="error-msg" *ngIf="unique_product_list?.length && x.unavailable">
+                              <ng-container *ngIf="x.available_qty>0">Only {{ x.available_qty }} {{ x.unit }} available in stock</ng-container>
+                              <ng-container *ngIf="x.available_qty==0">SOLD OUT</ng-container>
+                            </p>
+                          </div>
+
+                          <!-- qty scale -->
+                          <div class="mt-2 mb-2">
+                            <div *ngIf="!orderForm.cod_alert" class="d-flex justify-content-start align-items-center">
+                              <ng-container *ngIf="unique_product_list?.length && x.unavailable">
+                                <div class="pro-qty d-flex justify-content-center align-items-center height-100">
+                                  <!-- <button (click)="decProductQty(i);">
+                                    <i class="material-icons">remove</i>
+                                  </button> -->
+                                  <button class="qty-btn-disabled">
+                                    <i class="material-icons">remove</i>
+                                  </button>
+                                  <span class="btn-width">{{ x.quantity }}</span>
+                                  <button class="qty-btn-disabled">
+                                    <i class="material-icons">add</i>
+                                  </button>
+                                </div>
+                                <span *ngIf="template_setting?.display_unit">{{ x.unit }}</span>
+                              </ng-container>
+                              <span *ngIf="!x.unavailable">{{ x.quantity }} {{ (template_setting?.display_unit)? x.unit: '' }}</span>
+                            </div>
+                            <!-- for cod -->
+                            <div *ngIf="orderForm.cod_alert" class="d-flex justify-content-start align-items-center">
+                              <ng-container *ngIf="!x.allow_cod">
+                                <div class="pro-qty d-flex justify-content-center align-items-center height-100">
+                                  <!-- <button (click)="decProductQty(i);">
+                                    <i class="material-icons">remove</i>
+                                  </button> -->
+                                  <button class="qty-btn-disabled">
+                                    <i class="material-icons">remove</i>
+                                  </button>
+                                  <span class="btn-width">{{ x.quantity }}</span>
+                                  <button class="qty-btn-disabled">
+                                    <i class="material-icons">add</i>
+                                  </button>
+                                </div>
+                                <span *ngIf="template_setting?.display_unit">{{ x.unit }}</span>
+                              </ng-container>
+                              <span *ngIf="x.allow_cod">{{ x.quantity }} {{ (template_setting?.display_unit)? x.unit: '' }}</span>
+                            </div>
+                          </div>
+                          <!-- ## qty scale ## -->
+
+                          <div class="mt-2 mb-2">
+                            <span>{{ x.tempFinalPrice | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- #item list(mobile)# -->
+
+              <!-- Shipping Address -->
+              <div class="product-order-details gray-card primary-card p-3 mt-1 mb-3">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="product-order-type pb-3">
+                      <div class="row">
+                        <div class="col-6 d-flex align-items-center">
+                          <h4>Shipping Address</h4>
+                        </div>
+                        <div class="col-6 d-flex align-items-start justify-content-end">
+                          <button class="primary-btn" type="button" routerLink="/checkout/address-list/quotation">CHANGE</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="product-order-type-inner pt-3">
+                      <div class="row">
+                        <!-- name -->
+                        <div class="col-6 d-flex align-items-center">
+                          <h6>Name:</h6>
+                        </div>
+                        <div class="col-6 d-flex align-items-start justify-content-end">
+                          <span align="right">{{company_address.name}}</span>
+                        </div>
+                        <!-- phone -->
+                        <div class="col-6 d-flex align-items-center">
+                          <h6>Phone:</h6>
+                        </div>
+                        <div class="col-6  d-flex align-items-start justify-content-end">
+                          <span align="right">{{company_address?.dial_code}} {{company_address.mobile}}</span>
+                        </div>
+                        <!-- address -->
+                        <div class="col-6 d-flex align-items-center">
+                          <h6>Address:</h6>
+                        </div>
+                        <div class="col-6  d-flex align-items-start justify-content-end">
+                          <span align="right">{{company_address.address}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- #Shipping Address#-->
+
+              <!-- Billing Address -->
+              <div class="product-order-details gray-card primary-card p-3 mt-1 mb-3">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="product-order-type pb-3">
+                      <div class="row">
+                        <div class="d-flex align-items-center" [ngClass]="cs.guest_email? 'col-md-6': 'col-md-12'">
+                          <h4>Billing Address</h4>
+                        </div>
+                        <div *ngIf="cs.guest_email" class="col-md-6 d-flex align-items-center justify-content-end">
+                          <div class="billing-email">
+                            <span align="right">{{cs.guest_email}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="product-order-type-inner pt-3">
+                      <div class="row">
+                        <!-- name -->
+                        <div class="col-6 d-flex align-items-center">
+                          <h6>Name:</h6>
+                        </div>
+                        <div class="col-6 d-flex align-items-start justify-content-end">
+                          <span align="right">{{billing_address.name}}</span>
+                        </div>
+                        <!-- phone -->
+                        <div class="col-6 d-flex align-items-center">
+                          <h6>Phone:</h6>
+                        </div>
+                        <div class="col-6 d-flex align-items-start justify-content-end">
+                          <span align="right">{{billing_address?.dial_code}} {{billing_address.mobile}}</span>
+                        </div>
+                        <!-- address -->
+                        <div class="col-6 d-flex align-items-center">
+                          <h6>Address:</h6>
+                        </div>
+                        <div class="col-6 d-flex align-items-start justify-content-end">
+                          <span align="right">{{billing_address.address}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- #Billing Address# -->
+              
+            </div>
+
+            <!-- right section -->
+            <div class="col-lg-6">
+              <div class="product-order-details gray-card primary-card p-3 mt-0 mb-3">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="product-order-type pb-3">
+                      <h4> Order Total
+                        <span class="total-items">({{cartQty}} {{ cartQty>1 ? 'Items' : 'Item' }})</span>
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="product-order-type-inner pt-3">
+                  <div class="row">
+                    <!-- subtotal -->
+                    <div class="col-6 d-flex align-items-center">
+                      <h6>Subtotal:</h6>
+                    </div>
+                    <div class="col-6 d-flex align-items-start justify-content-end">
+                      <span align="right">{{ tempSubTotal | currency:cc.currency?.country_code:'symbol':cc.format }}</span>
+                    </div>
+                    <!-- amount payable -->
+                    <div class="col-6 d-flex align-items-center m-0 mt-3 mb-3">
+                      <h6 class="m-0">Amount Payable:</h6>
+                    </div>
+                    <div class="col-6 d-flex align-items-start justify-content-end m-0 mt-3 mb-3">
+                      <span class="m-0" align="right">
+                        {{ tempSubTotal | currency:cc.currency?.country_code:'symbol':cc.format }}
+                      </span>
+                    </div>
+
+                    <!-- gst details -->
+                    <div class="col-md-12 mt-2 mb-2">
+                      <input type="text" class="w-100" placeholder="Company Name" name="comp_name" [(ngModel)]="orderForm.gst.company">
+                    </div>
+                    <div class="col-md-12 mb-2">
+                      <input type="text" class="w-100" placeholder="Company GSTIN" name="comp_gst" [(ngModel)]="orderForm.gst.number">
+                    </div>
+                    <!-- order note -->
+                    <div *ngIf="cs.ys_features.indexOf('order_note')!=-1 && cs.checkout_setting.order_note" class="col-md-12 mb-2">
+                      <textarea placeholder="Order Notes" name="order_note" [(ngModel)]="orderForm.order_note"></textarea>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="danger-alert smooth-fadein" *ngIf="orderForm?.cart_exceed_alert || orderForm?.offer_invalid_error || orderForm.errorMsg;">
+                        <div class="alert-msg d-flex align-items-center justify-content-center p-2">
+                          <span class="material-icons"></span>
+                          <!-- Too much items in your cart error -->
+                          <p *ngIf="orderForm?.cart_exceed_alert;" class="m-0">Too much items in your quote</p>
+                          <!-- Order creation error -->
+                          <p *ngIf="orderForm.errorMsg;" class="m-0">{{orderForm.errorMsg}}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- place order -->
+                    <div class="col-md-12">
+                      <button type="button" (click)="onCreateQuotation();" class="primary-btn w-100" [disabled]="orderForm.submit">
+                        PLACE QUOTE REQUEST
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div *ngIf="!item_list?.length" class="{{template_setting?.body_type}}">
+            <div class="row">
+              <div class="col-12">
+                <div class="no-items d-flex align-items-center justify-content-center">
+                  <img width="100%" height="100%" imgBroken src="assets/images/no_items_found.svg" alt="not-found">
+                </div>
+              </div>
+              <div class="col-12" align="center">
+                <div class="no-items-letter">
+                  <p>No items to show</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        <!-- end col-12 -->
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- end container -->
+  </section>
+</section>
+
+<!-- submit loader -->
+<div *ngIf="orderForm.submit" class="payment-loder-wrapper">
+  <div class="payment-loader"></div>
+</div>

@@ -1,4 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 
 export class UserGuard implements CanActivate {
 
-  constructor(private router : Router) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router : Router) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -18,7 +19,8 @@ export class UserGuard implements CanActivate {
       return true;
     }
     else {
-      this.router.navigate(['/']);
+      if(isPlatformBrowser(this.platformId)) sessionStorage.setItem("user_state", state.url);
+      this.router.navigate(['/account']);
       return false;
     }
   }

@@ -14,8 +14,8 @@
               <h2>My Wishlist</h2>
               <p>This is your wishlist</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@
           <div class="breadcrumb-navigation mt-3">
             <ul class="collapsed">
               <li><a routerLink="/">Home</a></li>
-              <li *ngIf="commonService?.previous_route=='/account'"><a routerLink="/account">My Account</a></li>
+              <li *ngIf="cs?.previous_route=='/account'"><a routerLink="/account">My Account</a></li>
               <li><span class="active-page">My Wishlist</span></li>
             </ul>
           </div>
@@ -40,7 +40,7 @@
       <div class="row">
         <div class="col-12">
           <!-- for mobile -->
-          <div *ngIf="commonService?.screen_width<992" class="mobile-cart">
+          <div *ngIf="!cs.desktop_device" class="mobile-cart">
             <div class="gray-card primary-card p-3">
               <div class="row">
                 <div class="col-md-12">
@@ -80,7 +80,7 @@
           <!-- #for mobile# -->
 
           <!-- for desktop -->
-          <div *ngIf="commonService?.screen_width>=992">
+          <div *ngIf="cs.desktop_device">
             <table class="table">
               <thead class="wishlist-head">
                 <tr>

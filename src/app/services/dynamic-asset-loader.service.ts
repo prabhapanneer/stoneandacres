@@ -1,6 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { environment } from '../../environments/environment';
 
 interface Scripts {
   name: string; type: string; src: string;
@@ -11,15 +10,18 @@ export const CssStore: Scripts[] = [
   { name: 'squarepay', type: 'css', src: 'assets/css/squarepay.css' },
   { name: 'headroom-css', type: 'css', src: 'assets/css/headroom.css' },
   { name: 'plyr-css', type: 'css', src: 'assets/css/plyr.min.css' },
+  { name: 'swiper-css', type: 'css', src: 'assets/css/swiper.min.css' },
   { name: 'bs-datepicker', type: 'css', src: 'https://unpkg.com/ngx-bootstrap@6.2.0/datepicker/bs-datepicker.css' },
   { name: 'photoswipe', type: 'css', src: 'https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css' },
   { name: 'headroom-js', type: 'js', src: 'https://cdnjs.cloudflare.com/ajax/libs/headroom/0.10.2/headroom.min.js' },
+  { name: 'jquery', type: 'js', src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js' },
+  { name: 'wow-js', type: 'js', src: 'https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js' },
   { name: 'square-sandbox', type: 'js', src: 'https://js.squareupsandbox.com/v2/paymentform' },
   { name: 'square-live', type: 'js', src: 'https://js.squareup.com/v2/paymentform' },
-  { name: 'zoho', type: 'js', src: 'https://crm.zoho.com/crm/javascript/zcga.js' },
+  { name: 'script-js', type: 'js', src: 'assets/js/script.js' },
+  { name: 'swiper-js', type: 'js', src: 'assets/js/swiper.min.js' },
   { name: 'foloosipay', type: 'js', src: 'assets/js/foloosi.js' },
-  { name: 'plyr-js', type: 'js', src: 'assets/js/plyr.min.js' },
-  { name: 'chat', type: 'js', src: 'assets/js/chat.js' }
+  { name: 'plyr-js', type: 'js', src: 'assets/js/plyr.min.js' }
 ];
 
 @Injectable({

@@ -3,7 +3,7 @@
 </section>
 
 <!-- Before login -->
-<section class="over-all smooth-fadein" *ngIf="!commonService?.customer_token && !pageLoader">
+<section class="over-all smooth-fadein" *ngIf="!cs?.customer_token && !pageLoader">
   <section class="common-site-section account">
     <div class="{{template_setting?.body_type}}">
       <div class="row">
@@ -12,19 +12,19 @@
             <!-- Social Login -->
             <div class="d-flex flex-column align-items-center">
               <h4 align="center">{{ (formType=='signup')? 'Sign up': 'Sign in' }}</h4>
-              <ng-container *ngIf="commonService.ys_features.indexOf('social_login')!=-1">
-                <ng-container *ngIf="commonService.application_setting.facebook_id || commonService.application_setting.google_id">
+              <ng-container *ngIf="cs.ys_features.indexOf('social_login')!=-1">
+                <ng-container *ngIf="cs.application_setting.facebook_id || cs.application_setting.google_id">
                   <p>with your social network</p>
                   <div class="social-login">
                     <!-- facebook -->
-                    <div *ngIf="commonService.application_setting.facebook_id" class="social-login-icon" (click)="socialSignIn('facebook');">
+                    <div *ngIf="cs.application_setting.facebook_id" class="social-login-icon" (click)="socialSignIn('facebook');">
                       <a>
                         <img width="100%" height="100%" src="assets/images/icons/facebook.svg" alt="facebook">
                         <span>FACEBOOK</span>
                       </a>
                     </div>
                     <!-- google -->
-                    <div *ngIf="commonService.application_setting.google_id" class="social-login-icon" (click)="socialSignIn('google');">
+                    <div *ngIf="cs.application_setting.google_id" class="social-login-icon" (click)="socialSignIn('google');">
                       <a>
                         <img width="100%" height="100%" src="assets/images/icons/google.svg" alt="google">
                         <span>GOOGLE</span>
@@ -44,27 +44,36 @@
                 <div class="row">
                   <div class="form-group col-12">
                     <label for="name">Name</label>
-                    <input type="text" name="name" id="name" [(ngModel)]="registerForm.name" #name="ngModel"
-                      (input)="registerForm.errorMsg=null;" required />
+                    <input type="text" name="name" id="name" [(ngModel)]="registerForm.name" (input)="registerForm.errorMsg=null;" required />
+                  </div>
+                  <div class="form-group col-12">
+                    <label for="mobile">Mobile No</label>
+                    <div class="input-group modal-phone-no">
+                      <div class="input-group-prepend">
+                        <select name="dial_code" id="mobile" [(ngModel)]="registerForm.dial_code" required class="form-control h-auto">
+                          <option *ngFor="let x of rs.country_list | orderAsc: 'dial_code';" [ngValue]="x.dial_code">{{x.dial_code}}</option>
+                        </select>
+                      </div>
+                      <input *ngIf="!mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="registerForm.mobile" appNumberOnly required>
+                      <input *ngIf="mobile_pattern" type="tel" class="form-control border-radius-0" name="mobile" [(ngModel)]="registerForm.mobile" [pattern]="mobile_pattern"
+                      maxlength="{{country_details?.mobileno_length}}" title="Please fill {{country_details?.mobileno_length}} digit mobile number" appNumberOnly required>
+                    </div>
                   </div>
                   <div class="form-group col-12">
                     <label for="email">E-mail</label>
-                    <input type="email" name="email" id="email" [(ngModel)]="registerForm.email" #email="ngModel" (input)="registerForm.errorMsg=null;"
+                    <input type="email" name="email" id="email" [(ngModel)]="registerForm.email" (input)="registerForm.errorMsg=null;"
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
                   </div>
                   <div class="col-sm-6">
                     <div class="input-group icon-input-group mb-3">
                       <label for="password">Password</label>
-                      <input class="form-control" [type]="registerForm.input_txt? 'text': 'password'" name="password"
-                        id="password" [(ngModel)]="registerForm.password" #password="ngModel" pattern=".{6,}"
-                        title="Six or more characters" (input)="registerForm.errorMsg=null;" required />
+                      <input class="form-control" [type]="registerForm.input_txt? 'text': 'password'" name="password" id="password"
+                      [(ngModel)]="registerForm.password" pattern=".{6,}" title="Six or more characters" (input)="registerForm.errorMsg=null;" required />
                       <div class="input-group-append icon-append">
                         <span class="input-group-text">
-                          <i class="material-icons" *ngIf="!registerForm.input_txt"
-                            (click)="registerForm.input_txt = !registerForm.input_txt" aria-hidden="true">visibility</i>
-                          <i class="material-icons" *ngIf="registerForm.input_txt"
-                            (click)="registerForm.input_txt = !registerForm.input_txt"
-                            aria-hidden="true">visibility_off</i>
+                          <i class="material-icons" (click)="registerForm.input_txt = !registerForm.input_txt" aria-hidden="true">
+                            {{ (registerForm.input_txt)? 'visibility_off': 'visibility' }}
+                          </i>
                         </span>
                       </div>
                     </div>
@@ -72,13 +81,12 @@
                   <div class="col-sm-6">
                     <div class="input-group icon-input-group mb-3">
                       <label for="confirm_pwd">Re-Type Password</label>
-                      <input class="form-control" type="password" name="confirm_pwd" id="confirm_pwd"
-                        [(ngModel)]="registerForm.confirm_pwd" #confirm_pwd="ngModel"
-                        (input)="registerForm.errorMsg=null;" required />
+                      <input class="form-control" type="password" name="confirm_pwd" id="confirm_pwd" [(ngModel)]="registerForm.confirm_pwd" (input)="registerForm.errorMsg=null;" required />
                       <div class="input-group-append icon-append">
                         <span class="input-group-text">
-                          <i *ngIf="registerForm.confirm_pwd && registerForm.password==registerForm.confirm_pwd"
-                            class="material-icons verified" aria-hidden="true">check_circle</i>
+                          <i *ngIf="registerForm.password && registerForm.confirm_pwd" class="material-icons" [ngClass]="(registerForm.password==registerForm.confirm_pwd)? 'verified': 'mismatch'" aria-hidden="true">
+                            {{ (registerForm.password==registerForm.confirm_pwd)? 'check_circle': 'cancel' }}
+                          </i>
                         </span>
                       </div>
                     </div>
@@ -112,6 +120,7 @@
                       <div class="box" *ngIf="registerForm.submit">
                         <div class="spinner"></div>
                       </div>
+                      <em></em>
                     </button>
                   </div>
                 </div>
@@ -124,21 +133,19 @@
                 <div class="row">
                   <div class="form-group col-md-12">
                     <label for="email">E-mail</label>
-                    <input type="email" name="email" id="email" [(ngModel)]="loginForm.email" #email="ngModel" (input)="loginForm.errorMsg=null;"
+                    <input type="email" name="email" id="email" [(ngModel)]="loginForm.email" (input)="loginForm.errorMsg=null;"
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
                   </div>
                   <div class="col-md-12">
                     <div class="input-group icon-input-group mb-3">
                       <label for="password">Password</label>
                       <input class="form-control" [type]="loginForm.input_txt? 'text': 'password'" name="password"
-                        id="password" [(ngModel)]="loginForm.password" #password="ngModel"
-                        (input)="loginForm.errorMsg=null;" required />
+                      id="password" [(ngModel)]="loginForm.password" (input)="loginForm.errorMsg=null;" required />
                       <div class="input-group-append icon-append">
                         <span class="input-group-text">
-                          <i class="material-icons" *ngIf="!loginForm.input_txt"
-                            (click)="loginForm.input_txt = !loginForm.input_txt" aria-hidden="true">visibility</i>
-                          <i class="material-icons" *ngIf="loginForm.input_txt"
-                            (click)="loginForm.input_txt = !loginForm.input_txt" aria-hidden="true">visibility_off</i>
+                          <i class="material-icons" (click)="loginForm.input_txt = !loginForm.input_txt" aria-hidden="true">
+                            {{ (loginForm.input_txt)? 'visibility_off': 'visibility' }}
+                          </i>
                         </span>
                       </div>
                     </div>
@@ -176,6 +183,7 @@
                       <div class="box" *ngIf="loginForm.submit">
                         <div class="spinner"></div>
                       </div>
+                      <em></em>
                     </button>
                   </div>
                 </div>
@@ -189,7 +197,7 @@
 </section>
 
 <!-- After login -->
-<section class="over-all smooth-fadein" *ngIf="commonService?.customer_token && !pageLoader">
+<section class="over-all smooth-fadein" *ngIf="cs?.customer_token && !pageLoader">
   <!-- breadcrumb -->
   <section class="head-breadcrumb">
     <div class="{{template_setting?.body_type}}">
@@ -200,9 +208,9 @@
               <h2>My Account</h2>
               <p>Manage your info and orders here</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device"
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device"
               class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -222,8 +230,23 @@
   <section class="common-site-section myaccount">
     <div class="{{template_setting?.body_type}}">
       <div class="row">
+        <!-- quotations -->
+        <div *ngIf="cs.store_details?.sub_type=='quot'" class="col-md-6 mb-2 mt-2 d-flex">
+          <div class="col-md-12 d-sm-flex myaccount__card primary-card" routerLink="/account/quotations">
+            <div class="myaccount-icon d-flex justify-content-center align-items-center xs-pd-l-20">
+              <i class="material-icons">view_list</i>
+            </div>
+            <div class="myaccount__body pr-2 m_flex m_text_center">
+              <div class="my_acc_card_head">
+                <h4 class="mb-3">Quotations</h4>
+                <p class="text-muted">View and manage your quotations</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- orders -->
-        <div class="col-md-6 mb-2 mt-2 d-flex">
+        <div *ngIf="cs.store_details?.sub_type!='enquiry'" class="col-md-6 mb-2 mt-2 d-flex">
           <div class="col-md-12 d-sm-flex myaccount__card primary-card" routerLink="/account/my-orders">
             <div class="myaccount-icon d-flex justify-content-center align-items-center xs-pd-l-20">
               <i class="material-icons">view_list</i>
@@ -238,7 +261,7 @@
         </div>
 
         <!-- appointment -->
-        <div *ngIf="commonService.ys_features.indexOf('appointment_scheduler')!=-1" class="col-md-6 mb-2 mt-2 d-flex">
+        <div *ngIf="cs.ys_features.indexOf('appointment_scheduler')!=-1" class="col-md-6 mb-2 mt-2 d-flex">
           <div class="col-md-12 d-sm-flex myaccount__card primary-card" routerLink="/account/my-appointments">
             <div class="myaccount-icon d-flex justify-content-center align-items-center xs-pd-l-20">
               <i class="material-icons">event</i>
@@ -251,23 +274,6 @@
             </div>
           </div>
         </div>
-
-        <!-- feedback -->
-        <ng-container *ngIf="commonService.ys_features.indexOf('appointment_scheduler')==-1">
-          <div *ngIf="commonService.ys_features.indexOf('customer_feedback')!=-1 && commonService.application_setting?.feedback" class="col-md-6 mb-2 mt-2 d-flex">
-            <div class="col-md-12 d-sm-flex myaccount__card primary-card" routerLink="/account/feedback">
-              <div class="myaccount-icon d-flex justify-content-center align-items-center xs-pd-l-20">
-                <i class="material-icons">sentiment_satisfied_alt</i>
-              </div>
-              <div class="myaccount__body pr-2 m_flex m_text_center">
-                <div class="my_acc_card_head">
-                  <h4 class="mb-3">Give Feedback</h4>
-                  <p class="text-muted">Rate the quality of our products and services</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-container>
 
         <!-- profile -->
         <div class="col-md-6 mb-2 mt-2 d-flex">
@@ -300,7 +306,7 @@
         </div>
 
         <!-- feedback -->
-        <div *ngIf="commonService.ys_features.indexOf('appointment_scheduler')!=-1 && commonService.ys_features.indexOf('customer_feedback')!=-1 && commonService.application_setting?.feedback" class="col-md-6 mb-2 mt-2 d-flex">
+        <div *ngIf="cs.ys_features.indexOf('customer_feedback')!=-1 && cs.application_setting?.feedback" class="col-md-6 mb-2 mt-2 d-flex">
           <div class="col-md-12 d-sm-flex myaccount__card primary-card" routerLink="/account/feedback">
             <div class="myaccount-icon d-flex justify-content-center align-items-center xs-pd-l-20">
               <i class="material-icons">sentiment_satisfied_alt</i>
@@ -338,7 +344,7 @@
         <div class="modal-body forgot-model-input">
           <div>
             <div class="gray-card primary-card p-3 m-0">
-              <input class="w-100" type="email" name="email" placeholder="Email" [(ngModel)]="forgotForm.email" #email="ngModel" (input)="forgotForm.alert_msg=null;"
+              <input class="w-100" type="email" name="email" placeholder="Email" [(ngModel)]="forgotForm.email" (input)="forgotForm.alert_msg=null;"
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid Email ID" appLowercase required />
             </div>
           </div>

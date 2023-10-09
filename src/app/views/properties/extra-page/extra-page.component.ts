@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { StoreApiService } from '../../../services/store-api.service';
+import { PropertiesService } from '../../../services/properties.service';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 
@@ -15,33 +16,47 @@ export class ExtraPageComponent implements OnInit {
 
   pageLoader: boolean; details: any;
   template_setting: any = environment.template_setting;
+  storeSubscription: Subscription;
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private storeApi: StoreApiService, private commonService: CommonService, private sanitizer: DomSanitizer) { }
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private ps: PropertiesService, public cs: CommonService, private sanitizer: DomSanitizer) {
+    this.storeSubscription = this.cs.storeDataListener.subscribe(() => {
+      this.getData();
+    });
+  }
 
   ngOnInit(): void {
+    if(this.cs.storeDataLoaded) this.getData();
+    else this.pageLoader = true;
+  }
+
+  getData(): void {
+    this.pageLoader = false;
     this.activeRoute.params.subscribe((params: Params) => {
-      if(this.commonService.extra_pages[params.type]) {
-        this.details = this.commonService.extra_pages[params.type];
-        if(this.details.seo_status) this.commonService.setSiteMetaData(this.details.seo_details, null);
+      if(this.cs.extra_pages[params['type']]) {
+        this.details = this.cs.extra_pages[params['type']];
+        if(this.details.seo_status) this.cs.setSiteMetaData(this.details.seo_details, null);
       }
-      else if(this.commonService.ys_features.indexOf('extra_pages')!=-1) {
+      else if(this.cs.ys_features.indexOf('extra_pages')!=-1) {
         this.pageLoader = true;
-        this.storeApi.EXTRA_PAGE(params.type).subscribe(result => {
+        this.ps.EXTRA_PAGE(params['type']).subscribe(result => {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
             this.details = result.data;
             this.details.content = this.sanitizer.bypassSecurityTrustHtml(this.details.content);
-            this.commonService.extra_pages[params.type] = this.details;
-            if(this.details.seo_status) this.commonService.setSiteMetaData(this.details.seo_details, null);
+            this.cs.extra_pages[params['type']] = this.details;
+            if(this.details.seo_status) this.cs.setSiteMetaData(this.details.seo_details, null);
           }
           else {
             console.log("response", result);
-            this.router.navigate(['/others/404']);
+            this.router.navigate(['/404']);
           }
         });
       }
-      else this.router.navigate(['/']);
     });
+  }
+
+  ngOnDestroy() {
+    this.storeSubscription.unsubscribe();
   }
 
 }

@@ -53,7 +53,7 @@ td.pro-quantity .pro-qty {
 .myaccount__card {
   .myaccount-icon {
     i {
-      color: $primary-btn-bg !important;
+      color: $primary-text !important;
     }
   }
 }
@@ -146,17 +146,20 @@ input[type="radio"]:checked{ -webkit-box-shadow:inset 0px 0px 0px 0px #fff;-moz-
                 line-height: 21px;
             }
             &:after {
-                -webkit-animation: click-wave 0.25s;
-                -moz-animation: click-wave 0.25s;
-                animation: click-wave 0.25s;
-                background:$check_radio_color;
-                content: '';
-                display: block;
-                position: relative;
+                // -webkit-animation: click-wave 0.25s;
+                // -moz-animation: click-wave 0.25s;
+                // animation: click-wave 0.25s;
+                background: $check_radio_color;
+                color: $check_color;
+                font-family: 'Material Icons';
+                content: 'done';
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 z-index: 100;
                 width: 100%;
                 height: 100%;
-                background-image: url(../images/icons/checkmark.svg);
                 background-repeat: no-repeat;
                 background-position: center;
                 transition-delay: 0.2s !important;

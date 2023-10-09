@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Input, Renderer2, Inject, PLATFORM_ID } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Directive({
@@ -14,9 +14,9 @@ export class DeferLoadDirective {
     threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], rootMargin: '250px'
   }
 
-  constructor(private _element: ElementRef, private renderer: Renderer2, @Inject(PLATFORM_ID) private platformId: any) {}
+  constructor(private _element: ElementRef, private renderer: Renderer2, @Inject(PLATFORM_ID) private platformId: Object) {}
 
-  public ngAfterViewInit () {
+  public ngOnInit () {
     if(isPlatformBrowser(this.platformId)) {
       this.observer = new IntersectionObserver(entries => {
         this.checkForIntersection(entries);

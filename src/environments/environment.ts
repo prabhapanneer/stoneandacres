@@ -1,33 +1,29 @@
-let storeId = "624fd5a8a96c721d4bef5bc5";
-
 export const environment = {
   production: false,
-  header: 'type-3',
-  ws_url: 'https://yourstore.io/api',
+  header_root: 'header', // header (or) sc-header
+  header_type: 'type-3',
+  store_id: "624fd5a8a96c721d4bef5bc5",
   img_baseurl: 'https://yourstore.io/api/',
   img_host: "https://yourstore.io", // for _s split
-  store_id: storeId,
   gtag_tracking: false,
   facebook_pixel: false,
   gtag_conversion_id: "",
-  razorpay_payment_url: "https://api.razorpay.com/v1/checkout/embedded",
-  razorpay_redirect_url: "https://yourstore.io/api/store_details/razorpay_payment/"+storeId,
-  ccavenue_payment_url: "https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction",
-  ccavenue_redirect_url: "https://yourstore.io/api/store_details/ccavenue_payment/success/"+storeId,
-  ccavenue_cancel_url: "https://yourstore.io/api/store_details/ccavenue_payment/failure/"+storeId,
-  gpay_redirect_url: "https://yourstore.io/api/store_details/gpay_payment/"+storeId,
-  band_logo: "band-logo-black.svg",
   template_setting: {
+    headroom: true,
     header_type: "container-fluid",
     body_type: "container",
-    announcement_bar: true, // as well as let set $aannouncement-bar value in variable.scss
-    primary_slider: true,
+    home_type: "container",
+    primary_slider: "fs_slider", // fs_slider, slider, ''
+    highlights: 0, // 0 or greater than 0
+    explore_all: "View More",
+    purchase_txt: "",
     products_per_page: 24,
     display_products_count: true,
     currency_format: '1.0',
-    qty_scale: true, // - qty +(product page)
-    enable_product_inc: true, // for allow to order single qty of each product only(cart page)
+    qty_scale: false, // - qty +(product page)
+    enable_product_inc: false, // for allow to order single qty of each product only(cart page)
     display_estimated_delivery_time: true,
+    disp_brand: true,
     display_unit: true,
     product_swiper: true,
     display_goback: true,
@@ -35,13 +31,21 @@ export const environment = {
     enable_buynow: true,
     social_share: true,
     related_products_limit: 10,
-    blog_count: 10
+    blog_count: 10,
+    price_range: false,
+    category_grid_options: false,
+    purchase_badge: false,
+    p_card: false,
+    pp_img_tag: false,
+    accept_terms: false,
+    customer_gst: true,
+    icon_type: 'icon' // 'icon' (or) 'icon-outline'
   },
   cod_sms: {
     valid_in_seconds: 60,
     interval_in_mins: 60,
     limit: 3
   },
-  port: 4095,
-  domain: "stoneandacres.com"
+  port: 4004,
+  domain: "onetuft.com"
 };

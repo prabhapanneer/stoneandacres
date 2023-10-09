@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Input, Renderer2, Inject, PLATFORM_ID } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Directive({
@@ -11,9 +11,9 @@ export class ImgIntersectionDirective {
   @Input() ImagelazyLoad: any;
   private observer : IntersectionObserver;
 
-  constructor(private _element: ElementRef, private renderer: Renderer2, @Inject(PLATFORM_ID) private platformId: any) {}
+  constructor(private _element: ElementRef, private renderer: Renderer2, @Inject(PLATFORM_ID) private platformId: Object) {}
 
-  public ngAfterViewInit () {
+  public ngOnInit () {
     this.lqip_img = "assets/images/placeholder.svg";
     this.renderer.setAttribute(this._element.nativeElement, 'src', this.lqip_img);
     if(isPlatformBrowser(this.platformId)) {

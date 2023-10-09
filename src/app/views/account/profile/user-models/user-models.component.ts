@@ -22,11 +22,11 @@ export class UserModelsComponent implements OnInit {
   page: number = 1; pageSize: number = 10;
 
   constructor(
-    private api: ApiService, private storeApi: StoreApiService, public commonService: CommonService, @Inject(DOCUMENT) private document, public cc: CurrencyConversionService
+    private api: ApiService, private storeApi: StoreApiService, public cs: CommonService, @Inject(DOCUMENT) private document, public cc: CurrencyConversionService
   ) { }
 
-  ngOnInit() {
-    if(this.commonService.store_details.additional_features && this.commonService.store_details.additional_features.custom_model) {
+  ngOnInit(): void {
+    if(this.cs.store_details.additional_features && this.cs.store_details.additional_features.custom_model) {
       this.pageLoader = true;
       this.api.USER_DETAILS().subscribe(result => {
         if(result.status) {
@@ -82,49 +82,40 @@ export class UserModelsComponent implements OnInit {
                   this.disableOption();
                 }
                 modalName.show();
-                this.commonService.scrollModalTop(500);
+                this.cs.scrollModalTop(500);
               }
               // measurement
               else if(type=="measurement") {
                 this.mmIndex = 0;
-                if(!Object.entries(this.commonService.product_features).length) {
+                if(typeof(this.cs.product_features)=='object' && Object.keys(this.cs.product_features).length) {
+                  this.buildMmList(addonDetails.mm_list, this.cs.product_features.measurement_set).then((resp: any) => {
+                    this.parent_mm_list = resp;
+                    this.updateCurrentMmList();
+                    modalName.show();
+                    this.cs.scrollModalTop(500);
+                  });
+                }
+                else {
                   this.storeApi.PRODUCT_FEATURES().subscribe(result => {
                     if(result.status) {
-                      let productFeatures = JSON.parse(result.data);
-                      this.commonService.product_features = {
-                        addon_list: productFeatures.addon_list.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-                        measurement_set: productFeatures.measurement_set.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-                        tag_list: productFeatures.tag_list.filter(obj => obj.status == 'active').sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1)),
-                        tax_rates: productFeatures.tax_rates.filter(obj => obj.status == 'active'),
-                        size_chart: productFeatures.size_chart.filter(obj => obj.status == 'active'),
-                        faq_list: productFeatures.faq_list.filter(obj => obj.status == 'active'),
-                        highlights: productFeatures.nearby.filter(obj => obj.status == 'active'),
-                        sizing_assistant: productFeatures.sizing_assistant.filter(obj => obj.status == 'active'),
-                        taxonomy: productFeatures.taxonomy.filter(obj => obj.status == 'active'),
-                        color_list: productFeatures.color_list
-                      };
-                      this.buildMmList(addonDetails.mm_list, this.commonService.product_features.measurement_set).then((resp: any) => {
+                      let pdFeatures = JSON.parse(result.data);
+                      pdFeatures.addon_list = pdFeatures.addon_list.sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1));
+                      pdFeatures.measurement_set = pdFeatures.measurement_set.sort((a, b) => 0 - (a.rank > b.rank ? -1 : 1));
+                      this.cs.product_features = pdFeatures;
+                      this.buildMmList(addonDetails.mm_list, this.cs.product_features.measurement_set).then((resp: any) => {
                         this.parent_mm_list = resp;
                         this.updateCurrentMmList();
                         modalName.show();
-                        this.commonService.scrollModalTop(500);
+                        this.cs.scrollModalTop(500);
                       });
                     }
                     else console.log("response", result);
                   });
                 }
-                else {
-                  this.buildMmList(addonDetails.mm_list, this.commonService.product_features.measurement_set).then((resp: any) => {
-                    this.parent_mm_list = resp;
-                    this.updateCurrentMmList();
-                    modalName.show();
-                    this.commonService.scrollModalTop(500);
-                  });
-                }
               }
               else {
                 modalName.show();
-                this.commonService.scrollModalTop(500);
+                this.cs.scrollModalTop(500);
               }
             }
             else console.log("response", result);
@@ -215,7 +206,7 @@ export class UserModelsComponent implements OnInit {
             this.getCheckboxNextList();
           }
         }
-        this.commonService.scrollModalTop(0);
+        this.cs.scrollModalTop(0);
       }
       else this.addonForm.alert_msg = customAlert;
     }
@@ -348,7 +339,7 @@ export class UserModelsComponent implements OnInit {
       }
       this.mmIndex = this.mmIndex+1;
       this.updateCurrentMmList();
-      this.commonService.scrollModalTop(0);
+      this.cs.scrollModalTop(0);
     }
     else {
       this.addonForm.alert_msg = "Please fill out the mandatory fields";

@@ -43,7 +43,7 @@
                 <small class="summary-addon" *ngIf="x.addon_status && x.selected_addon">
                   <strong>Addon: </strong>
                   <span>{{x.selected_addon?.name}}<ng-container *ngIf="x.customization_status"> - </ng-container></span>
-                  <span *ngIf="x.customization_status" class="cursor" (click)=" commonService.onViewModel(x.customized_model);">
+                  <span *ngIf="x.customization_status" class="cursor" (click)=" cs.onViewModel(x.customized_model);">
                     {{x.customized_model?.name}}
                   </span>
                 </small>
@@ -104,7 +104,7 @@
                     <small class="summary-addon" *ngIf="selected_product?.addon_status && selected_product?.selected_addon">
                       <strong>Addon: </strong>
                       <span>{{selected_product.selected_addon?.name}}<ng-container *ngIf="selected_product.customization_status"> - </ng-container></span>
-                      <span *ngIf="selected_product.customization_status" class="cursor" (click)=" commonService.onViewModel(selected_product.customized_model);">
+                      <span *ngIf="selected_product.customization_status" class="cursor" (click)=" cs.onViewModel(selected_product.customized_model);">
                         {{selected_product.customized_model?.name}}
                       </span>
                     </small>
@@ -204,3 +204,5 @@
     </div>
   </div>
 </div>
+
+<app-customization></app-customization>

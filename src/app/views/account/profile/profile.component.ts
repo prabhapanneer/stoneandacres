@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { CommonService } from '../../../services/common.service';
 
@@ -8,12 +8,10 @@ import { CommonService } from '../../../services/common.service';
   styleUrls: ['./profile.component.scss']
 })
 
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
   template_setting: any = environment.template_setting;
 
-  constructor(public commonService: CommonService) { }
-
-  ngOnInit() { }
+  constructor(public cs: CommonService) { }
 
 }

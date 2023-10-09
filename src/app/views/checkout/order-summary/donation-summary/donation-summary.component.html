@@ -1,0 +1,49 @@
+<section *ngIf="pageLoader">
+  <app-loading-spinner></app-loading-spinner>
+</section>
+
+<section class="over-all smooth-fadein" *ngIf="!pageLoader">
+
+  <!-- breadcrumb -->
+  <section class="head-breadcrumb">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="head-breadcrumb-inner border-btm d-flex justify-content-between">
+            <div>
+              <h2>Order Confirmation</h2>
+            </div>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device"
+              class="d-flex align-items-center justify-content-end">
+              <span routerLink="/">GO BACK</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="template_setting?.breadcrumb" class="col-md-12">
+          <div class="breadcrumb-navigation mt-3">
+            <ul class="collapsed">
+              <li><a routerLink="/">Home</a></li>
+              <li><a class="active-page">Order Confirmation</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--# breadcrumb #-->
+
+  <section class="common-site-section">
+    <div class="{{template_setting?.body_type}}">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="d-flex align-items-center justify-content-center flex-column">
+            <h2>Thank You for Your Contribution</h2>
+            <button class="primary-btn mt-5" type="button" routerLink="/">CONTINUE SHOPPING</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>

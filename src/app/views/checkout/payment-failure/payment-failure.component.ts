@@ -15,7 +15,7 @@ export class PaymentFailureComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activeRoute.queryParams.subscribe((params: Params) => {
       this.params = params;
     });

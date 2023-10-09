@@ -10,14 +10,14 @@ import { CommonService } from '../services/common.service';
 
 export class GuestGuard implements CanActivate {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router : Router, private commonService: CommonService) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router : Router, private cs: CommonService) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if(this.commonService.application_setting.guest_checkout && !localStorage.getItem('customer_token')) {
-      if(isPlatformBrowser(this.platformId) && !sessionStorage.getItem('guest_email')) {
+    if(this.cs.application_setting.guest_checkout && !localStorage.getItem('customer_token')) {
+      if(isPlatformBrowser(this.platformId) && !sessionStorage.getItem("guest_token")) {
         return true;
       }
       else {

@@ -1,0 +1,214 @@
+<header class="sticky-header" id="headroom-head">
+
+  <!-- announcement bar -->
+  <div class="top-news">
+    <p class="mb-0" [ngClass]="(cs.ab_config?.link_status)? 'cursor': null" (click)="rs.onRedirect(cs.ab_config);" id="announceBar">
+      {{cs.announcementBar}}
+    </p>
+  </div>
+
+  <header class="cd-main-header">
+    <div class="{{ts.header_type}} m-header-container hover-container">
+      <!-- # DESKTOP # -->
+      <div *ngIf="cs.desktop_device" class="row m-header-row">
+        <div class="col-6 col-md-3 header-left-sec">
+          <ng-template [ngTemplateOutlet]="headerLogo"></ng-template>
+        </div>
+        <div class="col-6 col-md-9 header-right-sec">
+          <!-- desktop menu -->
+          <ul class="cd-header-buttons"></ul>
+          <!-- currency types -->
+          <div *ngIf="cs.ys_features.indexOf('currency_variation')!=-1 && !cs.application_setting?.hide_currency">
+            <ng-template [ngTemplateOutlet]="currTypes"></ng-template>
+          </div>
+          <!-- wishlist -->
+          <div>
+            <a (click)="(cs?.customer_token)? '': cs.after_login_event={ redirect: '/wishlist' }" [routerLink]="(cs?.customer_token)? '/wishlist' : '/account'">
+              <i class="wl-{{ts.icon_type}}"></i>
+              <sup *ngIf="cs.wish_list?.length">
+                <div class="item-badge">{{ cs.wish_list.length }}</div>
+              </sup>
+            </a>
+          </div>
+          <!-- cart -->
+          <ng-template [ngTemplateOutlet]="cartDropDown"></ng-template>
+          <!-- my account -->
+          <div>
+            <a routerLink="/account">
+              <i class="acc-{{ts.icon_type}}"></i>
+            </a>
+          </div>
+          <!-- search -->
+          <div routerLink="/search" class="btn-search">
+            <i class="search-{{ts.icon_type}} transform-90"></i>
+          </div>
+        </div>
+      </div>
+      <!-- # MOBILE # -->
+      <div *ngIf="!cs.desktop_device" class="row m-header-row">
+        <div class="col-4 d-flex align-items-center justify-content-left">
+          <!-- hamburger menu -->
+          <a class="cd-nav-trigger">
+            <span></span>
+          </a>
+        </div>
+        <div class="col-4 d-flex align-items-center justify-content-center">
+          <ng-template [ngTemplateOutlet]="headerLogo"></ng-template>
+        </div>
+        <div class="col-4 d-flex align-items-center justify-content-end">
+          <!-- search -->
+          <div class="px-2">
+            <a routerLink="/search" class="h-100 d-flex justify-content-center align-items-center">
+              <i class="search-{{ts.icon_type}}"></i>
+            </a>
+          </div>
+          <!-- cart -->
+          <div class="px-2">
+            <ng-template [ngTemplateOutlet]="cartDropDown"></ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+</header>
+
+<!-- navbar (menu) -->
+<div class="menu-overlay w-100" style="display: none;"></div>
+<nav class="cd-nav">
+  <ul id="cd-primary-nav" class="cd-primary-nav is-fixed">
+    <div *ngIf="!cs.desktop_device" class="nav-div">
+      <div class="col-6 justify-content-start px-0">
+        <ng-container *ngIf="cs.ys_features.indexOf('currency_variation')!=-1 && !cs.application_setting?.hide_currency">
+          <ng-template [ngTemplateOutlet]="currTypes"></ng-template>
+        </ng-container>
+      </div>
+      <div class="col-6 justify-content-end px-0">
+        <div class="nav-close d-flex py-2">
+          <span class="material-icons">close</span>
+        </div>
+      </div>
+    </div>
+    <!-- menu list -->
+    <li *ngFor="let menu of menu_list | orderAsc: 'rank'; let i=index;" [ngClass]="{ 'has-children mega-menu slim-scroll': menu?.sec_count, 'pos-relative': menu?.sec_count<=2 }">
+      <a (mouseenter)="(!menu?.sec_count && cs.desktop_device)? resetmm(): ''" (click)="(!menu?.sec_count)? rs.onRedirect(menu): ''" class="main-menu">{{menu.name}}</a>
+      <ul class="cd-secondary-nav cd-secondary-nav is-hidden slim-scroll" [ngClass]="{
+        'menu-layout-one': menu?.sec_count<=1,
+        'menu-layout-two': menu?.sec_count==2,
+        'menu-layout-three': menu?.sec_count==3,
+        'menu-layout-four': menu?.sec_count==4,
+        'menu-layout-five': menu?.sec_count>4
+      }">
+        <li class="go-back">
+          <a>{{menu.name}}</a>
+        </li>
+        <li class="see-all display-none">
+          <a>&nbsp;</a>
+        </li>
+        <!-- sections without category -->
+        <li *ngIf="menu?.sections_in_one_col">
+          <a *ngFor="let sec of menu.sections | orderAsc: 'rank';" [routerLink]="(sec.link_type=='internal')? sec.link: null" (click)="(sec.link_type!='internal')? rs.onRedirect(sec): null;">{{ sec.name }}</a>
+        </li>
+        <!-- section with category -->
+        <ng-container *ngIf="!menu?.sections_in_one_col">
+          <li class="slim-scroll" *ngFor="let sec of menu.sections | orderAsc: 'rank';" [ngClass]="(sec?.categories?.length)? 'has-children' : ''">
+            <a *ngIf="sec?.categories?.length && !cs.desktop_device">{{ sec.name }}</a>
+            <a *ngIf="!sec?.categories?.length || cs.desktop_device"
+            [routerLink]="(sec.link_type=='internal')? sec.link: null"
+            (click)="(sec.link_type!='internal')? rs.onRedirect(sec): null;">{{ sec.name }}</a>
+            <ul class="is-hidden">
+              <li class="go-back">
+                <a>{{sec.name}}</a>
+              </li>
+              <li class="slim-scroll" *ngFor="let cat of sec.categories | orderAsc: 'rank';" [ngClass]="(cat?.sub_categories?.length)? 'has-children' : ''">
+                <a *ngIf="cat?.sub_categories?.length">{{ cat.name }}</a>
+                <a *ngIf="!cat?.sub_categories?.length" [routerLink]="(cat.link_type=='internal')? cat.link: null"
+                (click)="(cat.link_type!='internal')? rs.onRedirect(cat): null;">{{ cat.name }}</a>
+                <ul class="is-hidden">
+                  <li class="go-back">
+                    <a>{{ cat.name }}</a>
+                  </li>
+                  <li class="see-all" *ngFor="let sub_cat of cat.sub_categories | orderAsc: 'rank';">
+                    <a [routerLink]="(sub_cat.link_type=='internal')? sub_cat.link: null" (click)="(sub_cat.link_type!='internal')? rs.onRedirect(sub_cat): null;">{{ sub_cat.name }}</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+        <!-- menu images -->
+        <li class="nav-img-wrapper slim-scroll" *ngFor="let x of menu.menu_images;">
+          <a class="nav-img">
+            <h4 *ngIf="x.heading" class="nav-img-title">{{x.heading}}</h4>
+            <img (click)="(!x.btn_status)? rs.onRedirect(x): null;" width="100%" height="100%" appImgLazyLoad [ImagelazyLoad]="imgBaseUrl+x.image" alt="menu-img" class="menu-nav-img">
+            <p *ngIf="x.sub_heading" class="blog-description pt-3">{{x.sub_heading}}</p>
+            <div *ngIf="x.btn_status" class="button-container">
+              <button class="primary-btn" (click)="rs.onRedirect(x);">{{x.btn_text}}</button>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- account & wishlist (mobile) -->
+    <ng-container *ngIf="!cs.desktop_device">
+      <li>
+        <a routerLink="/account">My Account</a>
+      </li>
+      <li>
+        <a (click)="(cs?.customer_token)? '': cs.after_login_event={ redirect: '/wishlist' }" [routerLink]="(cs?.customer_token)? '/wishlist' : '/account'">
+          Wishlist
+        </a>
+      </li>
+    </ng-container>
+  </ul>
+</nav>
+
+<!-- header logo -->
+<ng-template #headerLogo>
+  <a (click)="resetmm();" routerLink="/">
+    <div class="cd-logo logo">
+      <img width="100%" height="100%" appImgLazyLoad class="logo-img" [ImagelazyLoad]="imgBaseUrl+cs.store_logo" alt="{{cs.store_details?.name}}">
+    </div>
+  </a>
+</ng-template>
+
+<!-- cart -->
+<ng-template #cartDropDown>
+  <div class="mini-cart">
+    <div (click)="openCart();">
+      <a>
+        <i class="cart-{{ts.icon_type}}"></i>
+        <span *ngIf="cs.desktop_device && env.header_type=='type-1'">Shopping Bag</span>
+        <sup *ngIf="cs.cart_list?.length">
+          <div class="item-badge">{{ cs.cart_list.length }}</div>
+        </sup>
+      </a>
+    </div>
+  </div>
+</ng-template>
+
+<!-- currency Types -->
+<ng-template #currTypes>
+  <!-- currency drop-down -->  
+  <select *ngIf="!cs.ipBasedCurrency && cs.currency_types.length>1" class="currency-select" (change)="onCurrencyChange();" name="temp_currency" [(ngModel)]="cs.temp_currency" [disabled]="router.url.indexOf('/gift-cards/')!=-1">
+    <option *ngFor="let x of cs.currency_types; let i=index;" [ngValue]="x">{{x.country_code}}</option>
+  </select>
+  <!-- ip based -->
+  <a *ngIf="cs.ipBasedCurrency || cs.currency_types.length===1">{{cs.temp_currency?.country_code}}</a>
+</ng-template>
+
+<!-- body -->
+<div class="page-container">
+  <div class="cd-main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<!-- footer -->
+<app-footer></app-footer>
+
+<!-- side cart -->
+<app-side-cart></app-side-cart>
+
+<!-- customization -->
+<app-customization></app-customization>

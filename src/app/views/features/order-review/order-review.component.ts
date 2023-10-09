@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { FeaturesService } from '../../../services/features.service';
 import { CommonService } from '../../../services/common.service';
 import { StoreApiService } from '../../../services/store-api.service';
 import { CurrencyConversionService } from '../../../services/currency-conversion.service';
@@ -21,7 +22,7 @@ export class OrderReviewComponent implements OnInit {
 
   constructor(
     public cc: CurrencyConversionService, private router: Router, private activeRoute: ActivatedRoute,
-    private storeApi: StoreApiService, public commonService: CommonService
+    private storeApi: StoreApiService, public cs: CommonService, private fApi: FeaturesService
   ) { }
 
   ngOnInit(): void {
@@ -53,7 +54,7 @@ export class OrderReviewComponent implements OnInit {
       this.orderDetails.item_list[index].submit = false;
       if(result.status) {
         this.selected_product = result.data.item_list[index];
-        this.reviewForm = { store_id: environment.store_id, order_id: result.data._id, product_id: this.selected_product.product_id, item_index: index, rating: 5 };
+        this.reviewForm = { store_id: this.cs.store_id, order_id: result.data._id, product_id: this.selected_product.product_id, item_index: index, rating: 5 };
         modalName.show();
       }
       else console.log("response", result);
@@ -69,7 +70,7 @@ export class OrderReviewComponent implements OnInit {
 
   onupdate(modalName) {
     this.reviewForm.submit = true;
-    this.storeApi.ADD_REVIEW(this.reviewForm).subscribe(result => {
+    this.fApi.ADD_REVIEW(this.reviewForm).subscribe(result => {
       this.reviewForm.submit = false;
       if(result.status) {
         modalName.hide();

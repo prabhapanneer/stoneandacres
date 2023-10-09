@@ -14,8 +14,8 @@
               <h2>Custom Model</h2>
               <p>Edit your Custom model</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@
                     </li>
                   </ul>
                 </div>
-                <button class="primary-btn w-100 mt-2" type="button" (click)="commonService.onViewModel(x);">VIEW</button>
+                <button class="primary-btn w-100 mt-2" type="button" (click)="cs.onViewModel(x);">VIEW</button>
                 <button class="secondary-btn w-100 mt-2" type="button" (click)="deleteForm=x; removeModal.show();">REMOVE</button>
               </div>
             </div>
@@ -103,7 +103,7 @@
       <div class="row">
         <div class="col-md-12 navigation-ngx">
           <div>
-            <pagination-controls (pageChange)="page=$event; commonService.pageScrollTop();" autoHide="true" responsive="true" maxSize="5" previousLabel="" nextLabel=""></pagination-controls>
+            <pagination-controls (pageChange)="page=$event; cs.pageScrollTop();" autoHide="true" responsive="true" maxSize="5" previousLabel="" nextLabel=""></pagination-controls>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@
         <div class="proceed-sec d-flex justify-content-between w-100 m-0">
           <!-- left btn -->
           <button *ngIf="customIndex==0" (click)="customModal.hide();" class="primary-btn">CLOSE</button>
-          <button *ngIf="customIndex>0" (click)="addonForm.alert_msg=null; customIndex=customIndex-1; commonService?.scrollModalTop(0);" class="primary-btn">PREVIOUS</button>
+          <button *ngIf="customIndex>0" (click)="addonForm.alert_msg=null; customIndex=customIndex-1; cs?.scrollModalTop(0);" class="primary-btn">PREVIOUS</button>
           <!-- #left btn -->
           <!-- right btn -->
           <button *ngIf="custom_list[customIndex+1]?.filtered_option_list?.length" (click)="onCustomNext();" class="primary-btn">NEXT</button>
@@ -291,7 +291,7 @@
         <div class="proceed-sec d-flex justify-content-between w-100 m-0">
           <!-- left btn -->
           <button *ngIf="mmIndex==0" (click)="measurementModal.hide();" class="primary-btn">CLOSE</button>
-          <button *ngIf="mmIndex>0" (click)="mmIndex=mmIndex-1; commonService?.scrollModalTop(0);" class="primary-btn">PREVIOUS</button>
+          <button *ngIf="mmIndex>0" (click)="mmIndex=mmIndex-1; cs?.scrollModalTop(0);" class="primary-btn">PREVIOUS</button>
           <!-- #left btn -->
           <!-- right btn -->
           <button *ngIf="(addonForm?.mm_sets?.length-1)>mmIndex" (click)="onMmNext();" class="primary-btn">NEXT</button>
@@ -392,3 +392,5 @@
     </div>
   </div>
 </div>
+
+<app-customization></app-customization>

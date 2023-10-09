@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { StoreApiService } from '../../../services/store-api.service';
+import { PropertiesService } from '../../../services/properties.service';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 
@@ -16,80 +16,81 @@ export class PolicyComponent implements OnInit {
   pageLoader: boolean; policy_details: any;
   template_setting: any = environment.template_setting;
 
-  constructor(private router: Router, private commonService: CommonService, private storeApi: StoreApiService, private sanitizer: DomSanitizer) { }
+  constructor(private router: Router, private cs: CommonService, private ps: PropertiesService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    if(this.router.url=="/privacy-policy") {
-      if(!this.commonService.privacy_policy) {
+    let pageUrl = this.router.url.split('?')[0];
+    if(pageUrl=="/privacy-policy") {
+      if(!this.cs.privacy_policy) {
         this.pageLoader = true;
-        this.storeApi.POLICY_DETAILS("privacy").subscribe(result => {
+        this.ps.POLICY_DETAILS("privacy").subscribe(result => {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
-            this.commonService.privacy_policy = result.data;
-            this.commonService.privacy_policy.content = this.sanitizer.bypassSecurityTrustHtml(this.commonService.privacy_policy.content);
+            this.cs.privacy_policy = result.data;
+            this.cs.privacy_policy.content = this.sanitizer.bypassSecurityTrustHtml(this.cs.privacy_policy.content);
           }
           else {
             console.log("response", result);
-            this.commonService.privacy_policy = { title: "Privacy Policy", content: "" };
+            this.cs.privacy_policy = { title: "Privacy Policy", content: "" };
           }
-          this.policy_details = this.commonService.privacy_policy;
+          this.policy_details = this.cs.privacy_policy;
         });
       }
-      else this.policy_details = this.commonService.privacy_policy;
+      else this.policy_details = this.cs.privacy_policy;
     }
-    if(this.router.url=="/shipping-policy") {
-      if(!this.commonService.shipping_policy) {
+    if(pageUrl=="/shipping-policy") {
+      if(!this.cs.shipping_policy) {
         this.pageLoader = true;
-        this.storeApi.POLICY_DETAILS("shipping").subscribe(result => {
+        this.ps.POLICY_DETAILS("shipping").subscribe(result => {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
-            this.commonService.shipping_policy = result.data;
-            this.commonService.shipping_policy.content = this.sanitizer.bypassSecurityTrustHtml(this.commonService.shipping_policy.content);
+            this.cs.shipping_policy = result.data;
+            this.cs.shipping_policy.content = this.sanitizer.bypassSecurityTrustHtml(this.cs.shipping_policy.content);
           }
           else {
             console.log("response", result);
-            this.commonService.shipping_policy = { title: "Shipping Policy", content: "" };
+            this.cs.shipping_policy = { title: "Shipping Policy", content: "" };
           }
-          this.policy_details = this.commonService.shipping_policy;
+          this.policy_details = this.cs.shipping_policy;
         });
       }
-      else this.policy_details = this.commonService.shipping_policy;
+      else this.policy_details = this.cs.shipping_policy;
     }
-    else if(this.router.url=="/cancellation-policy") {
-      if(!this.commonService.cancellation_policy) {
+    else if(pageUrl=="/cancellation-policy") {
+      if(!this.cs.cancellation_policy) {
         this.pageLoader = true;
-        this.storeApi.POLICY_DETAILS("cancellation").subscribe(result => {
+        this.ps.POLICY_DETAILS("cancellation").subscribe(result => {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
-            this.commonService.cancellation_policy = result.data;
-            this.commonService.cancellation_policy.content = this.sanitizer.bypassSecurityTrustHtml(this.commonService.cancellation_policy.content);
+            this.cs.cancellation_policy = result.data;
+            this.cs.cancellation_policy.content = this.sanitizer.bypassSecurityTrustHtml(this.cs.cancellation_policy.content);
           }
           else {
             console.log("response", result);
-            this.commonService.cancellation_policy = { title: "Cancellation Policy", content: "" };
+            this.cs.cancellation_policy = { title: "Cancellation Policy", content: "" };
           }
-          this.policy_details = this.commonService.cancellation_policy;
+          this.policy_details = this.cs.cancellation_policy;
         });
       }
-      else this.policy_details = this.commonService.cancellation_policy;
+      else this.policy_details = this.cs.cancellation_policy;
     }
-    else if(this.router.url=="/terms-and-conditions") {
-      if(!this.commonService.terms_conditions) {
+    else if(pageUrl=="/terms-and-conditions") {
+      if(!this.cs.terms_conditions) {
         this.pageLoader = true;
-        this.storeApi.POLICY_DETAILS("terms_conditions").subscribe(result => {
+        this.ps.POLICY_DETAILS("terms_conditions").subscribe(result => {
           setTimeout(() => { this.pageLoader = false; }, 500);
           if(result.status) {
-            this.commonService.terms_conditions = result.data;
-            this.commonService.terms_conditions.content = this.sanitizer.bypassSecurityTrustHtml(this.commonService.terms_conditions.content);
+            this.cs.terms_conditions = result.data;
+            this.cs.terms_conditions.content = this.sanitizer.bypassSecurityTrustHtml(this.cs.terms_conditions.content);
           }
           else {
             console.log("response", result);
-            this.commonService.terms_conditions = { title: "Terms & Conditions", content: "" };
+            this.cs.terms_conditions = { title: "Terms & Conditions", content: "" };
           }
-          this.policy_details = this.commonService.terms_conditions;
+          this.policy_details = this.cs.terms_conditions;
         });
       }
-      else this.policy_details = this.commonService.terms_conditions;
+      else this.policy_details = this.cs.terms_conditions;
     }
   }
 

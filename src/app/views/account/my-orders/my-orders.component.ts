@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { environment } from '../../../../environments/environment';
 
@@ -8,16 +8,16 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./my-orders.component.scss']
 })
 
-export class MyOrdersComponent implements OnInit {
+export class MyOrdersComponent {
 
+  pageLoader: boolean;
   template_setting: any = environment.template_setting;
   
-  constructor(public commonService: CommonService) {
-    delete this.commonService.order_search;
-    delete this.commonService.coupon_search;
-  }
-
-  ngOnInit() {
+  constructor(public cs: CommonService) {
+    delete this.cs.order_search;
+    delete this.cs.coupon_search;
+    this.pageLoader = true;
+    setTimeout(() => { this.pageLoader = false; }, 500);
   }
 
 }

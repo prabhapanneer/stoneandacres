@@ -2,39 +2,29 @@
   <app-loading-spinner></app-loading-spinner>
 </section>
 
-<section *ngIf="!pageLoader && !commonService.store_locations?.location_list" class="over-all smooth-fadein">
-  <section class="site-section">
-    <div class="{{template_setting?.body_type}}">
-      <div>
-        <div class="row">
-          <div class="col-md-12 d-flex align-items-center justify-content-center">
-            <p class="d-flex align-items-center justify-content-center mt-5">Store Locator</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</section>
-
-<section *ngIf="!pageLoader && commonService.store_locations?.location_list" class="over-all smooth-fadein">
+<section *ngIf="!pageLoader" class="over-all smooth-fadein">
   <section class="common-site-section contact">
-    <div *ngIf="commonService.store_locations.page_config" class="row m-0">
+    <div *ngIf="cs.store_locations?.page_config" class="row m-0">
       <div class="col-lg-12">
         <div class="contact_contents ptb10 titles">
-          <h3 class="text-center">{{ commonService.store_locations.page_config.heading }}</h3>
-          <ng-container *ngIf="commonService.store_locations.page_config?.sub_heading">
-            <h6 class="text-center">{{ commonService.store_locations.page_config.sub_heading }}</h6>
+          <h3 class="text-center">{{ cs.store_locations.page_config.heading }}</h3>
+          <ng-container *ngIf="cs.store_locations.page_config?.sub_heading">
+            <h6 class="text-center">{{ cs.store_locations.page_config.sub_heading }}</h6>
             <span></span>
           </ng-container>
         </div>
       </div>
     </div>
 
-    <main *ngIf="commonService.store_locations.location_list?.length" class="content about-page">
+    <main class="content about-page">
       <section class="primary-section">
         <div class="{{template_setting?.body_type}} px-0">
-          <div class="row store-locator m-0">
-            <div *ngFor="let x of commonService.store_locations.location_list;" class="col-md-12 mb-5" [ngClass]="(commonService.store_locations.location_list.length>2)? 'col-lg-4': 'col-lg-6'">
+          <div *ngIf="cs.store_locations?.location_list?.length" class="row store-locator m-0">
+            <div *ngFor="let x of cs.store_locations.location_list;" class="mb-5" [ngClass]="{
+              'col-md-12': cs.store_locations.location_list.length===1,
+              'col-lg-6': cs.store_locations.location_list.length===2,
+              'col-lg-4': cs.store_locations.location_list.length>2
+            }">
               <div class="d-flex justify-content-center align-items-center py-3">
                 <h4>{{x.name}}</h4>
               </div>
@@ -49,6 +39,14 @@
                   {{x.mobile}}
                 </li>     
               </ul>
+            </div>
+          </div>
+
+          <div *ngIf="!cs.store_locations?.location_list?.length" class="row">
+            <div class="col-12">
+              <div class="live_order_id">
+                <h5 align="center">No locations found</h5>
+              </div>
             </div>
           </div>
         </div>

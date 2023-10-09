@@ -14,8 +14,8 @@
               <h2>{{service_details?.name}}</h2>
               <p>{{ (service_details?.description)? service_details.description: 'Book your service' }}</p>
             </div>
-            <div *ngIf="template_setting?.display_goback && commonService?.desktop_device" class="d-flex align-items-center justify-content-end">
-              <span (click)="commonService.goBack();">GO BACK</span>
+            <div *ngIf="template_setting?.display_goback && cs?.desktop_device" class="d-flex align-items-center justify-content-end">
+              <span (click)="cs.goBack();">GO BACK</span>
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@
           <div class="breadcrumb-navigation mt-3">
             <ul class="collapsed">
               <li><a routerLink="/">Home</a></li>
-              <li *ngIf="commonService.appointment_cat_page_attr?.name"><a routerLink="/services">{{commonService.appointment_cat_page_attr.name}}</a></li>
+              <li *ngIf="cs.appointment_cat_page_attr?.name"><a routerLink="/services">{{cs.appointment_cat_page_attr.name}}</a></li>
               <li><a routerLink="/services/{{params.category}}">Services</a></li>
               <li><span class="active-page">{{service_details?.name}}</span></li>
             </ul>
