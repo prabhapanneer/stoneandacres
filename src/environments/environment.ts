@@ -16,7 +16,7 @@ export const environment = {
     primary_slider: "fs_slider", // fs_slider, slider, ''
     highlights: 0, // 0 or greater than 0
     explore_all: "View More",
-    purchase_txt: "",
+    purchase_txt: "BOOK A SITE VISIT",
     products_per_page: 24,
     display_products_count: true,
     currency_format: '1.0',
@@ -25,7 +25,7 @@ export const environment = {
     display_estimated_delivery_time: true,
     disp_brand: true,
     display_unit: true,
-    product_swiper: true,
+    product_swiper: false,
     display_goback: true,
     breadcrumb: true,
     enable_buynow: true,

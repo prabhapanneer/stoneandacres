@@ -283,6 +283,10 @@ export class CommonService {
     if(details.gst) this.user_details.gst = details.gst;
   }
 
+  openEmi() {
+    this.document.getElementById('open_emi')?.click();
+  }
+
 }
 
 // browser storage variable expansion

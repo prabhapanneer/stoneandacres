@@ -19,6 +19,15 @@ export class RelatedProductsDirective {
       320: { slidesPerView: 1.5, spaceBetween: 0 }
     }
   };
+  private productSection: any = {
+    auto_play: true,
+    break_points: {
+      1024: { slidesPerView: 2, spaceBetween: 5 },
+      768: { slidesPerView: 2, spaceBetween: 5 },
+      640: { slidesPerView: 1, spaceBetween: 5 },
+      320: { slidesPerView: 1, spaceBetween: 5 }
+    }
+  };
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private _element: ElementRef, private assetLoader: DynamicAssetLoaderService) { }
 
@@ -71,11 +80,42 @@ export class RelatedProductsDirective {
         }
         break;
       }
+      else if(classList[i].includes("prod_img_slider")) {
+        let swipeElement = classList[i];
+        // swiper config
+        let swipeConfig: any = {
+          speed: 500,
+          breakpoints: this.productSection.break_points,
+          navigation: {
+            nextEl: '#product_image_next',
+            prevEl: '#product_image_prev'
+          }
+        }
+        let autoPlay = this.productSection.auto_play;
+        if(autoPlay) {
+          swipeConfig.autoplay = {
+            delay: 3000,
+            disableOnInteraction: false
+          }
+        }
+        // initialize swiper
+        let swipeInit = new Swiper('.'+swipeElement, swipeConfig);
+        // hover event
+        if(autoPlay && swipeElement.includes("desktop")) {
+          swipeInit.el.addEventListener("mouseover", () => {  
+            swipeInit.autoplay.stop();
+          });
+          swipeInit.el.addEventListener("mouseout", () => {   
+            swipeInit.autoplay.start();
+          });
+        }
+        break;
+      }
     }
   }
 
   ngOnDestroy() {
     if(isPlatformBrowser(this.platformId) && this.observer) this.observer.disconnect();
   }
-​
+
 }

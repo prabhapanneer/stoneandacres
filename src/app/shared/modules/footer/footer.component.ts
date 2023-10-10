@@ -17,6 +17,7 @@ export class FooterComponent {
   subscribeForm: any = {};
   imgBaseUrl: string = environment.img_baseurl;
   currentYear: any = (new Date()).getFullYear();
+  emiForm: any = {};
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object, private pApi: PropertiesService,
@@ -34,6 +35,13 @@ export class FooterComponent {
         console.log("response", result);
       }
     });
+  }
+
+  onCalc() {
+    let intr = (this.emiForm.interest_rate/100)/12;
+    this.emiForm.calc = this.emiForm.loan_amount * intr / (1 - (Math.pow(1/(1 + intr), this.emiForm.duration*12)));
+    let x = this.emiForm.calc.toFixed(0);
+    this.emiForm.result = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(x);
   }
 
   linkNavigate(x) {
